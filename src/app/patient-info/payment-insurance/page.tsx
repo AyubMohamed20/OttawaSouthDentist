@@ -1,4 +1,7 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { useState, useRef, useCallback, useEffect } from 'react';
+import Link from 'next/link';
 import {
   CreditCard,
   Banknote,
@@ -12,61 +15,117 @@ import {
   Wallet,
   BadgeCheck,
   HelpCircle,
+  ChevronDown,
+  ArrowRight,
+  Sparkles,
+  Calculator,
+  Lock,
+  Eye,
+  DollarSign,
+  Percent,
+  Clock,
+  Users,
+  FileText,
+  CircleDollarSign,
 } from 'lucide-react';
-import { SectionContainer } from '@/components/ui/section-container';
-import { Heading } from '@/components/ui/heading';
-import { FAQAccordion, type FAQItem } from '@/components/ui/faq-accordion';
-import { ContactCTA } from '@/components/sections/ContactCTA';
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useSpring,
+  useInView,
+} from 'framer-motion';
 import { contactInfo } from '@/data/site-config';
 
-// Page Metadata for SEO
-export const metadata: Metadata = {
-  title: 'Payment & Insurance | Ottawa South Dental',
-  description:
-    'Learn about payment options and insurance at Ottawa South Dental. We accept all major credit cards, offer direct billing to insurance, and participate in the Canadian Dental Care Plan (CDCP).',
-  keywords: [
-    'dental payment options Ottawa',
-    'dental insurance Ottawa',
-    'direct billing dentist Ottawa',
-    'CDCP dentist Ottawa',
-    'Canadian Dental Care Plan',
-    'dental financing Ottawa',
-    'insurance accepted dentist',
-    'Ottawa South Dental payment',
-  ],
-  openGraph: {
-    title: 'Payment & Insurance | Ottawa South Dental',
-    description:
-      'Flexible payment options and direct insurance billing at Ottawa South Dental. We accept the Canadian Dental Care Plan (CDCP).',
-    type: 'website',
-    locale: 'en_CA',
-    siteName: 'Ottawa South Dental',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Payment & Insurance | Ottawa South Dental',
-    description:
-      'Flexible payment options and direct insurance billing at Ottawa South Dental.',
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  alternates: {
-    canonical: '/patient-info/payment-insurance',
+// ============================================================================
+// ANIMATION VARIANTS
+// ============================================================================
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
   },
 };
 
-// Payment methods
+const itemVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  },
+};
+
+const floatingVariants = {
+  animate: {
+    y: [-15, 15, -15],
+    rotate: [0, 5, -5, 0],
+    transition: {
+      duration: 12,
+      repeat: Infinity,
+      ease: 'easeInOut' as const,
+    },
+  },
+};
+
+const floatingVariants2 = {
+  animate: {
+    y: [10, -20, 10],
+    x: [-10, 10, -10],
+    transition: {
+      duration: 16,
+      repeat: Infinity,
+      ease: 'easeInOut' as const,
+    },
+  },
+};
+
+const floatingVariants3 = {
+  animate: {
+    scale: [1, 1.15, 1],
+    rotate: [0, -8, 8, 0],
+    transition: {
+      duration: 20,
+      repeat: Infinity,
+      ease: 'easeInOut' as const,
+    },
+  },
+};
+
+const pulseVariants = {
+  animate: {
+    scale: [1, 1.05, 1],
+    opacity: [0.5, 0.8, 0.5],
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      ease: 'easeInOut' as const,
+    },
+  },
+};
+
+// ============================================================================
+// DATA
+// ============================================================================
+
 const paymentMethods = [
-  { icon: CreditCard, name: 'Visa', description: 'Credit & Debit' },
-  { icon: CreditCard, name: 'MasterCard', description: 'Credit & Debit' },
-  { icon: CreditCard, name: 'American Express', description: 'Credit' },
-  { icon: Banknote, name: 'Interac / Debit', description: 'Direct payment' },
-  { icon: Wallet, name: 'Cash', description: 'Accepted' },
+  { icon: CreditCard, name: 'Visa', description: 'Credit & Debit', color: '#1A1F71' },
+  { icon: CreditCard, name: 'MasterCard', description: 'Credit & Debit', color: '#EB001B' },
+  { icon: CreditCard, name: 'American Express', description: 'Credit', color: '#006FCF' },
+  { icon: Banknote, name: 'Interac / Debit', description: 'Direct payment', color: '#FFCC00' },
+  { icon: Wallet, name: 'Cash', description: 'Accepted', color: '#22C55E' },
 ];
 
-// Direct billing steps
 const directBillingSteps = [
   {
     step: 1,
@@ -100,27 +159,29 @@ const directBillingSteps = [
   },
 ];
 
-// Direct billing benefits
 const directBillingBenefits = [
   {
     title: 'No Upfront Payment',
     description: "You don't have to pay the full amount and wait for reimbursement",
+    icon: DollarSign,
   },
   {
     title: 'Less Paperwork',
     description: 'We handle the claim submission for you',
+    icon: FileText,
   },
   {
     title: 'Know Your Costs',
     description: 'We can estimate your out-of-pocket costs before treatment',
+    icon: Calculator,
   },
   {
     title: 'Convenient',
     description: 'Makes dental care more accessible',
+    icon: Clock,
   },
 ];
 
-// CDCP services covered
 const cdcpServices = [
   'Preventive care (cleanings, checkups)',
   'Diagnostic services (X-rays, exams)',
@@ -131,14 +192,12 @@ const cdcpServices = [
   'Oral surgery services',
 ];
 
-// CDCP eligibility points
 const cdcpEligibility = [
   'Be a Canadian resident',
   'Have an adjusted family net income below the threshold',
   'Not have access to dental insurance',
 ];
 
-// Financial policy points
 const financialPolicyPoints = [
   'Payment is expected at the time of service',
   'For patients with insurance, we will collect any estimated patient portion at the time of service',
@@ -146,8 +205,7 @@ const financialPolicyPoints = [
   'Please inform us of any changes to your insurance coverage',
 ];
 
-// FAQ items
-const faqItems: FAQItem[] = [
+const faqItems = [
   {
     question: 'Do you accept my insurance?',
     answer:
@@ -180,351 +238,1380 @@ const faqItems: FAQItem[] = [
   },
 ];
 
+const transparencyFeatures = [
+  {
+    icon: Eye,
+    title: 'Upfront Pricing',
+    description: 'Know your costs before any treatment begins',
+  },
+  {
+    icon: Lock,
+    title: 'No Hidden Fees',
+    description: 'What we quote is what you pay',
+  },
+  {
+    icon: FileText,
+    title: 'Detailed Estimates',
+    description: 'Written treatment plans with itemized costs',
+  },
+  {
+    icon: Users,
+    title: 'Patient-First Approach',
+    description: 'We prioritize your comfort and budget',
+  },
+];
+
+// ============================================================================
+// MAGNETIC EFFECT HOOK
+// ============================================================================
+
+function useMagnetic(strength: number = 0.3) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springConfig = { damping: 20, stiffness: 200 };
+  const springX = useSpring(x, springConfig);
+  const springY = useSpring(y, springConfig);
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const deltaX = (e.clientX - centerX) * strength;
+      const deltaY = (e.clientY - centerY) * strength;
+      x.set(deltaX);
+      y.set(deltaY);
+    },
+    [x, y, strength]
+  );
+
+  const handleMouseLeave = useCallback(() => {
+    x.set(0);
+    y.set(0);
+  }, [x, y]);
+
+  return { x: springX, y: springY, handleMouseMove, handleMouseLeave };
+}
+
+// ============================================================================
+// DECORATIVE COMPONENTS
+// ============================================================================
+
+function FloatingShapes() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <motion.div
+        variants={floatingVariants}
+        animate="animate"
+        className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full opacity-[0.03]"
+        style={{
+          background: 'radial-gradient(circle, #722F37 0%, transparent 70%)',
+        }}
+      />
+      <motion.div
+        variants={floatingVariants2}
+        animate="animate"
+        className="absolute -bottom-32 -left-32 w-[500px] h-[500px] rounded-full opacity-[0.04]"
+        style={{
+          background: 'radial-gradient(circle, #14b8a6 0%, transparent 70%)',
+        }}
+      />
+      <motion.div
+        variants={floatingVariants3}
+        animate="animate"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full opacity-[0.02]"
+        style={{
+          background: 'radial-gradient(circle, #eab308 0%, transparent 70%)',
+        }}
+      />
+      <motion.div
+        variants={floatingVariants}
+        animate="animate"
+        className="absolute top-32 left-[10%] w-24 h-24 border border-[#722F37]/10 rounded-2xl rotate-45"
+      />
+      <motion.div
+        variants={floatingVariants2}
+        animate="animate"
+        className="absolute bottom-40 right-[15%] w-20 h-20 border border-[#722F37]/10 rounded-full"
+      />
+    </div>
+  );
+}
+
+function TrustBadge({ icon: Icon, text }: { icon: React.ElementType; text: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.5, duration: 0.5 }}
+      className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-[#722F37]/10 shadow-sm"
+    >
+      <Icon className="w-4 h-4 text-[#722F37]" />
+      <span className="text-sm font-medium text-neutral-700">{text}</span>
+    </motion.div>
+  );
+}
+
+// ============================================================================
+// PAYMENT CARD COMPONENT
+// ============================================================================
+
+function PaymentCard({
+  method,
+  index,
+}: {
+  method: (typeof paymentMethods)[0];
+  index: number;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const magnetic = useMagnetic(0.1);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{
+        duration: 0.6,
+        delay: index * 0.1,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      style={{ x: magnetic.x, y: magnetic.y }}
+      onMouseMove={magnetic.handleMouseMove}
+      onMouseLeave={(e) => {
+        magnetic.handleMouseLeave();
+        setIsHovered(false);
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      className="relative group"
+    >
+      <motion.div
+        className="relative bg-white rounded-2xl p-8 border border-neutral-100 overflow-hidden cursor-pointer"
+        whileHover={{ scale: 1.03, y: -8 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+        style={{
+          boxShadow: isHovered
+            ? '0 25px 50px -12px rgba(114, 47, 55, 0.15)'
+            : '0 4px 20px -4px rgba(0, 0, 0, 0.05)',
+        }}
+      >
+        {/* Animated gradient background */}
+        <motion.div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{
+            background: `linear-gradient(135deg, ${method.color}08 0%, transparent 50%)`,
+          }}
+        />
+
+        {/* Shimmer effect */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -skew-x-12"
+          initial={{ x: '-200%' }}
+          animate={{ x: isHovered ? '200%' : '-200%' }}
+          transition={{ duration: 0.8, ease: 'easeInOut' }}
+        />
+
+        {/* Icon with animated background */}
+        <div className="relative flex flex-col items-center">
+          <motion.div
+            className="relative w-20 h-20 rounded-2xl flex items-center justify-center mb-4"
+            style={{
+              background: `linear-gradient(135deg, ${method.color}15 0%, ${method.color}05 100%)`,
+            }}
+            animate={{
+              rotate: isHovered ? [0, -5, 5, 0] : 0,
+            }}
+            transition={{ duration: 0.5 }}
+          >
+            <motion.div
+              className="absolute inset-0 rounded-2xl"
+              style={{ background: method.color }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{
+                scale: isHovered ? 1 : 0,
+                opacity: isHovered ? 0.1 : 0,
+              }}
+              transition={{ duration: 0.3 }}
+            />
+            <method.icon
+              className="w-10 h-10 transition-colors duration-300 relative z-10"
+              style={{ color: method.color }}
+            />
+          </motion.div>
+
+          <h3 className="font-bold text-lg text-neutral-900 text-center">{method.name}</h3>
+          <p className="text-sm text-neutral-500 mt-1">{method.description}</p>
+
+          {/* Check mark indicator */}
+          <motion.div
+            className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{
+              scale: isHovered ? 1 : 0,
+              opacity: isHovered ? 1 : 0,
+            }}
+            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+          >
+            <CheckCircle2 className="w-5 h-5 text-white" />
+          </motion.div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ============================================================================
+// DIRECT BILLING STEP COMPONENT
+// ============================================================================
+
+function DirectBillingStep({
+  step,
+  index,
+  isActive,
+  onActivate,
+}: {
+  step: (typeof directBillingSteps)[0];
+  index: number;
+  isActive: boolean;
+  onActivate: () => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: -50 }}
+      animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+      transition={{
+        duration: 0.6,
+        delay: index * 0.15,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className="relative"
+      onMouseEnter={onActivate}
+    >
+      {/* Connector line */}
+      {index < directBillingSteps.length - 1 && (
+        <motion.div
+          className="absolute left-6 top-20 w-0.5 h-12 bg-gradient-to-b from-[#722F37] to-[#722F37]/20"
+          initial={{ scaleY: 0 }}
+          animate={isInView ? { scaleY: 1 } : { scaleY: 0 }}
+          transition={{ duration: 0.5, delay: index * 0.15 + 0.3 }}
+          style={{ originY: 0 }}
+        />
+      )}
+
+      <motion.div
+        className={`flex items-start gap-5 p-5 rounded-2xl transition-all duration-300 cursor-pointer ${
+          isActive
+            ? 'bg-gradient-to-r from-[#722F37]/10 via-[#722F37]/5 to-transparent'
+            : 'bg-white/50 hover:bg-white'
+        }`}
+        whileHover={{ scale: 1.02, x: 8 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+      >
+        {/* Step number */}
+        <motion.div
+          className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg transition-all duration-300 ${
+            isActive
+              ? 'bg-[#722F37] text-white shadow-lg shadow-[#722F37]/30'
+              : 'bg-white border-2 border-[#722F37]/20 text-[#722F37]'
+          }`}
+          animate={isActive ? { scale: [1, 1.1, 1] } : { scale: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          {step.step}
+        </motion.div>
+
+        {/* Content */}
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-2">
+            <motion.div
+              animate={isActive ? { rotate: [0, -10, 10, 0] } : { rotate: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <step.icon
+                className={`w-5 h-5 transition-colors duration-300 ${
+                  isActive ? 'text-[#722F37]' : 'text-neutral-400'
+                }`}
+              />
+            </motion.div>
+            <h4
+              className={`font-semibold transition-colors duration-300 ${
+                isActive ? 'text-[#722F37]' : 'text-neutral-900'
+              }`}
+            >
+              {step.title}
+            </h4>
+          </div>
+          <p className="text-neutral-600 text-sm leading-relaxed">{step.description}</p>
+        </div>
+
+        {/* Arrow indicator */}
+        <motion.div
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -10 }}
+          transition={{ duration: 0.2 }}
+        >
+          <ArrowRight className="w-5 h-5 text-[#722F37]" />
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ============================================================================
+// BENEFIT CARD COMPONENT
+// ============================================================================
+
+function BenefitCard({
+  benefit,
+  index,
+}: {
+  benefit: (typeof directBillingBenefits)[0];
+  index: number;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{
+        duration: 0.5,
+        delay: index * 0.1,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="group"
+    >
+      <motion.div
+        className="relative bg-white rounded-2xl p-6 border border-neutral-100 overflow-hidden h-full"
+        whileHover={{ y: -5 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+        style={{
+          boxShadow: isHovered
+            ? '0 20px 40px -12px rgba(114, 47, 55, 0.12)'
+            : '0 2px 10px -2px rgba(0, 0, 0, 0.05)',
+        }}
+      >
+        {/* Animated corner accent */}
+        <motion.div
+          className="absolute top-0 right-0 w-24 h-24"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: isHovered ? 1 : 0, scale: isHovered ? 1 : 0.5 }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-[#722F37]/10 to-transparent rounded-bl-full" />
+        </motion.div>
+
+        <div className="flex items-start gap-4">
+          <motion.div
+            className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/5 flex items-center justify-center"
+            animate={{
+              rotate: isHovered ? [0, -10, 10, 0] : 0,
+              scale: isHovered ? 1.1 : 1,
+            }}
+            transition={{ duration: 0.5 }}
+          >
+            <benefit.icon className="w-6 h-6 text-[#722F37]" />
+          </motion.div>
+          <div>
+            <h4 className="font-semibold text-neutral-900 mb-1">{benefit.title}</h4>
+            <p className="text-sm text-neutral-600 leading-relaxed">{benefit.description}</p>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ============================================================================
+// CDCP SERVICE ITEM
+// ============================================================================
+
+function CDCPServiceItem({ service, index }: { service: string; index: number }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.li
+      initial={{ opacity: 0, x: -20 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{
+        duration: 0.4,
+        delay: index * 0.08,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="flex items-start gap-3 py-2 cursor-default"
+    >
+      <motion.div
+        className="flex-shrink-0 w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mt-0.5"
+        animate={{
+          scale: isHovered ? 1.2 : 1,
+          backgroundColor: isHovered ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.2)',
+        }}
+        transition={{ duration: 0.2 }}
+      >
+        <motion.div
+          animate={{ scale: isHovered ? [1, 1.2, 1] : 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <CheckCircle2 className="w-4 h-4 text-primary-300" />
+        </motion.div>
+      </motion.div>
+      <motion.span
+        className="text-white/90"
+        animate={{ x: isHovered ? 5 : 0 }}
+        transition={{ duration: 0.2 }}
+      >
+        {service}
+      </motion.span>
+    </motion.li>
+  );
+}
+
+// ============================================================================
+// TRANSPARENCY FEATURE CARD
+// ============================================================================
+
+function TransparencyCard({
+  feature,
+  index,
+}: {
+  feature: (typeof transparencyFeatures)[0];
+  index: number;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const magnetic = useMagnetic(0.08);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{
+        duration: 0.5,
+        delay: index * 0.1,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      style={{ x: magnetic.x, y: magnetic.y }}
+      onMouseMove={magnetic.handleMouseMove}
+      onMouseLeave={(e) => {
+        magnetic.handleMouseLeave();
+        setIsHovered(false);
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      className="relative group"
+    >
+      <motion.div
+        className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-neutral-100 text-center overflow-hidden"
+        whileHover={{ y: -8 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+        style={{
+          boxShadow: isHovered
+            ? '0 25px 50px -12px rgba(114, 47, 55, 0.12)'
+            : '0 4px 20px -4px rgba(0, 0, 0, 0.04)',
+        }}
+      >
+        {/* Animated gradient border */}
+        <motion.div
+          className="absolute inset-0 rounded-2xl"
+          style={{
+            padding: '2px',
+            background: 'linear-gradient(135deg, #722F37, #8B3A42, #722F37)',
+            WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+            WebkitMaskComposite: 'xor',
+            maskComposite: 'exclude',
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isHovered ? 1 : 0 }}
+          transition={{ duration: 0.3 }}
+        />
+
+        <motion.div
+          className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/5 flex items-center justify-center mb-5"
+          animate={{
+            rotate: isHovered ? [0, -10, 10, 0] : 0,
+            scale: isHovered ? 1.1 : 1,
+          }}
+          transition={{ duration: 0.5 }}
+        >
+          <feature.icon className="w-8 h-8 text-[#722F37]" />
+        </motion.div>
+
+        <h3 className="font-bold text-lg text-neutral-900 mb-2">{feature.title}</h3>
+        <p className="text-neutral-600 text-sm leading-relaxed">{feature.description}</p>
+
+        {/* Sparkle effect */}
+        <motion.div
+          className="absolute top-4 right-4"
+          animate={{
+            rotate: isHovered ? 360 : 0,
+            scale: isHovered ? 1 : 0.5,
+            opacity: isHovered ? 1 : 0,
+          }}
+          transition={{ duration: 0.5 }}
+        >
+          <Sparkles className="w-5 h-5 text-[#722F37]/30" />
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ============================================================================
+// FAQ ITEM COMPONENT
+// ============================================================================
+
+function FAQItem({
+  item,
+  index,
+  isOpen,
+  onToggle,
+}: {
+  item: (typeof faqItems)[0];
+  index: number;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 30 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+      transition={{
+        duration: 0.5,
+        delay: index * 0.08,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+    >
+      <motion.div
+        className={`relative rounded-2xl border overflow-hidden transition-all duration-300 ${
+          isOpen
+            ? 'bg-gradient-to-br from-white via-white to-[#FDF8F3]/50 border-[#722F37]/20 shadow-lg shadow-[#722F37]/5'
+            : 'bg-white border-neutral-100 hover:border-[#722F37]/10'
+        }`}
+        layout
+      >
+        <button
+          type="button"
+          onClick={onToggle}
+          className="w-full px-6 py-5 flex items-start justify-between gap-4 text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#722F37]/50 focus-visible:ring-inset rounded-2xl"
+          aria-expanded={isOpen}
+        >
+          <span
+            className={`text-base font-semibold leading-snug transition-colors duration-200 ${
+              isOpen ? 'text-[#722F37]' : 'text-neutral-900'
+            }`}
+          >
+            {item.question}
+          </span>
+          <motion.div
+            className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${
+              isOpen
+                ? 'bg-[#722F37] text-white'
+                : 'bg-gradient-to-br from-[#FDF8F3] via-[#F5EDE5] to-[#EDE5DD] text-[#722F37]'
+            }`}
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ChevronDown className="w-5 h-5" />
+          </motion.div>
+        </button>
+
+        <AnimatePresence initial={false}>
+          {isOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="overflow-hidden"
+            >
+              <div className="px-6 pb-5">
+                <div className="h-px bg-gradient-to-r from-transparent via-[#722F37]/10 to-transparent mb-4" />
+                <p className="text-neutral-600 leading-relaxed">{item.answer}</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ============================================================================
+// COST VISUALIZATION COMPONENT
+// ============================================================================
+
+function CostVisualization() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (isInView) {
+      const timer = setTimeout(() => setProgress(100), 200);
+      return () => clearTimeout(timer);
+    }
+    return undefined;
+  }, [isInView]);
+
+  const insuranceCoverage = 80;
+  const patientPortion = 20;
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      className="relative bg-white rounded-3xl p-8 border border-neutral-100 shadow-xl"
+    >
+      <div className="flex items-center gap-3 mb-8">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/5 flex items-center justify-center">
+          <CircleDollarSign className="w-6 h-6 text-[#722F37]" />
+        </div>
+        <div>
+          <h3 className="font-bold text-xl text-neutral-900">Cost Breakdown Example</h3>
+          <p className="text-sm text-neutral-500">See how direct billing works</p>
+        </div>
+      </div>
+
+      {/* Progress visualization */}
+      <div className="relative h-12 bg-neutral-100 rounded-2xl overflow-hidden mb-6">
+        <motion.div
+          className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#722F37] to-[#8B3A42] flex items-center justify-center"
+          initial={{ width: 0 }}
+          animate={{ width: isInView ? `${insuranceCoverage}%` : 0 }}
+          transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span className="text-white font-semibold text-sm">Insurance Covers</span>
+        </motion.div>
+        <motion.div
+          className="absolute inset-y-0 right-0 bg-gradient-to-r from-primary-200 to-primary-100 flex items-center justify-center"
+          initial={{ width: 0 }}
+          animate={{ width: isInView ? `${patientPortion}%` : 0 }}
+          transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span className="text-[#722F37] font-semibold text-sm">You Pay</span>
+        </motion.div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-4">
+        <motion.div
+          className="text-center p-4 rounded-xl bg-neutral-50"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ delay: 0.6 }}
+        >
+          <p className="text-2xl font-bold text-neutral-900">$500</p>
+          <p className="text-xs text-neutral-500">Treatment Cost</p>
+        </motion.div>
+        <motion.div
+          className="text-center p-4 rounded-xl bg-[#722F37]/5"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ delay: 0.7 }}
+        >
+          <p className="text-2xl font-bold text-[#722F37]">$400</p>
+          <p className="text-xs text-neutral-500">Insurance Pays</p>
+        </motion.div>
+        <motion.div
+          className="text-center p-4 rounded-xl bg-green-50"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ delay: 0.8 }}
+        >
+          <p className="text-2xl font-bold text-green-600">$100</p>
+          <p className="text-xs text-neutral-500">You Pay</p>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ============================================================================
+// MAIN PAGE COMPONENT
+// ============================================================================
+
 export default function PaymentInsurancePage() {
+  const [activeStep, setActiveStep] = useState(0);
+  const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  const heroY = useTransform(scrollYProgress, [0, 0.5], [0, 100]);
+
   return (
     <main id="main-content" className="flex min-h-screen flex-col">
       {/* ========== HERO SECTION ========== */}
-      <SectionContainer
-        as="section"
-        background="secondary"
-        paddingY="lg"
-        size="xl"
-        aria-labelledby="payment-insurance-heading"
+      <motion.section
+        ref={heroRef}
+        className="relative bg-gradient-to-br from-[#FDF8F3] via-[#FFFBF8] to-white overflow-hidden"
+        style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
       >
-        <div className="text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/5 text-[#722F37] text-sm font-medium mb-6">
-            <Wallet className="w-4 h-4" />
-            <span>Patient Information</span>
-          </div>
-          <Heading
-            variant="page-title"
-            subtitle="We believe quality dental care should be accessible to everyone. We offer flexible payment options, direct insurance billing, and participate in the Canadian Dental Care Plan (CDCP)."
-            align="center"
-            id="payment-insurance-heading"
+        <FloatingShapes />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="text-center max-w-4xl mx-auto"
           >
-            Payment & Insurance
-          </Heading>
+            {/* Trust badges */}
+            <motion.div
+              variants={itemVariants}
+              className="flex flex-wrap items-center justify-center gap-3 mb-8"
+            >
+              <TrustBadge icon={Shield} text="Secure Payments" />
+              <TrustBadge icon={Lock} text="Direct Billing" />
+              <TrustBadge icon={BadgeCheck} text="CDCP Accepted" />
+            </motion.div>
+
+            {/* Main heading */}
+            <motion.h1
+              variants={itemVariants}
+              className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-neutral-900 tracking-tight leading-[1.1]"
+            >
+              Payment &{' '}
+              <span className="relative inline-block">
+                <span className="relative z-10 text-[#722F37]">Insurance</span>
+                <motion.svg
+                  className="absolute -bottom-2 left-0 w-full"
+                  viewBox="0 0 300 12"
+                  fill="none"
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  animate={{ pathLength: 1, opacity: 1 }}
+                  transition={{ delay: 0.8, duration: 1 }}
+                >
+                  <motion.path
+                    d="M2 10C50 4 150 0 298 8"
+                    stroke="#722F37"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    style={{ pathLength: scrollYProgress }}
+                  />
+                </motion.svg>
+              </span>
+            </motion.h1>
+
+            {/* Subtitle */}
+            <motion.p
+              variants={itemVariants}
+              className="mt-6 text-xl text-neutral-600 leading-relaxed max-w-2xl mx-auto"
+            >
+              We believe quality dental care should be accessible to everyone. We offer flexible
+              payment options, direct insurance billing, and participate in the Canadian Dental Care
+              Plan (CDCP).
+            </motion.p>
+
+            {/* Scroll indicator */}
+            <motion.div
+              variants={itemVariants}
+              className="mt-12"
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <div className="w-8 h-14 mx-auto rounded-full border-2 border-[#722F37]/30 flex items-start justify-center p-2">
+                <motion.div
+                  className="w-1.5 h-3 bg-[#722F37] rounded-full"
+                  animate={{ y: [0, 16, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
-      </SectionContainer>
+      </motion.section>
+
+      {/* ========== COST TRANSPARENCY SECTION ========== */}
+      <section className="relative bg-white py-24 lg:py-32 overflow-hidden">
+        <div className="absolute inset-0">
+          <motion.div
+            variants={pulseVariants}
+            animate="animate"
+            className="absolute top-20 right-20 w-64 h-64 rounded-full bg-[#722F37]/5 blur-3xl"
+          />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="text-center mb-16"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#722F37]/10 to-[#722F37]/5 text-[#722F37] text-sm font-semibold mb-6"
+            >
+              <Eye className="w-4 h-4" />
+              <span>Complete Transparency</span>
+            </motion.div>
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-neutral-900 tracking-tight">
+              No Surprises, <span className="text-[#722F37]">Just Trust</span>
+            </h2>
+            <p className="mt-4 text-lg text-neutral-600 max-w-2xl mx-auto">
+              We believe in complete cost transparency. Know exactly what to expect before any
+              treatment.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {transparencyFeatures.map((feature, index) => (
+              <TransparencyCard key={feature.title} feature={feature} index={index} />
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ========== PAYMENT METHODS SECTION ========== */}
-      <SectionContainer
-        as="section"
-        background="white"
-        paddingY="lg"
-        size="xl"
-        aria-labelledby="payment-methods-heading"
-      >
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 text-primary-700 text-sm font-medium mb-4">
-            <CreditCard className="w-4 h-4" />
-            <span>Accepted Payments</span>
-          </div>
-          <h2
-            id="payment-methods-heading"
-            className="font-display text-fluid-3xl md:text-fluid-4xl font-bold text-neutral-900 tracking-tight"
-          >
-            Payment Methods <span className="text-[#722F37]">Accepted</span>
-          </h2>
-          <p className="mt-4 text-lg text-neutral-600 max-w-2xl mx-auto">
-            We accept a variety of payment methods for your convenience.
-          </p>
-        </div>
+      <section className="relative bg-gradient-to-b from-[#FDF8F3] to-white py-24 lg:py-32 overflow-hidden">
+        <FloatingShapes />
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 md:gap-6 max-w-4xl mx-auto">
-          {paymentMethods.map((method) => (
-            <div
-              key={method.name}
-              className="group bg-white rounded-2xl p-6 border border-neutral-100 shadow-soft hover:shadow-soft-lg hover:border-[#722F37]/20 transition-all duration-300 text-center"
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="text-center mb-16"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-[#722F37]/10 text-[#722F37] text-sm font-semibold mb-6 shadow-sm"
             >
-              <div className="w-14 h-14 mx-auto rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center group-hover:from-[#722F37] group-hover:to-[#5a252c] transition-all duration-300 mb-3">
-                <method.icon className="w-7 h-7 text-primary-600 group-hover:text-white transition-colors duration-300" />
-              </div>
-              <h3 className="font-semibold text-neutral-900">{method.name}</h3>
-              <p className="text-sm text-neutral-500 mt-1">{method.description}</p>
-            </div>
-          ))}
+              <CreditCard className="w-4 h-4" />
+              <span>Accepted Payments</span>
+            </motion.div>
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-neutral-900 tracking-tight">
+              Payment Methods <span className="text-[#722F37]">Accepted</span>
+            </h2>
+            <p className="mt-4 text-lg text-neutral-600 max-w-2xl mx-auto">
+              We accept a variety of payment methods for your convenience.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-5xl mx-auto">
+            {paymentMethods.map((method, index) => (
+              <PaymentCard key={method.name} method={method} index={index} />
+            ))}
+          </div>
         </div>
-      </SectionContainer>
+      </section>
 
       {/* ========== DIRECT BILLING SECTION ========== */}
-      <SectionContainer
-        as="section"
-        background="secondary"
-        paddingY="lg"
-        size="xl"
-        aria-labelledby="direct-billing-heading"
-      >
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-          {/* Content */}
-          <div>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/5 text-[#722F37] text-sm font-medium mb-6">
-              <FileCheck className="w-4 h-4" />
-              <span>Insurance</span>
-            </div>
-
-            <h2
-              id="direct-billing-heading"
-              className="font-display text-fluid-3xl md:text-fluid-4xl font-bold text-neutral-900 tracking-tight"
-            >
-              Direct Billing to <span className="text-[#722F37]">Insurance</span>
-            </h2>
-
-            <p className="mt-6 text-lg text-neutral-600 leading-relaxed">
-              We offer <strong>direct billing</strong> to most insurance companies, making dental
-              care more accessible and hassle-free. No more paying upfront and waiting for
-              reimbursement.
-            </p>
-
-            {/* Benefits */}
-            <div className="mt-8 grid sm:grid-cols-2 gap-4">
-              {directBillingBenefits.map((benefit) => (
-                <div
-                  key={benefit.title}
-                  className="bg-white rounded-xl p-5 border border-neutral-100 shadow-soft"
-                >
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold text-neutral-900">{benefit.title}</h4>
-                      <p className="text-sm text-neutral-600 mt-1">{benefit.description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Insurance providers note */}
-            <div className="mt-8 bg-gradient-to-r from-[#FDF8F3] to-[#FFFBF8] rounded-2xl p-6 border border-[#722F37]/10">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-[#722F37]/10 flex items-center justify-center flex-shrink-0">
-                  <Building2 className="w-6 h-6 text-[#722F37]" />
-                </div>
-                <div>
-                  <p className="font-semibold text-neutral-900">Insurance Providers</p>
-                  <p className="text-sm text-neutral-600 mt-1">
-                    We work with most major insurance providers in Canada. Please bring your
-                    insurance card to your appointment, and our team will verify your coverage.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Steps */}
-          <div>
-            <h3 className="text-xl font-semibold text-neutral-900 mb-6">
-              How Direct Billing Works
-            </h3>
-            <div className="space-y-4">
-              {directBillingSteps.map((step, index) => (
-                <div
-                  key={step.step}
-                  className="flex items-start gap-4 bg-white rounded-xl p-5 border border-neutral-100 shadow-soft animate-fade-in-up"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#722F37] text-white flex items-center justify-center font-bold text-lg">
-                    {step.step}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3">
-                      <step.icon className="w-5 h-5 text-[#722F37]" />
-                      <h4 className="font-semibold text-neutral-900">{step.title}</h4>
-                    </div>
-                    <p className="text-neutral-600 mt-1">{step.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </SectionContainer>
-
-      {/* ========== CDCP SECTION ========== */}
-      <section className="relative bg-[#722F37] overflow-hidden">
-        {/* Decorative pattern */}
-        <div className="absolute inset-0 opacity-10" aria-hidden="true">
-          <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <defs>
-              <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                <circle cx="2" cy="2" r="1" fill="white" />
-              </pattern>
-            </defs>
-            <rect fill="url(#dots)" width="100%" height="100%" />
-          </svg>
+      <section className="relative bg-white py-24 lg:py-32 overflow-hidden">
+        <div className="absolute inset-0">
+          <motion.div
+            variants={floatingVariants2}
+            animate="animate"
+            className="absolute bottom-20 left-20 w-96 h-96 rounded-full bg-[#722F37]/3 blur-3xl"
+          />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Content */}
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+            {/* Left column - Content */}
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white/90 text-sm font-medium mb-6">
-                <BadgeCheck className="w-4 h-4" />
-                <span>Government Program</span>
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7 }}
+              >
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 }}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#722F37]/10 to-[#722F37]/5 text-[#722F37] text-sm font-semibold mb-6"
+                >
+                  <FileCheck className="w-4 h-4" />
+                  <span>Insurance</span>
+                </motion.div>
+
+                <h2 className="font-display text-4xl md:text-5xl font-bold text-neutral-900 tracking-tight mb-6">
+                  Direct Billing to{' '}
+                  <span className="text-[#722F37]">Insurance</span>
+                </h2>
+
+                <p className="text-lg text-neutral-600 leading-relaxed mb-10">
+                  We offer <strong className="text-neutral-900">direct billing</strong> to most
+                  insurance companies, making dental care more accessible and hassle-free. No more
+                  paying upfront and waiting for reimbursement.
+                </p>
+              </motion.div>
+
+              {/* Benefits grid */}
+              <div className="grid sm:grid-cols-2 gap-4 mb-10">
+                {directBillingBenefits.map((benefit, index) => (
+                  <BenefitCard key={benefit.title} benefit={benefit} index={index} />
+                ))}
               </div>
 
-              <h2 className="font-display text-fluid-3xl md:text-fluid-4xl font-bold text-white tracking-tight">
-                Canadian Dental Care Plan <span className="text-primary-200">(CDCP)</span>
-              </h2>
-
-              <p className="mt-6 text-lg text-white/80 leading-relaxed">
-                We are proud to accept the <strong className="text-white">Canadian Dental Care Plan (CDCP)</strong>,
-                making dental care more accessible to eligible Canadians.
-              </p>
-
-              <div className="mt-8">
-                <h3 className="text-lg font-semibold text-white mb-4">Eligibility Requirements</h3>
-                <ul className="space-y-3">
-                  {cdcpEligibility.map((item) => (
-                    <li key={item} className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <CheckCircle2 className="w-4 h-4 text-primary-300" />
-                      </div>
-                      <span className="text-white/90">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* How to use CDCP */}
-              <div className="mt-8 bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <h3 className="text-lg font-semibold text-white mb-3">How to Use CDCP at Our Office</h3>
-                <ol className="space-y-2 text-white/80">
-                  <li className="flex gap-2">
-                    <span className="font-semibold text-white">1.</span>
-                    Apply for CDCP through the federal government
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="font-semibold text-white">2.</span>
-                    Bring your CDCP documentation to your appointment
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="font-semibold text-white">3.</span>
-                    We bill the program directly for covered services
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="font-semibold text-white">4.</span>
-                    You may pay for any services not covered
-                  </li>
-                </ol>
-              </div>
+              {/* Insurance providers note */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="relative bg-gradient-to-r from-[#FDF8F3] to-[#FFFBF8] rounded-2xl p-6 border border-[#722F37]/10 overflow-hidden"
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-[#722F37]/5 to-transparent"
+                  initial={{ x: '-100%' }}
+                  whileInView={{ x: '100%' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.5, delay: 0.5 }}
+                />
+                <div className="relative flex items-start gap-4">
+                  <div className="w-14 h-14 rounded-xl bg-[#722F37]/10 flex items-center justify-center flex-shrink-0">
+                    <Building2 className="w-7 h-7 text-[#722F37]" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-neutral-900 text-lg">Insurance Providers</p>
+                    <p className="text-neutral-600 mt-1 leading-relaxed">
+                      We work with most major insurance providers in Canada. Please bring your
+                      insurance card to your appointment, and our team will verify your coverage.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
             </div>
 
-            {/* Services covered */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-white" />
+            {/* Right column - Steps & Visualization */}
+            <div className="space-y-8">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="bg-gradient-to-br from-[#FDF8F3] to-white rounded-3xl p-8 border border-neutral-100"
+              >
+                <h3 className="text-xl font-bold text-neutral-900 mb-6">
+                  How Direct Billing Works
+                </h3>
+                <div className="space-y-2">
+                  {directBillingSteps.map((step, index) => (
+                    <DirectBillingStep
+                      key={step.step}
+                      step={step}
+                      index={index}
+                      isActive={activeStep === index}
+                      onActivate={() => setActiveStep(index)}
+                    />
+                  ))}
                 </div>
-                <h3 className="text-xl font-semibold text-white">Services Covered by CDCP</h3>
-              </div>
+              </motion.div>
 
-              <ul className="space-y-4">
-                {cdcpServices.map((service) => (
-                  <li key={service} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-primary-300 flex-shrink-0 mt-0.5" />
-                    <span className="text-white/90">{service}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-8 pt-6 border-t border-white/20">
-                <p className="text-sm text-white/70">
-                  <strong className="text-white">Note:</strong> Coverage details may vary. Contact
-                  our office or visit the federal government website for complete eligibility
-                  information.
-                </p>
-              </div>
+              {/* Cost visualization */}
+              <CostVisualization />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ========== FINANCIAL POLICY SECTION ========== */}
-      <SectionContainer
-        as="section"
-        background="white"
-        paddingY="lg"
-        size="xl"
-        aria-labelledby="financial-policy-heading"
-      >
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 text-primary-700 text-sm font-medium mb-4">
-              <ClipboardList className="w-4 h-4" />
-              <span>Policy</span>
-            </div>
-            <h2
-              id="financial-policy-heading"
-              className="font-display text-fluid-3xl md:text-fluid-4xl font-bold text-neutral-900 tracking-tight"
-            >
-              Our Financial <span className="text-[#722F37]">Policy</span>
-            </h2>
-          </div>
+      {/* ========== CDCP SECTION ========== */}
+      <section className="relative bg-[#722F37] overflow-hidden py-24 lg:py-32">
+        {/* Decorative elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div
+            variants={floatingVariants}
+            animate="animate"
+            className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-white/5"
+          />
+          <motion.div
+            variants={floatingVariants2}
+            animate="animate"
+            className="absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full bg-white/3"
+          />
+          <div
+            className="absolute inset-0 opacity-[0.02]"
+            style={{
+              backgroundImage: `
+                linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)
+              `,
+              backgroundSize: '60px 60px',
+            }}
+          />
+        </div>
 
-          <div className="bg-gradient-to-br from-[#FDF8F3] via-white to-[#FFFBF8] rounded-3xl p-8 md:p-10 border border-neutral-100 shadow-soft">
-            <ul className="space-y-5">
-              {financialPolicyPoints.map((point, index) => (
-                <li
-                  key={index}
-                  className="flex items-start gap-4 animate-fade-in-up"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div className="w-8 h-8 rounded-full bg-[#722F37]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <CheckCircle2 className="w-4 h-4 text-[#722F37]" />
-                  </div>
-                  <p className="text-neutral-700 leading-relaxed">{point}</p>
-                </li>
-              ))}
-            </ul>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+            {/* Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 text-white text-sm font-semibold mb-6 backdrop-blur-sm border border-white/10"
+              >
+                <BadgeCheck className="w-4 h-4" />
+                <span>Government Program</span>
+              </motion.div>
+
+              <h2 className="font-display text-4xl md:text-5xl font-bold text-white tracking-tight mb-6">
+                Canadian Dental Care Plan{' '}
+                <span className="text-primary-200">(CDCP)</span>
+              </h2>
+
+              <p className="text-lg text-white/80 leading-relaxed mb-10">
+                We are proud to accept the{' '}
+                <strong className="text-white">Canadian Dental Care Plan (CDCP)</strong>, making
+                dental care more accessible to eligible Canadians.
+              </p>
+
+              {/* Eligibility */}
+              <div className="mb-10">
+                <h3 className="text-lg font-semibold text-white mb-5">Eligibility Requirements</h3>
+                <ul className="space-y-3">
+                  {cdcpEligibility.map((item, index) => (
+                    <motion.li
+                      key={item}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 }}
+                      className="flex items-start gap-3"
+                    >
+                      <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <CheckCircle2 className="w-4 h-4 text-primary-300" />
+                      </div>
+                      <span className="text-white/90">{item}</span>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* How to use */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+                className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
+              >
+                <h3 className="text-lg font-semibold text-white mb-4">
+                  How to Use CDCP at Our Office
+                </h3>
+                <ol className="space-y-3">
+                  {[
+                    'Apply for CDCP through the federal government',
+                    'Bring your CDCP documentation to your appointment',
+                    'We bill the program directly for covered services',
+                    'You may pay for any services not covered',
+                  ].map((step, index) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.5 + index * 0.1 }}
+                      className="flex gap-3 text-white/80"
+                    >
+                      <span className="font-bold text-white">{index + 1}.</span>
+                      {step}
+                    </motion.li>
+                  ))}
+                </ol>
+              </motion.div>
+            </motion.div>
+
+            {/* Services covered */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="relative"
+            >
+              <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 lg:p-10 border border-white/20">
+                <div className="flex items-center gap-4 mb-8">
+                  <motion.div
+                    className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center"
+                    animate={{
+                      rotate: [0, 5, -5, 0],
+                    }}
+                    transition={{ duration: 4, repeat: Infinity }}
+                  >
+                    <Shield className="w-7 h-7 text-white" />
+                  </motion.div>
+                  <h3 className="text-2xl font-bold text-white">Services Covered by CDCP</h3>
+                </div>
+
+                <ul className="space-y-1">
+                  {cdcpServices.map((service, index) => (
+                    <CDCPServiceItem key={service} service={service} index={index} />
+                  ))}
+                </ul>
+
+                <div className="mt-8 pt-6 border-t border-white/20">
+                  <p className="text-sm text-white/70">
+                    <strong className="text-white">Note:</strong> Coverage details may vary. Contact
+                    our office or visit the federal government website for complete eligibility
+                    information.
+                  </p>
+                </div>
+              </div>
+
+              {/* Decorative badge */}
+              <motion.div
+                className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white flex items-center justify-center shadow-2xl"
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+              >
+                <div className="text-center">
+                  <BadgeCheck className="w-8 h-8 text-[#722F37] mx-auto" />
+                  <span className="text-xs font-bold text-[#722F37]">CDCP</span>
+                </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
-      </SectionContainer>
+      </section>
+
+      {/* ========== FINANCIAL POLICY SECTION ========== */}
+      <section className="relative bg-white py-24 lg:py-32 overflow-hidden">
+        <div className="absolute inset-0">
+          <motion.div
+            variants={pulseVariants}
+            animate="animate"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-[#722F37]/3 blur-3xl"
+          />
+        </div>
+
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="text-center mb-12"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#722F37]/10 to-[#722F37]/5 text-[#722F37] text-sm font-semibold mb-6"
+            >
+              <ClipboardList className="w-4 h-4" />
+              <span>Policy</span>
+            </motion.div>
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-neutral-900 tracking-tight">
+              Our Financial <span className="text-[#722F37]">Policy</span>
+            </h2>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative bg-gradient-to-br from-[#FDF8F3] via-white to-[#FFFBF8] rounded-3xl p-10 md:p-12 border border-neutral-100 shadow-xl"
+          >
+            {/* Decorative corner */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#722F37]/5 to-transparent rounded-bl-full" />
+
+            <ul className="space-y-6">
+              {financialPolicyPoints.map((point, index) => (
+                <motion.li
+                  key={index}
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 + 0.3 }}
+                  className="flex items-start gap-5"
+                >
+                  <motion.div
+                    className="flex-shrink-0 w-10 h-10 rounded-full bg-[#722F37]/10 flex items-center justify-center"
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ type: 'spring', stiffness: 400 }}
+                  >
+                    <CheckCircle2 className="w-5 h-5 text-[#722F37]" />
+                  </motion.div>
+                  <p className="text-neutral-700 leading-relaxed text-lg pt-1.5">{point}</p>
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
+        </div>
+      </section>
 
       {/* ========== FAQ SECTION ========== */}
-      <SectionContainer
-        as="section"
-        background="secondary"
-        paddingY="lg"
-        size="xl"
-        aria-labelledby="faq-heading"
-      >
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/5 text-[#722F37] text-sm font-medium mb-4">
+      <section className="relative bg-gradient-to-b from-[#FDF8F3] to-white py-24 lg:py-32 overflow-hidden">
+        <FloatingShapes />
+
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="text-center mb-12"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-[#722F37]/10 text-[#722F37] text-sm font-semibold mb-6 shadow-sm"
+            >
               <HelpCircle className="w-4 h-4" />
               <span>Help</span>
-            </div>
-            <h2
-              id="faq-heading"
-              className="font-display text-fluid-3xl md:text-fluid-4xl font-bold text-neutral-900 tracking-tight"
-            >
+            </motion.div>
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-neutral-900 tracking-tight">
               Frequently Asked <span className="text-[#722F37]">Questions</span>
             </h2>
             <p className="mt-4 text-lg text-neutral-600 max-w-xl mx-auto">
               Have questions about payment or insurance? Find answers to common questions below.
             </p>
+          </motion.div>
+
+          <div className="space-y-4">
+            {faqItems.map((item, index) => (
+              <FAQItem
+                key={index}
+                item={item}
+                index={index}
+                isOpen={openFAQ === index}
+                onToggle={() => setOpenFAQ(openFAQ === index ? null : index)}
+              />
+            ))}
           </div>
-
-          <FAQAccordion items={faqItems} allowMultiple={false} />
         </div>
-      </SectionContainer>
+      </section>
 
-      {/* ========== CONTACT CTA ========== */}
-      <ContactCTA
-        id="contact-billing"
-        variant="full"
-        background="gradient"
-        headline="Questions About Billing?"
-        description="Our friendly team is happy to help with any payment, insurance, or billing questions. Don't hesitate to reach out."
-        phoneNumber={contactInfo.phone}
-        phoneDisplay={`(${contactInfo.phone.slice(0, 3)}) ${contactInfo.phone.slice(3, 6)}-${contactInfo.phone.slice(6)}`}
-        showEmergency={false}
-        showHours={true}
-        hoursText="Mon-Fri: 9am-5pm | Sat: 9am-2pm"
-        bookUrl="/contact"
-        bookText="Contact Us"
-      />
+      {/* ========== CONTACT CTA SECTION ========== */}
+      <section className="relative bg-gradient-to-br from-[#722F37] via-[#8B3A42] to-[#722F37] overflow-hidden py-24 lg:py-32">
+        {/* Animated background elements */}
+        <div className="absolute inset-0">
+          <motion.div
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.1, 0.15, 0.1],
+            }}
+            transition={{ duration: 8, repeat: Infinity }}
+            className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-white/10 blur-3xl"
+          />
+          <motion.div
+            animate={{
+              scale: [1.2, 1, 1.2],
+              opacity: [0.1, 0.15, 0.1],
+            }}
+            transition={{ duration: 10, repeat: Infinity }}
+            className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full bg-white/10 blur-3xl"
+          />
+        </div>
+
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
+              className="w-20 h-20 mx-auto rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center mb-8"
+            >
+              <Phone className="w-10 h-10 text-white" />
+            </motion.div>
+
+            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight mb-6">
+              Questions About Billing?
+            </h2>
+
+            <p className="text-xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed">
+              Our friendly team is happy to help with any payment, insurance, or billing questions.
+              Don&apos;t hesitate to reach out.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <motion.a
+                href={`tel:${contactInfo.phone}`}
+                className="group relative inline-flex items-center gap-3 px-8 py-4 bg-white text-[#722F37] font-bold rounded-2xl overflow-hidden shadow-xl shadow-black/20"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-neutral-100 to-white"
+                  initial={{ x: '-100%' }}
+                  whileHover={{ x: '100%' }}
+                  transition={{ duration: 0.5 }}
+                />
+                <Phone className="w-5 h-5 relative z-10" />
+                <span className="relative z-10">
+                  ({contactInfo.phone.slice(0, 3)}) {contactInfo.phone.slice(3, 6)}-
+                  {contactInfo.phone.slice(6)}
+                </span>
+              </motion.a>
+
+              <Link href="/contact">
+                <motion.span
+                  className="group relative inline-flex items-center gap-3 px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-bold rounded-2xl border border-white/20 overflow-hidden"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <motion.div
+                    className="absolute inset-0 bg-white/10"
+                    initial={{ x: '-100%' }}
+                    whileHover={{ x: '100%' }}
+                    transition={{ duration: 0.5 }}
+                  />
+                  <span className="relative z-10">Contact Us</span>
+                  <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+                </motion.span>
+              </Link>
+            </div>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5 }}
+              className="mt-8 text-white/60 text-sm"
+            >
+              Mon-Fri: 8am-5pm | Sat: By Appointment
+            </motion.p>
+          </motion.div>
+        </div>
+      </section>
     </main>
   );
 }
