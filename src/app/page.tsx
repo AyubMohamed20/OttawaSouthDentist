@@ -227,7 +227,7 @@ function AnimatedHeadline({ text, accent }: { text: string; accent: string }) {
       <h1 className="font-display font-bold tracking-tight leading-[1.05]">
         <div className="overflow-hidden">
           <motion.span
-            className="block text-[3.5rem] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] text-neutral-900"
+            className="block text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] text-neutral-900"
             initial={{ y: '100%', opacity: 0 }}
             animate={isInView ? { y: 0, opacity: 1 } : {}}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -237,7 +237,7 @@ function AnimatedHeadline({ text, accent }: { text: string; accent: string }) {
         </div>
         <div className="overflow-hidden mt-2">
           <motion.span
-            className="block text-[3.5rem] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] text-[#722F37]"
+            className="block text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] text-[#722F37]"
             initial={{ y: '100%', opacity: 0 }}
             animate={isInView ? { y: 0, opacity: 1 } : {}}
             transition={{
@@ -485,7 +485,7 @@ function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#FFFBF8] via-white to-[#FDF8F3]"
+      className="relative min-h-screen bg-gradient-to-br from-[#FFFBF8] via-white to-[#FDF8F3]"
     >
       <FloatingOrbs />
       <GridPattern />
@@ -497,23 +497,23 @@ function HeroSection() {
             <div className="lg:col-span-6 xl:col-span-5 text-center lg:text-left">
               {/* Trust Badges */}
               <motion.div
-                className="flex flex-wrap gap-3 justify-center lg:justify-start mb-8"
+                className="flex flex-wrap gap-3 justify-center lg:justify-start mb-8 pt-2"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
                 <motion.div
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-full text-emerald-700 text-sm font-medium"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-full text-emerald-700 text-sm font-medium whitespace-nowrap"
                   whileHover={{ scale: 1.05, y: -2 }}
                 >
-                  <ShieldCheck className="w-4 h-4" />
+                  <ShieldCheck className="w-4 h-4 flex-shrink-0" />
                   CDCP Accepted
                 </motion.div>
                 <motion.div
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full text-blue-700 text-sm font-medium"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full text-blue-700 text-sm font-medium whitespace-nowrap"
                   whileHover={{ scale: 1.05, y: -2 }}
                 >
-                  <Receipt className="w-4 h-4" />
+                  <Receipt className="w-4 h-4 flex-shrink-0" />
                   Direct Insurance Billing
                 </motion.div>
               </motion.div>

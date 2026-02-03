@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { InvisalignContent } from './InvisalignContent';
+import { InvisalignContentMobile } from './InvisalignContent-mobile';
+import { ResponsiveWrapper } from '@/components/responsive-wrapper';
 import { structuredData, JsonLd } from '@/lib/metadata';
 
 export const metadata: Metadata = {
@@ -101,7 +103,10 @@ export default function InvisalignPage() {
         description: serviceData.description,
         url: serviceData.url,
       })} />
-      <InvisalignContent />
+      <ResponsiveWrapper
+        desktop={<InvisalignContent />}
+        mobile={<InvisalignContentMobile />}
+      />
     </>
   );
 }

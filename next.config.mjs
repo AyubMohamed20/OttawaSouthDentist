@@ -2,7 +2,13 @@
 const nextConfig = {
   // Image optimization - critical for Core Web Vitals (LCP)
   images: {
-    remotePatterns: [],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+        pathname: '/**',
+      },
+    ],
     formats: ["image/avif", "image/webp"],
     // Device sizes for responsive images
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
@@ -115,7 +121,7 @@ const nextConfig = {
         headers: [
           {
             key: "Link",
-            value: '</images/hero-dental-care.jpg>; rel=preload; as=image; fetchpriority=high, <https://fonts.googleapis.com>; rel=preconnect',
+            value: '</images/home/hero-dentist-consultation.jpg>; rel=preload; as=image; fetchpriority=high, <https://fonts.googleapis.com>; rel=preconnect',
           },
         ],
       },

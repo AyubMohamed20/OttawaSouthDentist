@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { NewPatientsContent } from './NewPatientsContent';
+import { NewPatientsContentMobile } from './NewPatientsContent-mobile';
+import { ResponsiveWrapperCSS } from '@/components/responsive-wrapper';
 
 export const metadata: Metadata = {
   title: 'New Patient Information | Ottawa South Dental',
@@ -39,5 +41,10 @@ export const metadata: Metadata = {
 };
 
 export default function NewPatientInfoPage() {
-  return <NewPatientsContent />;
+  return (
+    <ResponsiveWrapperCSS
+      desktop={<NewPatientsContent />}
+      mobile={<NewPatientsContentMobile />}
+    />
+  );
 }

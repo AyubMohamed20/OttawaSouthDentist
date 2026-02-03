@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { WhiteFillingsContent } from './WhiteFillingsContent';
+import { WhiteFillingsContentMobile } from './WhiteFillingsContent-mobile';
+import { ResponsiveWrapper } from '@/components/responsive-wrapper';
 import { structuredData, JsonLd } from '@/lib/metadata';
 
 export const metadata: Metadata = {
@@ -75,7 +77,10 @@ export default function WhiteFillingsPage() {
         description: serviceData.description,
         url: serviceData.url,
       })} />
-      <WhiteFillingsContent />
+      <ResponsiveWrapper
+        desktop={<WhiteFillingsContent />}
+        mobile={<WhiteFillingsContentMobile />}
+      />
     </>
   );
 }

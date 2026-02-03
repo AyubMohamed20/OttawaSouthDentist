@@ -27,16 +27,19 @@ import {
   Award,
   Zap,
   Sun,
-  Coffee,
   Utensils,
-  Bed,
   Timer,
-  AlertTriangle,
   CircleDollarSign,
-  Milestone,
   Star,
-  Play,
   CheckCircle2,
+  Brush,
+  Droplet,
+  ShieldPlus,
+  HeartPulse,
+  Users,
+  Baby,
+  UserCheck,
+  Activity,
 } from 'lucide-react';
 import {
   motion,
@@ -92,6 +95,7 @@ const preventiveServices = [
     description: 'Professional fluoride applications strengthen tooth enamel and help repair early stages of decay.',
     benefit: 'Cavity Prevention',
     effectiveness: 95,
+    color: '#3b82f6',
   },
   {
     icon: Shield,
@@ -99,6 +103,7 @@ const preventiveServices = [
     description: 'Thin protective coatings applied to chewing surfaces of back teeth to prevent cavities.',
     benefit: 'Long-term Protection',
     effectiveness: 90,
+    color: '#8b5cf6',
   },
   {
     icon: GraduationCap,
@@ -106,6 +111,7 @@ const preventiveServices = [
     description: 'Personalized instruction on proper brushing, flossing, and daily care techniques.',
     benefit: 'Better Habits',
     effectiveness: 100,
+    color: '#22c55e',
   },
   {
     icon: Apple,
@@ -113,6 +119,7 @@ const preventiveServices = [
     description: 'Expert guidance on diet choices that support healthy teeth and gums.',
     benefit: 'Holistic Health',
     effectiveness: 85,
+    color: '#f97316',
   },
   {
     icon: BadgeCheck,
@@ -120,6 +127,7 @@ const preventiveServices = [
     description: 'Professional sports mouthguards designed to protect teeth during athletic activities.',
     benefit: 'Sports Safety',
     effectiveness: 98,
+    color: '#06b6d4',
   },
   {
     icon: Moon,
@@ -127,6 +135,7 @@ const preventiveServices = [
     description: 'Custom-fitted guards to protect teeth from grinding and clenching during sleep.',
     benefit: 'Sleep Protection',
     effectiveness: 92,
+    color: '#6366f1',
   },
 ];
 
@@ -181,6 +190,7 @@ const dailyRoutineSteps = [
     ],
     tip: 'Wait 30 minutes after eating before brushing',
     duration: '5 min',
+    image: '/images/services/preventive-dentistry/teeth-model.jpg',
   },
   {
     time: 'After Meals',
@@ -194,6 +204,7 @@ const dailyRoutineSteps = [
     ],
     tip: 'Crunchy fruits and vegetables help clean teeth naturally',
     duration: '2 min',
+    image: '/images/services/preventive-dentistry/dental-checkup.jpg',
   },
   {
     time: 'Evening',
@@ -207,6 +218,7 @@ const dailyRoutineSteps = [
     ],
     tip: 'Never skip nighttime brushing',
     duration: '5 min',
+    image: '/images/services/preventive-dentistry/hero-preventive.jpg',
   },
 ];
 
@@ -250,7 +262,8 @@ const healthMilestones = [
       'Fluoride varnish applications',
       'Monitor tooth development',
     ],
-    icon: Star,
+    icon: Baby,
+    description: 'Building the foundation for lifelong oral health',
   },
   {
     age: '6-12',
@@ -261,7 +274,8 @@ const healthMilestones = [
       'Orthodontic evaluation',
       'Sports mouthguard fitting',
     ],
-    icon: Target,
+    icon: Star,
+    description: 'Protecting permanent teeth as they emerge',
   },
   {
     age: '13-18',
@@ -273,6 +287,7 @@ const healthMilestones = [
       'Diet and oral health education',
     ],
     icon: Zap,
+    description: 'Maintaining health through teen years',
   },
   {
     age: '19-40',
@@ -284,6 +299,7 @@ const healthMilestones = [
       'Cosmetic considerations',
     ],
     icon: Award,
+    description: 'Preserving your smile for decades',
   },
   {
     age: '40+',
@@ -295,6 +311,7 @@ const healthMilestones = [
       'Bone health monitoring',
     ],
     icon: Heart,
+    description: 'Focused care for lasting health',
   },
 ];
 
@@ -346,6 +363,18 @@ const staggerContainer = {
   },
 };
 
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  },
+};
+
 // ============================================================================
 // MAGNETIC EFFECT HOOK
 // ============================================================================
@@ -379,6 +408,253 @@ function useMagnetic(strength: number = 0.3) {
 }
 
 // ============================================================================
+// TOOTH SVG ILLUSTRATION COMPONENT
+// ============================================================================
+
+function ToothIllustration({ className = '', animated = true }: { className?: string; animated?: boolean }) {
+  return (
+    <motion.svg
+      viewBox="0 0 100 140"
+      className={className}
+      initial={animated ? { opacity: 0, scale: 0.8 } : false}
+      animate={animated ? { opacity: 1, scale: 1 } : false}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      aria-hidden="true"
+    >
+      {/* Tooth Crown */}
+      <defs>
+        <linearGradient id="toothGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="50%" stopColor="#f8fafc" />
+          <stop offset="100%" stopColor="#e2e8f0" />
+        </linearGradient>
+        <linearGradient id="toothShadow" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#cbd5e1" stopOpacity="0.3" />
+          <stop offset="50%" stopColor="transparent" />
+          <stop offset="100%" stopColor="#cbd5e1" stopOpacity="0.2" />
+        </linearGradient>
+        <filter id="toothGlow">
+          <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+          <feMerge>
+            <feMergeNode in="coloredBlur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      {/* Main tooth body */}
+      <path
+        d="M50 10
+           C70 10 85 25 85 45
+           C85 60 80 75 75 90
+           C72 100 68 115 65 130
+           C63 135 60 138 55 138
+           C50 138 50 130 50 125
+           C50 130 50 138 45 138
+           C40 138 37 135 35 130
+           C32 115 28 100 25 90
+           C20 75 15 60 15 45
+           C15 25 30 10 50 10Z"
+        fill="url(#toothGradient)"
+        stroke="#e2e8f0"
+        strokeWidth="1"
+        filter="url(#toothGlow)"
+      />
+
+      {/* Tooth highlight */}
+      <ellipse
+        cx="40"
+        cy="35"
+        rx="12"
+        ry="8"
+        fill="white"
+        opacity="0.6"
+      />
+
+      {/* Root divider line */}
+      <path
+        d="M50 90 L50 125"
+        stroke="#cbd5e1"
+        strokeWidth="1"
+        strokeDasharray="2,2"
+        opacity="0.5"
+      />
+
+      {/* Sparkle */}
+      {animated && (
+        <motion.g
+          animate={{ opacity: [0.5, 1, 0.5], scale: [0.9, 1.1, 0.9] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <path
+            d="M70 25 L72 30 L77 32 L72 34 L70 39 L68 34 L63 32 L68 30 Z"
+            fill="#722F37"
+            opacity="0.8"
+          />
+        </motion.g>
+      )}
+    </motion.svg>
+  );
+}
+
+// ============================================================================
+// PROTECTION SHIELD ILLUSTRATION
+// ============================================================================
+
+function ProtectionShieldIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 140" className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#722F37" />
+          <stop offset="100%" stopColor="#5a252c" />
+        </linearGradient>
+        <linearGradient id="innerShieldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#8B3A42" />
+          <stop offset="100%" stopColor="#722F37" />
+        </linearGradient>
+      </defs>
+
+      {/* Outer shield */}
+      <motion.path
+        d="M60 10 L100 30 L100 70 C100 100 80 120 60 130 C40 120 20 100 20 70 L20 30 Z"
+        fill="url(#shieldGradient)"
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+      />
+
+      {/* Inner shield */}
+      <path
+        d="M60 25 L90 40 L90 70 C90 92 75 108 60 116 C45 108 30 92 30 70 L30 40 Z"
+        fill="url(#innerShieldGradient)"
+        opacity="0.3"
+      />
+
+      {/* Checkmark */}
+      <motion.path
+        d="M45 70 L55 82 L78 55"
+        fill="none"
+        stroke="white"
+        strokeWidth="6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+      />
+
+      {/* Shine effect */}
+      <motion.ellipse
+        cx="45"
+        cy="45"
+        rx="10"
+        ry="15"
+        fill="white"
+        opacity="0.2"
+        animate={{ opacity: [0.1, 0.3, 0.1] }}
+        transition={{ duration: 3, repeat: Infinity }}
+      />
+    </svg>
+  );
+}
+
+// ============================================================================
+// TOOTHBRUSH ILLUSTRATION
+// ============================================================================
+
+function ToothbrushIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 40 120" className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id="brushHandleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#722F37" />
+          <stop offset="50%" stopColor="#8B3A42" />
+          <stop offset="100%" stopColor="#722F37" />
+        </linearGradient>
+      </defs>
+
+      {/* Handle */}
+      <rect x="15" y="40" width="10" height="75" rx="3" fill="url(#brushHandleGradient)" />
+
+      {/* Brush head */}
+      <rect x="12" y="10" width="16" height="35" rx="4" fill="#f1f5f9" stroke="#e2e8f0" strokeWidth="1" />
+
+      {/* Bristles */}
+      {[0, 1, 2, 3, 4].map((row) => (
+        <g key={row}>
+          {[0, 1, 2].map((col) => (
+            <motion.rect
+              key={`${row}-${col}`}
+              x={15 + col * 4}
+              y={14 + row * 6}
+              width="2"
+              height="5"
+              rx="1"
+              fill="#94a3b8"
+              animate={{ scaleY: [1, 0.8, 1] }}
+              transition={{ duration: 0.5, delay: row * 0.1, repeat: Infinity, repeatDelay: 2 }}
+            />
+          ))}
+        </g>
+      ))}
+
+      {/* Grip texture */}
+      {[0, 1, 2, 3].map((i) => (
+        <rect key={i} x="17" y={60 + i * 8} width="6" height="2" rx="1" fill="#5a252c" opacity="0.5" />
+      ))}
+    </svg>
+  );
+}
+
+// ============================================================================
+// FLUORIDE DROP ILLUSTRATION
+// ============================================================================
+
+function FluorideDropIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 80 100" className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id="dropGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#60a5fa" />
+          <stop offset="100%" stopColor="#3b82f6" />
+        </linearGradient>
+        <filter id="dropShadow">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.2" />
+        </filter>
+      </defs>
+
+      {/* Main drop */}
+      <motion.path
+        d="M40 10 C40 10 65 45 65 60 C65 77 54 90 40 90 C26 90 15 77 15 60 C15 45 40 10 40 10Z"
+        fill="url(#dropGradient)"
+        filter="url(#dropShadow)"
+        initial={{ y: -10, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      />
+
+      {/* Highlight */}
+      <ellipse cx="30" cy="55" rx="8" ry="12" fill="white" opacity="0.4" />
+
+      {/* F letter */}
+      <text x="40" y="68" textAnchor="middle" fill="white" fontSize="20" fontWeight="bold">
+        F
+      </text>
+
+      {/* Sparkles */}
+      <motion.g
+        animate={{ opacity: [0.5, 1, 0.5] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        <circle cx="55" cy="45" r="2" fill="#93c5fd" />
+        <circle cx="25" cy="72" r="1.5" fill="#93c5fd" />
+      </motion.g>
+    </svg>
+  );
+}
+
+// ============================================================================
 // ANIMATED SHIELD VISUALIZATION
 // ============================================================================
 
@@ -388,11 +664,11 @@ function AnimatedShieldVisualization() {
   const [activeLayer, setActiveLayer] = useState(0);
 
   const protectionLayers = [
-    { name: 'Daily Brushing', color: '#22c55e', radius: 180 },
-    { name: 'Flossing', color: '#3b82f6', radius: 150 },
-    { name: 'Professional Cleaning', color: '#8b5cf6', radius: 120 },
-    { name: 'Fluoride Treatment', color: '#ec4899', radius: 90 },
-    { name: 'Dental Sealants', color: '#f59e0b', radius: 60 },
+    { name: 'Daily Brushing', color: '#22c55e', radius: 180, icon: Brush },
+    { name: 'Flossing', color: '#3b82f6', radius: 150, icon: Sparkles },
+    { name: 'Professional Cleaning', color: '#8b5cf6', radius: 120, icon: Stethoscope },
+    { name: 'Fluoride Treatment', color: '#ec4899', radius: 90, icon: Droplet },
+    { name: 'Dental Sealants', color: '#f59e0b', radius: 60, icon: Shield },
   ];
 
   useEffect(() => {
@@ -406,100 +682,124 @@ function AnimatedShieldVisualization() {
   }, [isInView, protectionLayers.length]);
 
   return (
-    <div ref={containerRef} className="relative h-[500px] flex items-center justify-center">
-      {/* Central tooth */}
-      <motion.div
-        className="relative z-20 w-24 h-32 flex items-center justify-center"
-        initial={{ scale: 0 }}
-        animate={isInView ? { scale: 1 } : { scale: 0 }}
-        transition={{ delay: 0.5, type: 'spring', stiffness: 200 }}
-      >
-        <div className="relative">
-          {/* Tooth shape */}
-          <div className="w-20 h-28 bg-gradient-to-b from-white via-neutral-100 to-neutral-200 rounded-t-full rounded-b-lg shadow-xl" />
-          {/* Tooth roots */}
-          <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex gap-1">
-            <div className="w-3 h-8 bg-gradient-to-b from-neutral-200 to-neutral-300 rounded-b-full" />
-            <div className="w-3 h-6 bg-gradient-to-b from-neutral-200 to-neutral-300 rounded-b-full" />
-          </div>
-          {/* Sparkle */}
+    <div ref={containerRef} className="relative">
+      <div className="grid lg:grid-cols-2 gap-12 items-center">
+        {/* Visualization */}
+        <div className="relative h-[500px] flex items-center justify-center">
+          {/* Central tooth */}
           <motion.div
-            className="absolute top-4 right-2 w-4 h-4 text-white"
-            animate={{
-              opacity: [0.5, 1, 0.5],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
+            className="relative z-20"
+            initial={{ scale: 0 }}
+            animate={isInView ? { scale: 1 } : { scale: 0 }}
+            transition={{ delay: 0.5, type: 'spring', stiffness: 200 }}
           >
-            <Sparkles className="w-full h-full" />
+            <ToothIllustration className="w-24 h-32" />
           </motion.div>
-        </div>
-      </motion.div>
 
-      {/* Protection layers */}
-      {protectionLayers.map((layer, index) => (
-        <motion.div
-          key={layer.name}
-          className="absolute rounded-full border-2"
-          style={{
-            width: layer.radius * 2,
-            height: layer.radius * 2,
-            borderColor: layer.color,
-          }}
-          initial={{ scale: 0, opacity: 0 }}
-          animate={
-            isInView
-              ? {
-                  scale: activeLayer >= index ? 1 : 0.8,
-                  opacity: activeLayer >= index ? 0.6 : 0.2,
-                }
-              : { scale: 0, opacity: 0 }
-          }
-          transition={{
-            delay: index * 0.2,
-            duration: 0.5,
-            type: 'spring',
-          }}
-        >
-          {/* Animated pulse */}
-          {activeLayer === index && (
+          {/* Protection layers */}
+          {protectionLayers.map((layer, index) => (
             <motion.div
-              className="absolute inset-0 rounded-full"
-              style={{ borderColor: layer.color }}
-              animate={{
-                scale: [1, 1.1, 1],
-                opacity: [0.3, 0, 0.3],
+              key={layer.name}
+              className="absolute rounded-full border-2"
+              style={{
+                width: layer.radius * 2,
+                height: layer.radius * 2,
+                borderColor: layer.color,
               }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-          )}
-        </motion.div>
-      ))}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={
+                isInView
+                  ? {
+                      scale: activeLayer >= index ? 1 : 0.8,
+                      opacity: activeLayer >= index ? 0.6 : 0.2,
+                    }
+                  : { scale: 0, opacity: 0 }
+              }
+              transition={{
+                delay: index * 0.2,
+                duration: 0.5,
+                type: 'spring',
+              }}
+            >
+              {/* Animated pulse */}
+              {activeLayer === index && (
+                <motion.div
+                  className="absolute inset-0 rounded-full"
+                  style={{ borderColor: layer.color, borderWidth: 2 }}
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    opacity: [0.3, 0, 0.3],
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+              )}
+            </motion.div>
+          ))}
+        </div>
 
-      {/* Layer labels */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 space-y-3">
-        {protectionLayers.map((layer, index) => (
-          <motion.button
-            key={layer.name}
-            onClick={() => setActiveLayer(index)}
-            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-300 ${
-              activeLayer === index
-                ? 'bg-white shadow-lg scale-105'
-                : 'bg-white/50 hover:bg-white/80'
-            }`}
-            initial={{ opacity: 0, x: 20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-            transition={{ delay: 0.8 + index * 0.1 }}
+        {/* Layer labels */}
+        <div className="space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            className="mb-8"
           >
-            <div
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: layer.color }}
-            />
-            <span className={`text-sm font-medium ${activeLayer === index ? 'text-[#1e293b]' : 'text-neutral-500'}`}>
-              {layer.name}
-            </span>
-          </motion.button>
-        ))}
+            <h3 className="text-2xl font-bold text-[#1e293b] mb-2">
+              Multiple Layers of Protection
+            </h3>
+            <p className="text-neutral-600">
+              Each preventive measure adds another layer of defense for your teeth
+            </p>
+          </motion.div>
+
+          {protectionLayers.map((layer, index) => {
+            const LayerIcon = layer.icon;
+            return (
+              <motion.button
+                key={layer.name}
+                onClick={() => setActiveLayer(index)}
+                className={`w-full flex items-center gap-4 px-5 py-4 rounded-xl transition-all duration-300 ${
+                  activeLayer === index
+                    ? 'bg-white shadow-lg ring-2'
+                    : 'bg-white/50 hover:bg-white/80'
+                }`}
+                style={{
+                  '--tw-ring-color': activeLayer === index ? layer.color : 'transparent',
+                } as React.CSSProperties}
+                initial={{ opacity: 0, x: 20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
+                transition={{ delay: 0.8 + index * 0.1 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: `${layer.color}20` }}
+                >
+                  <LayerIcon className="w-6 h-6" style={{ color: layer.color }} />
+                </div>
+                <div className="flex-1 text-left">
+                  <span className={`font-medium ${activeLayer === index ? 'text-[#1e293b]' : 'text-neutral-500'}`}>
+                    {layer.name}
+                  </span>
+                  <div className="h-1.5 mt-2 bg-neutral-100 rounded-full overflow-hidden">
+                    <motion.div
+                      className="h-full rounded-full"
+                      style={{ backgroundColor: layer.color }}
+                      initial={{ width: 0 }}
+                      animate={{ width: activeLayer >= index ? '100%' : '0%' }}
+                      transition={{ duration: 0.5 }}
+                    />
+                  </div>
+                </div>
+                <div
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: activeLayer >= index ? layer.color : '#e5e7eb' }}
+                />
+              </motion.button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
@@ -516,13 +816,13 @@ function OralHealthAssessment() {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-100px' });
 
-  const questions: { question: string; weight: number }[] = [
-    { question: 'Do you brush twice daily for at least 2 minutes?', weight: 20 },
-    { question: 'Do you floss daily?', weight: 20 },
-    { question: 'Have you visited a dentist in the last 6 months?', weight: 20 },
-    { question: 'Do you limit sugary foods and drinks?', weight: 15 },
-    { question: 'Do you use fluoride toothpaste?', weight: 15 },
-    { question: 'Do you wear a mouthguard during sports?', weight: 10 },
+  const questions: { question: string; weight: number; icon: React.ComponentType<{ className?: string }> }[] = [
+    { question: 'Do you brush twice daily for at least 2 minutes?', weight: 20, icon: Brush },
+    { question: 'Do you floss daily?', weight: 20, icon: Sparkles },
+    { question: 'Have you visited a dentist in the last 6 months?', weight: 20, icon: Calendar },
+    { question: 'Do you limit sugary foods and drinks?', weight: 15, icon: Apple },
+    { question: 'Do you use fluoride toothpaste?', weight: 15, icon: Droplet },
+    { question: 'Do you wear a mouthguard during sports?', weight: 10, icon: Shield },
   ];
 
   const handleAnswer = (answer: boolean) => {
@@ -544,10 +844,10 @@ function OralHealthAssessment() {
   };
 
   const getScoreMessage = (score: number) => {
-    if (score >= 80) return { message: 'Excellent oral health habits!', color: '#22c55e', emoji: '🌟' };
-    if (score >= 60) return { message: 'Good habits, room for improvement', color: '#eab308', emoji: '👍' };
-    if (score >= 40) return { message: 'Some areas need attention', color: '#f97316', emoji: '⚠️' };
-    return { message: "Let's build better habits together", color: '#ef4444', emoji: '💪' };
+    if (score >= 80) return { message: 'Excellent oral health habits!', color: '#22c55e', grade: 'A' };
+    if (score >= 60) return { message: 'Good habits, room for improvement', color: '#eab308', grade: 'B' };
+    if (score >= 40) return { message: 'Some areas need attention', color: '#f97316', grade: 'C' };
+    return { message: "Let's build better habits together", color: '#ef4444', grade: 'D' };
   };
 
   const resetAssessment = () => {
@@ -555,6 +855,8 @@ function OralHealthAssessment() {
     setAnswers([]);
     setShowResults(false);
   };
+
+  const currentQ = questions[currentQuestion];
 
   return (
     <div ref={containerRef} className="max-w-2xl mx-auto">
@@ -590,17 +892,21 @@ function OralHealthAssessment() {
               animate={{ opacity: 1, x: 0 }}
               className="text-center"
             >
-              <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/5 flex items-center justify-center">
-                <CheckCircle2 className="w-8 h-8 text-[#722F37]" />
-              </div>
-              <h3 className="text-2xl font-semibold text-[#1e293b] mb-8">
-                {questions[currentQuestion]?.question}
-              </h3>
+              {currentQ && (
+                <>
+                  <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/5 flex items-center justify-center">
+                    <currentQ.icon className="w-10 h-10 text-[#722F37]" />
+                  </div>
+                  <h3 className="text-2xl font-semibold text-[#1e293b] mb-8">
+                    {currentQ.question}
+                  </h3>
+                </>
+              )}
 
               <div className="flex justify-center gap-4">
                 <motion.button
                   onClick={() => handleAnswer(true)}
-                  className="px-12 py-4 bg-green-500 text-white font-semibold rounded-xl hover:bg-green-600 transition-colors"
+                  className="px-12 py-4 bg-green-500 text-white font-semibold rounded-xl hover:bg-green-600 transition-colors shadow-lg shadow-green-500/25"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -630,12 +936,13 @@ function OralHealthAssessment() {
               return (
                 <>
                   <motion.div
-                    className="text-6xl mb-4"
+                    className="w-32 h-32 mx-auto mb-6 rounded-full flex items-center justify-center text-5xl font-bold text-white"
+                    style={{ backgroundColor: result.color }}
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: 'spring', stiffness: 200 }}
                   >
-                    {result.emoji}
+                    {result.grade}
                   </motion.div>
 
                   <motion.div
@@ -694,7 +1001,7 @@ function OralHealthAssessment() {
                   <div className="flex justify-center gap-4">
                     <Link
                       href="/contact#book"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-[#722F37] text-white font-semibold rounded-xl hover:bg-[#8B3A42] transition-colors"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-[#722F37] text-white font-semibold rounded-xl hover:bg-[#8B3A42] transition-colors shadow-lg shadow-[#722F37]/25"
                     >
                       <Calendar className="w-5 h-5" />
                       Book Consultation
@@ -804,50 +1111,36 @@ function DailyRoutineGuide() {
           className="bg-white rounded-3xl border border-neutral-200 overflow-hidden shadow-sm"
         >
           <div className="grid lg:grid-cols-2">
-            {/* Visual Side */}
-            <div className="relative h-64 lg:h-auto bg-gradient-to-br from-[#FDF8F3] to-[#F5EDE5] flex items-center justify-center p-8">
+            {/* Visual Side with Image */}
+            <div className="relative h-64 lg:h-auto min-h-[300px]">
+              <Image
+                src={currentStep.image}
+                alt={`${currentStep.title} - ${currentStep.time} dental care routine`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
               <motion.div
-                className="text-center"
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.2 }}
+                className="absolute bottom-6 left-6 right-6"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
               >
                 {(() => {
                   const ActiveIcon = currentStep.icon;
                   return (
-                    <div className="relative">
-                      <motion.div
-                        className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-[#722F37]/20 to-[#722F37]/5 flex items-center justify-center"
-                        animate={{
-                          boxShadow: [
-                            '0 0 0 0 rgba(114, 47, 55, 0.2)',
-                            '0 0 0 20px rgba(114, 47, 55, 0)',
-                            '0 0 0 0 rgba(114, 47, 55, 0)',
-                          ],
-                        }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                      >
-                        <ActiveIcon className="w-16 h-16 text-[#722F37]" />
-                      </motion.div>
-                      <motion.div
-                        className="absolute -top-2 -right-2 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: 0.4, type: 'spring' }}
-                      >
-                        <Timer className="w-6 h-6 text-[#722F37]" />
-                      </motion.div>
+                    <div className="flex items-center gap-4">
+                      <div className="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                        <ActiveIcon className="w-7 h-7 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-white/80 text-sm font-medium">{currentStep.time}</p>
+                        <p className="text-white text-xl font-bold">{currentStep.title}</p>
+                      </div>
                     </div>
                   );
                 })()}
-                <motion.p
-                  className="mt-6 text-lg font-semibold text-[#1e293b]"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  {currentStep.title}
-                </motion.p>
               </motion.div>
             </div>
 
@@ -857,7 +1150,8 @@ function DailyRoutineGuide() {
                 <span className="px-3 py-1 rounded-full bg-[#722F37]/10 text-[#722F37] text-sm font-medium">
                   {currentStep.time}
                 </span>
-                <span className="px-3 py-1 rounded-full bg-neutral-100 text-neutral-600 text-sm font-medium">
+                <span className="px-3 py-1 rounded-full bg-neutral-100 text-neutral-600 text-sm font-medium flex items-center gap-1">
+                  <Timer className="w-3.5 h-3.5" />
                   {currentStep.duration}
                 </span>
               </div>
@@ -887,7 +1181,7 @@ function DailyRoutineGuide() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6 }}
-                className="p-4 rounded-xl bg-[#FDF8F3] border border-[#EDE5DD]"
+                className="p-4 rounded-xl bg-gradient-to-br from-[#FDF8F3] to-[#F5EDE5] border border-[#EDE5DD]"
               >
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-lg bg-[#722F37] flex items-center justify-center flex-shrink-0">
@@ -1097,11 +1391,17 @@ function HealthMilestonesTimeline() {
         >
           <div className="grid lg:grid-cols-5 gap-0">
             {/* Info side */}
-            <div className="lg:col-span-2 p-8 lg:p-12 bg-gradient-to-br from-[#722F37] to-[#5a252c]">
+            <div className="lg:col-span-2 p-8 lg:p-12 bg-gradient-to-br from-[#722F37] to-[#5a252c] relative overflow-hidden">
+              {/* Decorative tooth illustration */}
+              <div className="absolute -bottom-10 -right-10 opacity-10">
+                <ToothIllustration className="w-48 h-64" animated={false} />
+              </div>
+
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
+                className="relative z-10"
               >
                 {(() => {
                   const MilestoneIcon = currentMilestone.icon;
@@ -1118,7 +1418,7 @@ function HealthMilestonesTimeline() {
                   {currentMilestone.title}
                 </h3>
                 <p className="text-white/80 leading-relaxed">
-                  Key preventive care milestones for this life stage to ensure optimal oral health.
+                  {currentMilestone.description}
                 </p>
               </motion.div>
             </div>
@@ -1196,10 +1496,16 @@ function ServicesGrid() {
 
             <div className="relative">
               <div className="flex items-start justify-between mb-4">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <ServiceIcon className="w-7 h-7 text-[#722F37]" />
+                <div
+                  className="w-14 h-14 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                  style={{ backgroundColor: `${service.color}15` }}
+                >
+                  <ServiceIcon className="w-7 h-7" style={{ color: service.color }} />
                 </div>
-                <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
+                <span
+                  className="px-3 py-1 rounded-full text-xs font-semibold"
+                  style={{ backgroundColor: `${service.color}15`, color: service.color }}
+                >
                   {service.benefit}
                 </span>
               </div>
@@ -1213,11 +1519,12 @@ function ServicesGrid() {
               <div className="pt-4 border-t border-neutral-100">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-neutral-500">Effectiveness</span>
-                  <span className="text-sm font-bold text-[#722F37]">{service.effectiveness}%</span>
+                  <span className="text-sm font-bold" style={{ color: service.color }}>{service.effectiveness}%</span>
                 </div>
                 <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
                   <motion.div
-                    className="h-full bg-gradient-to-r from-[#722F37] to-[#8B3A42] rounded-full"
+                    className="h-full rounded-full"
+                    style={{ backgroundColor: service.color }}
                     initial={{ width: 0 }}
                     animate={isInView ? { width: `${service.effectiveness}%` } : { width: 0 }}
                     transition={{ duration: 0.8, delay: index * 0.1 }}
@@ -1264,8 +1571,6 @@ function FAQAccordion({ items }: { items: FAQItem[] }) {
                   className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300 ${
                     isOpen ? 'bg-[#722F37]' : 'bg-neutral-100'
                   }`}
-                  animate={{ rotate: isOpen ? 180 : 0 }}
-                  transition={{ duration: 0.3 }}
                 >
                   <span className={`text-sm font-semibold ${isOpen ? 'text-white' : 'text-neutral-500'}`}>
                     {index + 1}
@@ -1347,21 +1652,21 @@ function HeroSection() {
 
         {/* Floating icons */}
         <motion.div
-          className="absolute top-20 left-[15%] w-12 h-12 rounded-full bg-green-100 flex items-center justify-center"
+          className="absolute top-20 left-[15%] w-12 h-12 rounded-full bg-green-100 flex items-center justify-center shadow-lg"
           animate={{ y: [-10, 10, -10], rotate: [0, 10, 0] }}
           transition={{ duration: 6, repeat: Infinity }}
         >
           <ShieldCheck className="w-6 h-6 text-green-600" />
         </motion.div>
         <motion.div
-          className="absolute bottom-32 right-[20%] w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center"
+          className="absolute bottom-32 right-[20%] w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shadow-lg"
           animate={{ y: [10, -10, 10], rotate: [0, -10, 0] }}
           transition={{ duration: 7, repeat: Infinity }}
         >
           <Droplets className="w-5 h-5 text-blue-600" />
         </motion.div>
         <motion.div
-          className="absolute top-1/3 right-[10%] w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center"
+          className="absolute top-1/3 right-[10%] w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center shadow-lg"
           animate={{ y: [-15, 15, -15], x: [5, -5, 5] }}
           transition={{ duration: 8, repeat: Infinity }}
         >
@@ -1394,6 +1699,7 @@ function HeroSection() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
                 className="mb-8"
+                aria-label="Breadcrumb"
               >
                 <ol className="flex items-center gap-2 text-sm">
                   <li>
@@ -1401,14 +1707,14 @@ function HeroSection() {
                       Home
                     </Link>
                   </li>
-                  <li className="text-neutral-300">/</li>
+                  <li className="text-neutral-300" aria-hidden="true">/</li>
                   <li>
                     <Link href="/services" className="text-neutral-500 hover:text-[#722F37] transition-colors">
                       Services
                     </Link>
                   </li>
-                  <li className="text-neutral-300">/</li>
-                  <li className="text-[#722F37] font-medium">Preventive Dentistry</li>
+                  <li className="text-neutral-300" aria-hidden="true">/</li>
+                  <li className="text-[#722F37] font-medium" aria-current="page">Preventive Dentistry</li>
                 </ol>
               </motion.nav>
 
@@ -1423,6 +1729,7 @@ function HeroSection() {
                   className="w-2 h-2 rounded-full bg-green-500"
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
+                  aria-hidden="true"
                 />
                 <span className="text-sm font-medium text-green-700">
                   Protection for Your Whole Family
@@ -1443,6 +1750,7 @@ function HeroSection() {
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
                     transition={{ delay: 0.8, duration: 0.6 }}
+                    aria-hidden="true"
                   />
                 </span>
               </motion.h1>
@@ -1478,10 +1786,11 @@ function HeroSection() {
                       initial={{ x: '-100%' }}
                       whileHover={{ x: '200%' }}
                       transition={{ duration: 0.6 }}
+                      aria-hidden="true"
                     />
-                    <Calendar className="w-5 h-5" />
+                    <Calendar className="w-5 h-5" aria-hidden="true" />
                     <span className="relative">Book This Service</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                   </Link>
                 </motion.div>
 
@@ -1489,7 +1798,7 @@ function HeroSection() {
                   href="tel:+16137336446"
                   className="inline-flex items-center gap-3 px-8 py-4 bg-white text-[#722F37] font-semibold rounded-xl border-2 border-[#722F37]/20 hover:border-[#722F37]/40 hover:bg-[#FDF8F3] transition-all"
                 >
-                  <Phone className="w-5 h-5" />
+                  <Phone className="w-5 h-5" aria-hidden="true" />
                   (613) 733-6446
                 </a>
               </motion.div>
@@ -1503,7 +1812,7 @@ function HeroSection() {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                    <Shield className="w-6 h-6 text-green-600" />
+                    <Shield className="w-6 h-6 text-green-600" aria-hidden="true" />
                   </div>
                   <div>
                     <p className="font-bold text-[#1e293b]">75%</p>
@@ -1512,7 +1821,7 @@ function HeroSection() {
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                    <DollarSign className="w-6 h-6 text-blue-600" />
+                    <DollarSign className="w-6 h-6 text-blue-600" aria-hidden="true" />
                   </div>
                   <div>
                     <p className="font-bold text-[#1e293b]">50%</p>
@@ -1532,14 +1841,14 @@ function HeroSection() {
               {/* Main image */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-neutral-900/10 aspect-[4/3]">
                 <Image
-                  src="/images/hygiene/hygiene-05.jpg"
-                  alt="Dental hygienist performing preventive care treatment"
+                  src="/images/services/preventive-dentistry/hero-preventive.jpg"
+                  alt="Dentist demonstrating proper brushing technique to patient using a dental model"
                   fill
                   className="object-cover"
                   priority
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" aria-hidden="true" />
               </div>
 
               {/* Floating cards */}
@@ -1551,7 +1860,7 @@ function HeroSection() {
               >
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-100 to-green-50 flex items-center justify-center">
-                    <ShieldCheck className="w-7 h-7 text-green-600" />
+                    <ShieldCheck className="w-7 h-7 text-green-600" aria-hidden="true" />
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-[#1e293b]">90%</p>
@@ -1568,7 +1877,7 @@ function HeroSection() {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-[#722F37]/10 flex items-center justify-center">
-                    <Heart className="w-5 h-5 text-[#722F37]" />
+                    <Users className="w-5 h-5 text-[#722F37]" aria-hidden="true" />
                   </div>
                   <div>
                     <p className="font-semibold text-[#1e293b]">All Ages</p>
@@ -1585,6 +1894,102 @@ function HeroSection() {
 }
 
 // ============================================================================
+// WHY PREVENTION SECTION WITH IMAGE
+// ============================================================================
+
+function WhyPreventionSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+
+  const features = [
+    { icon: ShieldPlus, title: 'Stop Problems Before They Start', description: 'Early detection and treatment prevents minor issues from becoming major procedures' },
+    { icon: HeartPulse, title: 'Protect Overall Health', description: 'Good oral health is linked to better heart health and reduced risk of diabetes' },
+    { icon: CircleDollarSign, title: 'Save Money Long-Term', description: 'Prevention costs a fraction of complex restorative treatments' },
+    { icon: Smile, title: 'Maintain Confidence', description: 'Keep your natural smile healthy and beautiful for life' },
+  ];
+
+  return (
+    <section ref={containerRef} className="relative py-24 bg-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Image Side */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+            transition={{ duration: 0.8 }}
+            className="relative"
+          >
+            <div className="relative rounded-3xl overflow-hidden aspect-[4/3]">
+              <Image
+                src="/images/services/preventive-dentistry/child-checkup.jpg"
+                alt="Happy child receiving a dental checkup, showing the positive experience of preventive care"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#722F37]/20 to-transparent" aria-hidden="true" />
+            </div>
+
+            {/* Floating illustration */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+              className="absolute -bottom-8 -right-8 bg-white rounded-2xl p-4 shadow-xl"
+            >
+              <ProtectionShieldIllustration className="w-24 h-28" />
+            </motion.div>
+          </motion.div>
+
+          {/* Content Side */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <span className="inline-block px-4 py-1 rounded-full bg-[#722F37]/5 text-[#722F37] text-sm font-medium mb-4">
+              Why Prevention?
+            </span>
+            <h2 className="text-4xl lg:text-5xl font-bold text-[#1e293b] tracking-tight mb-6">
+              The Best Treatment is{' '}
+              <span className="text-[#722F37]">Prevention</span>
+            </h2>
+            <p className="text-lg text-neutral-600 mb-8">
+              Just like changing the oil in your car prevents engine damage, regular dental care
+              prevents costly and painful dental problems. Our preventive approach keeps your smile
+              healthy while saving you time, money, and discomfort.
+            </p>
+
+            <div className="space-y-4">
+              {features.map((feature, index) => {
+                const FeatureIcon = feature.icon;
+                return (
+                  <motion.div
+                    key={feature.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                    transition={{ delay: 0.4 + index * 0.1 }}
+                    className="flex items-start gap-4 p-4 rounded-xl hover:bg-[#FDF8F3] transition-colors"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-[#722F37]/10 flex items-center justify-center flex-shrink-0">
+                      <FeatureIcon className="w-6 h-6 text-[#722F37]" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-[#1e293b] mb-1">{feature.title}</h3>
+                      <p className="text-sm text-neutral-500">{feature.description}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ============================================================================
 // MAIN COMPONENT
 // ============================================================================
 
@@ -1593,6 +1998,9 @@ export function PreventiveDentistryContent() {
     <main id="main-content" className="min-h-screen bg-white">
       {/* Hero Section */}
       <HeroSection />
+
+      {/* Why Prevention Section */}
+      <WhyPreventionSection />
 
       {/* Services Grid */}
       <section className="relative py-24 bg-gradient-to-b from-white to-[#FDF8F3]">
@@ -1773,11 +2181,11 @@ export function PreventiveDentistryContent() {
                   variants={fadeInUp}
                   className="group relative p-6 rounded-2xl bg-white border border-neutral-200 hover:border-[#722F37]/20 hover:shadow-xl transition-all duration-500"
                 >
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#722F37]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#722F37]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true" />
 
                   <div className="relative">
                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                      <BenefitIcon className="w-7 h-7 text-[#722F37]" />
+                      <BenefitIcon className="w-7 h-7 text-[#722F37]" aria-hidden="true" />
                     </div>
 
                     <h3 className="font-semibold text-lg text-[#1e293b] mb-2">{benefit.title}</h3>
@@ -1832,7 +2240,7 @@ export function PreventiveDentistryContent() {
               href="tel:+16137336446"
               className="inline-flex items-center gap-2 text-[#722F37] font-semibold hover:underline"
             >
-              <Phone className="w-5 h-5" />
+              <Phone className="w-5 h-5" aria-hidden="true" />
               Call us at (613) 733-6446
             </a>
           </motion.div>
@@ -1875,7 +2283,7 @@ export function PreventiveDentistryContent() {
                     className="group block p-6 rounded-2xl bg-white border border-neutral-200 hover:border-[#722F37]/20 hover:shadow-xl transition-all duration-500"
                   >
                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                      <ServiceIcon className="w-7 h-7 text-[#722F37]" />
+                      <ServiceIcon className="w-7 h-7 text-[#722F37]" aria-hidden="true" />
                     </div>
 
                     <h3 className="font-semibold text-lg text-[#1e293b] mb-2 group-hover:text-[#722F37] transition-colors">
@@ -1887,7 +2295,7 @@ export function PreventiveDentistryContent() {
 
                     <span className="inline-flex items-center gap-2 text-[#722F37] font-medium text-sm group-hover:gap-3 transition-all">
                       Learn more
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </span>
                   </Link>
                 </motion.div>
@@ -1907,15 +2315,22 @@ export function PreventiveDentistryContent() {
           className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/5"
           animate={{ rotate: 360 }}
           transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
+          aria-hidden="true"
         />
         <motion.div
           className="absolute -bottom-32 -left-32 w-[500px] h-[500px] rounded-full bg-white/5"
           animate={{ rotate: -360 }}
           transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+          aria-hidden="true"
         />
 
+        {/* Tooth illustration */}
+        <div className="absolute bottom-10 right-10 opacity-10 hidden lg:block" aria-hidden="true">
+          <ToothIllustration className="w-32 h-44" animated={false} />
+        </div>
+
         {/* Animated protection rings */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
           <motion.div
             className="w-[600px] h-[600px] rounded-full border border-white/10"
             animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.1, 0.3] }}
@@ -1945,7 +2360,7 @@ export function PreventiveDentistryContent() {
               }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <ShieldCheck className="w-10 h-10 text-white" />
+              <ShieldCheck className="w-10 h-10 text-white" aria-hidden="true" />
             </motion.div>
 
             <h2 className="text-4xl lg:text-5xl font-bold text-white tracking-tight mb-6">
@@ -1962,9 +2377,9 @@ export function PreventiveDentistryContent() {
                   href="/contact#book"
                   className="group inline-flex items-center gap-3 px-8 py-4 bg-white text-[#722F37] font-semibold rounded-xl hover:bg-neutral-100 transition-colors shadow-lg"
                 >
-                  <Calendar className="w-5 h-5" />
+                  <Calendar className="w-5 h-5" aria-hidden="true" />
                   Book This Service
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                 </Link>
               </motion.div>
 
@@ -1972,7 +2387,7 @@ export function PreventiveDentistryContent() {
                 href="tel:+16137336446"
                 className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/10 text-white font-semibold rounded-xl border-2 border-white/20 hover:bg-white/20 transition-colors"
               >
-                <Phone className="w-5 h-5" />
+                <Phone className="w-5 h-5" aria-hidden="true" />
                 (613) 733-6446
               </a>
             </div>

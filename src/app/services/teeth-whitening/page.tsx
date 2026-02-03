@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { TeethWhiteningContent } from './TeethWhiteningContent';
+import { TeethWhiteningContentMobile } from './TeethWhiteningContent-mobile';
+import { ResponsiveWrapperCSS } from '@/components/responsive-wrapper';
 import { structuredData, JsonLd } from '@/lib/metadata';
 
 export const metadata: Metadata = {
@@ -76,7 +78,10 @@ export default function TeethWhiteningPage() {
         description: serviceData.description,
         url: serviceData.url,
       })} />
-      <TeethWhiteningContent />
+      <ResponsiveWrapperCSS
+        desktop={<TeethWhiteningContent />}
+        mobile={<TeethWhiteningContentMobile />}
+      />
     </>
   );
 }

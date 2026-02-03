@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { DenturesContent } from './DenturesContent';
+import { DenturesContentMobile } from './DenturesContent-mobile';
+import { ResponsiveWrapper } from '@/components/responsive-wrapper';
 import { structuredData, JsonLd } from '@/lib/metadata';
 
 export const metadata: Metadata = {
@@ -76,7 +78,10 @@ export default function DenturesPage() {
         description: serviceData.description,
         url: serviceData.url,
       })} />
-      <DenturesContent />
+      <ResponsiveWrapper
+        desktop={<DenturesContent />}
+        mobile={<DenturesContentMobile />}
+      />
     </>
   );
 }

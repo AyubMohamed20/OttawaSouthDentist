@@ -3,8 +3,30 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, Phone, Clock, Globe, Mail, ArrowUp, ArrowRight, Send } from 'lucide-react';
-import { motion, useInView, useMotionValue, useSpring, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import {
+  MapPin,
+  Phone,
+  Clock,
+  Globe,
+  Mail,
+  ArrowUp,
+  ArrowRight,
+  Send,
+  Stethoscope,
+  Heart,
+  ShieldPlus,
+  CalendarCheck,
+  Users,
+  Sparkles,
+  CreditCard,
+  PhoneCall,
+  Building2,
+  Languages,
+  CalendarClock,
+} from 'lucide-react';
+import { motion, useInView, useMotionValue, useSpring, useScroll, AnimatePresence } from 'framer-motion';
+import { ResponsiveWrapperCSS } from '@/components/responsive-wrapper';
+import { FooterMobile } from './Footer-mobile';
 
 // ============================================================================
 // TYPES & DATA
@@ -13,45 +35,51 @@ import { motion, useInView, useMotionValue, useSpring, useScroll, useTransform, 
 interface FooterLink {
   label: string;
   href: string;
+  icon?: React.ElementType;
 }
 
 interface FooterSection {
   title: string;
+  icon: React.ElementType;
   links: FooterLink[];
 }
 
 const footerSections: FooterSection[] = [
   {
     title: 'Services',
+    icon: Stethoscope,
     links: [
-      { label: 'Preventive Dentistry', href: '/services/preventive-dentistry' },
-      { label: 'Cosmetic Dentistry', href: '/services/cosmetic-dentistry' },
-      { label: 'Dental Implants', href: '/services/dental-implants' },
-      { label: 'All Services', href: '/services' },
+      { label: 'Preventive Dentistry', href: '/services/preventive-dentistry', icon: ShieldPlus },
+      { label: 'Cosmetic Dentistry', href: '/services/cosmetic-dentistry', icon: Sparkles },
+      { label: 'Dental Implants', href: '/services/dental-implants', icon: Heart },
+      { label: 'All Services', href: '/services', icon: Stethoscope },
     ],
   },
   {
     title: 'About',
+    icon: Building2,
     links: [
-      { label: 'Our Practice', href: '/about' },
-      { label: 'Meet the Team', href: '/about/team' },
-      { label: 'Contact Us', href: '/contact' },
+      { label: 'Our Practice', href: '/about', icon: Building2 },
+      { label: 'Meet the Team', href: '/about/team', icon: Users },
+      { label: 'Contact Us', href: '/contact', icon: PhoneCall },
     ],
   },
   {
     title: 'Patient Info',
+    icon: Users,
     links: [
-      { label: 'New Patients', href: '/patient-info/new-patients' },
-      { label: 'Insurance & Payment', href: '/patient-info/payment-insurance' },
-      { label: 'CDCP Coverage', href: '/patient-info/cdcp' },
+      { label: 'New Patients', href: '/patient-info/new-patients', icon: Users },
+      { label: 'Insurance & Payment', href: '/patient-info/payment-insurance', icon: CreditCard },
+      { label: 'CDCP Coverage', href: '/patient-info/cdcp', icon: ShieldPlus },
     ],
   },
   {
     title: 'Contact',
+    icon: PhoneCall,
     links: [
-      { label: 'Book Appointment', href: '/contact#book' },
-      { label: 'Directions', href: '/contact#map' },
-      { label: 'Emergency Care', href: '/contact#emergency' },
+      { label: 'Book Appointment', href: '/contact#book', icon: CalendarCheck },
+      { label: 'Directions', href: '/contact#map', icon: MapPin },
+      { label: 'Emergency Care', href: '/contact#emergency', icon: PhoneCall },
     ],
   },
 ];
@@ -141,6 +169,19 @@ const floatingVariants3 = {
   },
 };
 
+// Icon hover animation variant
+const iconHoverVariants = {
+  initial: { scale: 1, rotate: 0 },
+  hover: {
+    scale: 1.15,
+    rotate: [0, -8, 8, 0],
+    transition: {
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+    },
+  },
+};
+
 // ============================================================================
 // MAGNETIC EFFECT HOOK
 // ============================================================================
@@ -168,6 +209,27 @@ function useMagnetic(strength: number = 0.3) {
   }, [x, y]);
 
   return { x: springX, y: springY, handleMouseMove, handleMouseLeave };
+}
+
+// ============================================================================
+// CUSTOM TOOTH ICON SVG
+// ============================================================================
+
+function ToothIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 2C9.5 2 7.5 3 6.5 5C5.5 7 5 9 5 11C5 13.5 5.5 15 6 17C6.5 19 7 22 8 22C9 22 9.5 20 10 18C10.5 16 11 14 12 14C13 14 13.5 16 14 18C14.5 20 15 22 16 22C17 22 17.5 19 18 17C18.5 15 19 13.5 19 11C19 9 18.5 7 17.5 5C16.5 3 14.5 2 12 2Z" />
+    </svg>
+  );
 }
 
 // ============================================================================
@@ -207,12 +269,16 @@ function FloatingShapes() {
         }}
       />
 
-      {/* Geometric shapes */}
+      {/* Floating tooth icon - decorative */}
       <motion.div
         variants={floatingVariants}
         animate="animate"
-        className="absolute top-20 left-[15%] w-20 h-20 border border-white/[0.03] rounded-2xl rotate-45"
-      />
+        className="absolute top-20 left-[15%] w-16 h-16 text-white/[0.03]"
+      >
+        <ToothIcon className="w-full h-full" />
+      </motion.div>
+
+      {/* Geometric shapes */}
       <motion.div
         variants={floatingVariants2}
         animate="animate"
@@ -240,10 +306,20 @@ function FloatingShapes() {
 }
 
 // ============================================================================
-// ANIMATED LINK COMPONENT
+// ANIMATED LINK COMPONENT WITH ICON
 // ============================================================================
 
-function AnimatedLink({ href, children, delay = 0 }: { href: string; children: React.ReactNode; delay?: number }) {
+function AnimatedLink({
+  href,
+  children,
+  icon: Icon,
+  delay = 0,
+}: {
+  href: string;
+  children: React.ReactNode;
+  icon?: React.ElementType;
+  delay?: number;
+}) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -255,14 +331,29 @@ function AnimatedLink({ href, children, delay = 0 }: { href: string; children: R
     >
       <Link
         href={href}
-        className="group relative inline-flex items-center gap-2 py-1.5 text-neutral-400 hover:text-white transition-colors duration-300"
+        className="group relative inline-flex items-center gap-2.5 py-1.5 text-neutral-400 hover:text-white transition-colors duration-300"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
+        {/* Icon with hover animation */}
+        {Icon && (
+          <motion.span
+            className="flex-shrink-0 text-neutral-500 group-hover:text-[#722F37] transition-colors duration-300"
+            animate={{
+              scale: isHovered ? 1.1 : 1,
+              rotate: isHovered ? [0, -5, 5, 0] : 0,
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            <Icon className="w-3.5 h-3.5" aria-hidden="true" />
+          </motion.span>
+        )}
+
         <motion.span
           className="absolute left-0 w-0 h-[1px] bg-gradient-to-r from-[#722F37] to-[#722F37]/50 bottom-0"
           animate={{ width: isHovered ? '100%' : '0%' }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          style={{ left: Icon ? '1.5rem' : 0 }}
         />
         <span className="text-sm font-light tracking-wide">{children}</span>
         <motion.div
@@ -272,7 +363,7 @@ function AnimatedLink({ href, children, delay = 0 }: { href: string; children: R
           }}
           transition={{ duration: 0.2 }}
         >
-          <ArrowRight className="w-3 h-3 text-[#722F37]" />
+          <ArrowRight className="w-3 h-3 text-[#722F37]" aria-hidden="true" />
         </motion.div>
       </Link>
     </motion.div>
@@ -288,7 +379,7 @@ function ContactCard({
   title,
   content,
   href,
-  delay = 0
+  delay = 0,
 }: {
   icon: React.ElementType;
   title: string;
@@ -303,7 +394,7 @@ function ContactCard({
     <motion.div
       style={{ x: magnetic.x, y: magnetic.y }}
       onMouseMove={magnetic.handleMouseMove}
-      onMouseLeave={(e) => {
+      onMouseLeave={() => {
         magnetic.handleMouseLeave();
         setIsHovered(false);
       }}
@@ -324,21 +415,18 @@ function ContactCard({
         <div className="relative flex items-center gap-4">
           <motion.div
             className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[#722F37]/20 to-[#722F37]/5 flex items-center justify-center"
-            animate={{
-              rotate: isHovered ? [0, -5, 5, 0] : 0,
-            }}
-            transition={{ duration: 0.4 }}
+            variants={iconHoverVariants}
+            initial="initial"
+            animate={isHovered ? 'hover' : 'initial'}
           >
-            <Icon className="w-5 h-5 text-[#722F37]" />
+            <Icon className="w-5 h-5 text-[#722F37]" aria-hidden="true" />
           </motion.div>
 
           <div className="flex-1 min-w-0">
             <p className="text-xs uppercase tracking-wider text-neutral-500 mb-0.5 font-medium">
               {title}
             </p>
-            <p className="text-white font-medium text-sm truncate">
-              {content}
-            </p>
+            <p className="text-white font-medium text-sm truncate">{content}</p>
           </div>
         </div>
       </motion.div>
@@ -358,6 +446,7 @@ function ContactCard({
           target={href.startsWith('http') ? '_blank' : undefined}
           rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
           className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-[#722F37] focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 rounded-2xl"
+          aria-label={`${title}: ${content}`}
         >
           {CardContent}
         </a>
@@ -375,8 +464,13 @@ function ContactCard({
 function HoursTimeline() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const today = new Date().getDay();
-  const adjustedToday = today === 0 ? 6 : today - 1; // Convert Sunday=0 to our Mon=0 format
+  const [adjustedToday, setAdjustedToday] = useState<number | null>(null);
+
+  // Calculate current day on client side only to avoid hydration mismatch
+  useEffect(() => {
+    const today = new Date().getDay();
+    setAdjustedToday(today === 0 ? 6 : today - 1);
+  }, []);
 
   return (
     <motion.div
@@ -388,9 +482,13 @@ function HoursTimeline() {
       className="relative"
     >
       <div className="flex items-center gap-2 mb-5">
-        <div className="p-2 rounded-lg bg-[#722F37]/10">
-          <Clock className="w-4 h-4 text-[#722F37]" />
-        </div>
+        <motion.div
+          className="p-2 rounded-lg bg-[#722F37]/10"
+          whileHover={{ scale: 1.1, rotate: [0, -5, 5, 0] }}
+          transition={{ duration: 0.3 }}
+        >
+          <CalendarClock className="w-4 h-4 text-[#722F37]" aria-hidden="true" />
+        </motion.div>
         <h3 className="text-white font-semibold text-sm uppercase tracking-wider">
           Office Hours
         </h3>
@@ -413,8 +511,9 @@ function HoursTimeline() {
               }}
               className="relative flex items-center gap-4 pl-6"
             >
-              {/* Timeline dot */}
+              {/* Timeline dot - suppressHydrationWarning for time-dependent styling */}
               <motion.div
+                suppressHydrationWarning
                 className={`absolute left-0 w-3.5 h-3.5 rounded-full border-2 ${
                   index === adjustedToday
                     ? 'border-[#722F37] bg-[#722F37]'
@@ -422,30 +521,38 @@ function HoursTimeline() {
                       ? 'border-neutral-600 bg-neutral-800'
                       : 'border-neutral-700 bg-neutral-900'
                 }`}
-                animate={index === adjustedToday ? {
-                  scale: [1, 1.2, 1],
-                  boxShadow: [
-                    '0 0 0 0 rgba(114, 47, 55, 0.4)',
-                    '0 0 0 8px rgba(114, 47, 55, 0)',
-                    '0 0 0 0 rgba(114, 47, 55, 0)',
-                  ],
-                } : {}}
+                animate={
+                  index === adjustedToday
+                    ? {
+                        scale: [1, 1.2, 1],
+                        boxShadow: [
+                          '0 0 0 0 rgba(114, 47, 55, 0.4)',
+                          '0 0 0 8px rgba(114, 47, 55, 0)',
+                          '0 0 0 0 rgba(114, 47, 55, 0)',
+                        ],
+                      }
+                    : {}
+                }
                 transition={{ duration: 2, repeat: Infinity }}
               />
 
-              <div className={`flex-1 flex items-center justify-between py-1.5 ${
-                index === adjustedToday ? 'text-white' : 'text-neutral-400'
-              }`}>
+              <div
+                className={`flex-1 flex items-center justify-between py-1.5 ${
+                  index === adjustedToday ? 'text-white' : 'text-neutral-400'
+                }`}
+              >
                 <span className={`text-sm ${index === adjustedToday ? 'font-semibold' : 'font-light'}`}>
                   {item.day}
                 </span>
-                <span className={`text-sm ${
-                  !item.open
-                    ? 'text-neutral-600'
-                    : index === adjustedToday
-                      ? 'text-[#722F37] font-medium'
-                      : ''
-                }`}>
+                <span
+                  className={`text-sm ${
+                    !item.open
+                      ? 'text-neutral-600'
+                      : index === adjustedToday
+                        ? 'text-[#722F37] font-medium'
+                        : ''
+                  }`}
+                >
                   {item.hours}
                 </span>
               </div>
@@ -461,15 +568,7 @@ function HoursTimeline() {
 // SOCIAL ICONS
 // ============================================================================
 
-function SocialIcon({
-  icon,
-  href,
-  label
-}: {
-  icon: React.ReactNode;
-  href: string;
-  label: string;
-}) {
+function SocialIcon({ icon, href, label }: { icon: React.ReactNode; href: string; label: string }) {
   const [isHovered, setIsHovered] = useState(false);
   const magnetic = useMagnetic(0.25);
 
@@ -481,7 +580,7 @@ function SocialIcon({
       aria-label={label}
       style={{ x: magnetic.x, y: magnetic.y }}
       onMouseMove={magnetic.handleMouseMove}
-      onMouseLeave={(e) => {
+      onMouseLeave={() => {
         magnetic.handleMouseLeave();
         setIsHovered(false);
       }}
@@ -500,7 +599,7 @@ function SocialIcon({
           initial={{ scale: 0, opacity: 0 }}
           animate={{
             scale: isHovered ? 1.5 : 0,
-            opacity: isHovered ? 1 : 0
+            opacity: isHovered ? 1 : 0,
           }}
           transition={{ duration: 0.3 }}
           style={{ borderRadius: '50%' }}
@@ -525,7 +624,11 @@ function SocialIcon({
 function FacebookIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
+      <path
+        fillRule="evenodd"
+        d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+        clipRule="evenodd"
+      />
     </svg>
   );
 }
@@ -534,7 +637,11 @@ function FacebookIcon({ className }: { className?: string }) {
 function InstagramIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clipRule="evenodd" />
+      <path
+        fillRule="evenodd"
+        d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
+        clipRule="evenodd"
+      />
     </svg>
   );
 }
@@ -553,7 +660,6 @@ function NewsletterSignup() {
     e.preventDefault();
     if (!email) return;
     setIsSubmitting(true);
-    // Simulate submission
     setTimeout(() => {
       setEmail('');
       setIsSubmitting(false);
@@ -569,9 +675,17 @@ function NewsletterSignup() {
       className="relative"
     >
       <div className="mb-4">
-        <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-2">
-          Stay Connected
-        </h3>
+        <div className="flex items-center gap-2 mb-2">
+          <motion.div
+            whileHover={{ scale: 1.1, rotate: [0, -5, 5, 0] }}
+            transition={{ duration: 0.3 }}
+          >
+            <Sparkles className="w-4 h-4 text-[#722F37]" aria-hidden="true" />
+          </motion.div>
+          <h3 className="text-white font-semibold text-sm uppercase tracking-wider">
+            Stay Connected
+          </h3>
+        </div>
         <p className="text-neutral-500 text-sm font-light">
           Get dental tips and practice updates delivered to your inbox.
         </p>
@@ -604,9 +718,16 @@ function NewsletterSignup() {
           />
 
           <div className="relative flex items-center bg-white/[0.03] backdrop-blur-sm">
-            <div className="pl-4 text-neutral-500">
-              <Mail className="w-4 h-4" />
-            </div>
+            <motion.div
+              className="pl-4 text-neutral-500"
+              animate={{
+                color: isFocused ? '#722F37' : 'rgb(115 115 115)',
+                scale: isFocused ? 1.1 : 1,
+              }}
+              transition={{ duration: 0.2 }}
+            >
+              <Mail className="w-4 h-4" aria-hidden="true" />
+            </motion.div>
             <input
               ref={inputRef}
               type="email"
@@ -616,6 +737,7 @@ function NewsletterSignup() {
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
               className="flex-1 bg-transparent px-3 py-3.5 text-sm text-white placeholder:text-neutral-600 focus:outline-none"
+              aria-label="Email address for newsletter"
             />
             <motion.button
               type="submit"
@@ -623,6 +745,7 @@ function NewsletterSignup() {
               className="m-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-[#722F37] to-[#8B3A42] text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              aria-label="Subscribe to newsletter"
             >
               <AnimatePresence mode="wait">
                 {isSubmitting ? (
@@ -639,8 +762,9 @@ function NewsletterSignup() {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
+                    whileHover={{ x: 2 }}
                   >
-                    <Send className="w-4 h-4" />
+                    <Send className="w-4 h-4" aria-hidden="true" />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -683,7 +807,7 @@ function ScrollToTopButton() {
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           onClick={scrollToTop}
           onMouseMove={magnetic.handleMouseMove}
-          onMouseLeave={(e) => {
+          onMouseLeave={() => {
             magnetic.handleMouseLeave();
             setIsHovered(false);
           }}
@@ -705,11 +829,8 @@ function ScrollToTopButton() {
               transition={{ duration: 0.6, ease: 'easeInOut' }}
             />
 
-            <motion.div
-              animate={{ y: isHovered ? -2 : 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <ArrowUp className="w-5 h-5 text-white" />
+            <motion.div animate={{ y: isHovered ? -2 : 0 }} transition={{ duration: 0.2 }}>
+              <ArrowUp className="w-5 h-5 text-white" aria-hidden="true" />
             </motion.div>
           </motion.div>
 
@@ -733,10 +854,57 @@ function ScrollToTopButton() {
 }
 
 // ============================================================================
-// MAIN FOOTER COMPONENT
+// SECTION HEADER WITH ICON
 // ============================================================================
 
-export function Footer() {
+function SectionHeader({
+  title,
+  icon: Icon,
+  index,
+}: {
+  title: string;
+  icon: React.ElementType;
+  index: number;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.h3
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.05 }}
+      className="flex items-center gap-2 text-white font-semibold text-xs uppercase tracking-[0.2em] mb-5 relative"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <motion.span
+        className="text-[#722F37]"
+        animate={{
+          scale: isHovered ? 1.2 : 1,
+          rotate: isHovered ? [0, -10, 10, 0] : 0,
+        }}
+        transition={{ duration: 0.3 }}
+      >
+        <Icon className="w-4 h-4" aria-hidden="true" />
+      </motion.span>
+      <span>{title}</span>
+      <motion.div
+        className="absolute -bottom-1 left-0 h-[2px] bg-gradient-to-r from-[#722F37] to-transparent"
+        initial={{ width: 0 }}
+        whileInView={{ width: '100%' }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.3 + index * 0.05 }}
+      />
+    </motion.h3>
+  );
+}
+
+// ============================================================================
+// DESKTOP FOOTER COMPONENT
+// ============================================================================
+
+function FooterDesktop() {
   const currentYear = new Date().getFullYear();
   const footerRef = useRef<HTMLElement>(null);
   const isInView = useInView(footerRef, { once: true, margin: '-100px' });
@@ -790,15 +958,24 @@ export function Footer() {
                 </motion.div>
               </Link>
 
-              <p className="text-neutral-400 text-sm leading-relaxed mb-8 max-w-xs font-light">
-                Providing compassionate, comprehensive dental care for the whole
-                family in a warm and welcoming environment.
-              </p>
+              <div className="flex items-start gap-3 mb-6">
+                <motion.div
+                  className="flex-shrink-0 mt-1"
+                  whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0] }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Heart className="w-4 h-4 text-[#722F37]" aria-hidden="true" />
+                </motion.div>
+                <p className="text-neutral-400 text-sm leading-relaxed max-w-xs font-light">
+                  Providing compassionate, comprehensive dental care for the whole family in a warm
+                  and welcoming environment.
+                </p>
+              </div>
 
               {/* Contact Cards Stack */}
               <div className="space-y-3">
                 <ContactCard
-                  icon={Phone}
+                  icon={PhoneCall}
                   title="Phone"
                   content={PHONE_NUMBER}
                   href={PHONE_HREF}
@@ -812,7 +989,7 @@ export function Footer() {
                   delay={0.15}
                 />
                 <ContactCard
-                  icon={Globe}
+                  icon={Languages}
                   title="Languages"
                   content={LANGUAGES.join(' • ')}
                   delay={0.2}
@@ -825,27 +1002,17 @@ export function Footer() {
               <div className="grid grid-cols-2 xl:grid-cols-4 gap-8">
                 {footerSections.map((section, sectionIndex) => (
                   <div key={section.title}>
-                    <motion.h3
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: sectionIndex * 0.05 }}
-                      className="text-white font-semibold text-xs uppercase tracking-[0.2em] mb-5 relative inline-block"
-                    >
-                      {section.title}
-                      <motion.div
-                        className="absolute -bottom-1 left-0 h-[2px] bg-gradient-to-r from-[#722F37] to-transparent"
-                        initial={{ width: 0 }}
-                        whileInView={{ width: '100%' }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.3 + sectionIndex * 0.05 }}
-                      />
-                    </motion.h3>
+                    <SectionHeader
+                      title={section.title}
+                      icon={section.icon}
+                      index={sectionIndex}
+                    />
                     <ul className="space-y-1" role="list">
                       {section.links.map((link, linkIndex) => (
                         <li key={`${section.title}-${linkIndex}`}>
                           <AnimatedLink
                             href={link.href}
+                            icon={link.icon}
                             delay={0.1 + linkIndex * 0.03}
                           >
                             {link.label}
@@ -899,12 +1066,28 @@ export function Footer() {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-neutral-600 text-sm font-light">
-                © {currentYear} Ottawa South Dental. All rights reserved.
-              </p>
-              <p className="text-neutral-500 text-sm font-light">
-                Serving Ottawa families with compassionate dental care.
-              </p>
+              <div className="flex items-center gap-2">
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: 360 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <ToothIcon className="w-4 h-4 text-[#722F37]" />
+                </motion.div>
+                <p className="text-neutral-600 text-sm font-light">
+                  © {currentYear} Ottawa South Dental. All rights reserved.
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <motion.div
+                  whileHover={{ scale: 1.2 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Heart className="w-3 h-3 text-[#722F37]" aria-hidden="true" />
+                </motion.div>
+                <p className="text-neutral-500 text-sm font-light">
+                  Serving Ottawa families with compassionate dental care.
+                </p>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -913,5 +1096,18 @@ export function Footer() {
       {/* Scroll to Top Button */}
       <ScrollToTopButton />
     </>
+  );
+}
+
+// ============================================================================
+// MAIN FOOTER COMPONENT - RESPONSIVE WRAPPER
+// ============================================================================
+
+export function Footer() {
+  return (
+    <ResponsiveWrapperCSS
+      desktop={<FooterDesktop />}
+      mobile={<FooterMobile />}
+    />
   );
 }

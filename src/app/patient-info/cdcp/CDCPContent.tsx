@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   ChevronDown,
   Check,
@@ -27,6 +28,17 @@ import {
   ExternalLink,
   ChevronRight,
   AlertCircle,
+  ShieldCheck,
+  HandHeart,
+  HeartPulse,
+  Building2,
+  CircleDollarSign,
+  UsersRound,
+  BadgeDollarSign,
+  Wallet,
+  GraduationCap,
+  Baby,
+  UserRound,
 } from 'lucide-react';
 import {
   motion,
@@ -211,6 +223,37 @@ const importantDates = [
   { date: '2025', event: 'Full rollout to all eligible Canadians' },
 ];
 
+const coverageTiers = [
+  {
+    income: 'Under $70,000',
+    coverage: '100%',
+    copay: '$0',
+    icon: CircleDollarSign,
+    highlight: true,
+  },
+  {
+    income: '$70,000 - $79,999',
+    coverage: '60%',
+    copay: '40%',
+    icon: Wallet,
+    highlight: false,
+  },
+  {
+    income: '$80,000 - $89,999',
+    coverage: '40%',
+    copay: '60%',
+    icon: BadgeDollarSign,
+    highlight: false,
+  },
+];
+
+const eligibleGroups = [
+  { icon: UserRound, label: 'Seniors 65+', description: 'Full access since 2024' },
+  { icon: UsersRound, label: 'Adults 18-64', description: 'With disability tax credit' },
+  { icon: Baby, label: 'Children under 18', description: 'Based on family income' },
+  { icon: GraduationCap, label: 'Students', description: 'Without other coverage' },
+];
+
 // ============================================================================
 // ANIMATION VARIANTS
 // ============================================================================
@@ -282,7 +325,7 @@ function useMagnetic(strength: number = 0.3) {
 
 function FloatingParticles() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
       {/* Canada maple leaf patterns */}
       {[...Array(8)].map((_, i) => (
         <motion.div
@@ -338,6 +381,74 @@ function FloatingParticles() {
 }
 
 // ============================================================================
+// CANADA FLAG SVG ILLUSTRATION
+// ============================================================================
+
+function CanadaFlagIllustration({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 200 120"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Flag background */}
+      <rect x="0" y="10" width="50" height="100" fill="#FF0000" opacity="0.9" />
+      <rect x="50" y="10" width="100" height="100" fill="#FFFFFF" />
+      <rect x="150" y="10" width="50" height="100" fill="#FF0000" opacity="0.9" />
+
+      {/* Simplified maple leaf */}
+      <path
+        d="M100 25 L103 40 L115 35 L108 50 L120 55 L105 60 L110 75 L100 65 L90 75 L95 60 L80 55 L92 50 L85 35 L97 40 Z"
+        fill="#FF0000"
+      />
+
+      {/* Decorative shield behind */}
+      <ellipse cx="100" cy="60" rx="35" ry="40" fill="none" stroke="#722F37" strokeWidth="2" opacity="0.2" />
+    </svg>
+  );
+}
+
+// ============================================================================
+// COVERAGE TIERS ILLUSTRATION
+// ============================================================================
+
+function CoverageTiersIllustration() {
+  return (
+    <svg
+      viewBox="0 0 300 200"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-full h-auto max-w-md mx-auto"
+      aria-hidden="true"
+    >
+      {/* Background circles */}
+      <circle cx="150" cy="100" r="90" fill="#722F37" opacity="0.05" />
+      <circle cx="150" cy="100" r="70" fill="#722F37" opacity="0.08" />
+      <circle cx="150" cy="100" r="50" fill="#722F37" opacity="0.1" />
+
+      {/* Dollar sign center */}
+      <text x="150" y="115" textAnchor="middle" fontSize="40" fill="#722F37" fontWeight="bold">$</text>
+
+      {/* Coverage indicators */}
+      <g transform="translate(50, 160)">
+        <rect x="0" y="0" width="60" height="8" rx="4" fill="#22c55e" />
+        <text x="30" y="25" textAnchor="middle" fontSize="10" fill="#666">100%</text>
+      </g>
+      <g transform="translate(120, 160)">
+        <rect x="0" y="0" width="60" height="8" rx="4" fill="#f59e0b" />
+        <text x="30" y="25" textAnchor="middle" fontSize="10" fill="#666">60%</text>
+      </g>
+      <g transform="translate(190, 160)">
+        <rect x="0" y="0" width="60" height="8" rx="4" fill="#ef4444" />
+        <text x="30" y="25" textAnchor="middle" fontSize="10" fill="#666">40%</text>
+      </g>
+    </svg>
+  );
+}
+
+// ============================================================================
 // HERO SECTION
 // ============================================================================
 
@@ -363,6 +474,19 @@ function HeroSection() {
         style={{ y: backgroundY }}
       />
 
+      {/* Hero image overlay */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/patient-info/cdcp/hero-dental-care.jpg"
+          alt="Patient receiving dental care with a warm smile in a modern dental clinic"
+          fill
+          className="object-cover opacity-10"
+          priority
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#FDF8F3] via-[#FDF8F3]/95 to-transparent" />
+      </div>
+
       {/* Canada flag-inspired accent stripe */}
       <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#722F37] via-[#FF0000] to-[#722F37]" />
 
@@ -378,11 +502,12 @@ function HeroSection() {
           `,
           backgroundSize: '60px 60px',
         }}
+        aria-hidden="true"
       />
 
       <motion.div
         style={{ opacity, scale }}
-        className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32"
+        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32"
       >
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left content */}
@@ -402,7 +527,7 @@ function HeroSection() {
                     Home
                   </Link>
                 </li>
-                <ChevronRight className="w-4 h-4 text-neutral-400" />
+                <ChevronRight className="w-4 h-4 text-neutral-400" aria-hidden="true" />
                 <li>
                   <Link
                     href="/patient-info"
@@ -411,7 +536,7 @@ function HeroSection() {
                     Patient Info
                   </Link>
                 </li>
-                <ChevronRight className="w-4 h-4 text-neutral-400" />
+                <ChevronRight className="w-4 h-4 text-neutral-400" aria-hidden="true" />
                 <li className="text-[#722F37] font-medium">CDCP</li>
               </ol>
             </motion.nav>
@@ -427,7 +552,7 @@ function HeroSection() {
                   animate={{ rotate: [0, 10, -10, 0] }}
                   transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                 >
-                  <BadgeCheck className="w-5 h-5 text-[#722F37]" />
+                  <ShieldCheck className="w-5 h-5 text-[#722F37]" aria-hidden="true" />
                 </motion.div>
                 <span className="font-semibold text-[#722F37]">
                   Registered CDCP Provider
@@ -436,6 +561,7 @@ function HeroSection() {
                   className="w-2 h-2 rounded-full bg-green-500"
                   animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
+                  aria-hidden="true"
                 />
               </motion.div>
             </motion.div>
@@ -455,6 +581,7 @@ function HeroSection() {
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  aria-hidden="true"
                 />
               </span>{' '}
               Plan
@@ -475,11 +602,11 @@ function HeroSection() {
               className="flex flex-wrap items-center gap-4"
             >
               <MagneticButton href="/contact#book" primary>
-                <Calendar className="w-5 h-5" />
+                <Calendar className="w-5 h-5" aria-hidden="true" />
                 Book Appointment
               </MagneticButton>
               <MagneticButton href="tel:+16137336446">
-                <Phone className="w-5 h-5" />
+                <Phone className="w-5 h-5" aria-hidden="true" />
                 (613) 733-6446
               </MagneticButton>
             </motion.div>
@@ -487,31 +614,87 @@ function HeroSection() {
             {/* Trust indicators */}
             <motion.div
               variants={fadeInUp}
-              className="mt-12 flex items-center gap-8"
+              className="mt-12 flex flex-wrap items-center gap-6 lg:gap-8"
             >
               <div className="flex items-center gap-2 text-sm text-neutral-500">
-                <CheckCircle2 className="w-5 h-5 text-green-500" />
+                <CheckCircle2 className="w-5 h-5 text-green-500" aria-hidden="true" />
                 <span>Direct Billing</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-neutral-500">
-                <CheckCircle2 className="w-5 h-5 text-green-500" />
+                <CheckCircle2 className="w-5 h-5 text-green-500" aria-hidden="true" />
                 <span>No Paperwork</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-neutral-500">
-                <CheckCircle2 className="w-5 h-5 text-green-500" />
+                <CheckCircle2 className="w-5 h-5 text-green-500" aria-hidden="true" />
                 <span>Same-Day Care</span>
               </div>
             </motion.div>
           </motion.div>
 
-          {/* Right side - Animated card */}
+          {/* Right side - Hero image and card */}
           <motion.div
             initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="relative hidden lg:block"
           >
-            <CDCPCardVisualization />
+            {/* Main image */}
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+              <Image
+                src="/images/patient-info/cdcp/happy-patient.jpg"
+                alt="Happy patient smiling after receiving dental care covered by CDCP"
+                width={600}
+                height={400}
+                className="w-full h-auto object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+            </div>
+
+            {/* Floating badges */}
+            <motion.div
+              className="absolute -top-4 -right-4 px-5 py-3 bg-white rounded-2xl shadow-xl border border-neutral-100"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.6 }}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                  <CheckCircle2 className="w-5 h-5 text-green-600" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-xs text-neutral-500">Coverage up to</p>
+                  <p className="font-bold text-green-600">100%</p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="absolute -bottom-4 -left-4 px-5 py-3 bg-white rounded-2xl shadow-xl border border-neutral-100"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.8 }}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#722F37]/10 flex items-center justify-center">
+                  <Leaf className="w-5 h-5 text-[#722F37]" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-xs text-neutral-500">Government</p>
+                  <p className="font-bold text-[#722F37]">Federal Program</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Canada flag illustration */}
+            <motion.div
+              className="absolute top-1/2 -right-8 -translate-y-1/2"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 0.3, x: 0 }}
+              transition={{ delay: 1 }}
+            >
+              <CanadaFlagIllustration className="w-24 h-auto" />
+            </motion.div>
           </motion.div>
         </div>
 
@@ -528,158 +711,11 @@ function HeroSection() {
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           >
             <span className="text-sm font-medium">Scroll to explore</span>
-            <ArrowDown className="w-5 h-5" />
+            <ArrowDown className="w-5 h-5" aria-hidden="true" />
           </motion.div>
         </motion.div>
       </motion.div>
     </section>
-  );
-}
-
-// ============================================================================
-// CDCP CARD VISUALIZATION
-// ============================================================================
-
-function CDCPCardVisualization() {
-  const [isFlipped, setIsFlipped] = useState(false);
-
-  return (
-    <div
-      className="relative w-full max-w-md mx-auto perspective-1000"
-      onMouseEnter={() => setIsFlipped(true)}
-      onMouseLeave={() => setIsFlipped(false)}
-    >
-      {/* Glow effect */}
-      <motion.div
-        className="absolute -inset-4 bg-gradient-to-r from-[#722F37]/20 via-red-500/20 to-[#722F37]/20 rounded-3xl blur-2xl"
-        animate={{
-          opacity: isFlipped ? 0.8 : 0.5,
-          scale: isFlipped ? 1.05 : 1,
-        }}
-        transition={{ duration: 0.5 }}
-      />
-
-      <motion.div
-        className="relative w-full aspect-[1.586/1] cursor-pointer"
-        animate={{ rotateY: isFlipped ? 180 : 0 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        style={{ transformStyle: 'preserve-3d' }}
-      >
-        {/* Front of card */}
-        <div
-          className="absolute inset-0 rounded-2xl overflow-hidden shadow-2xl"
-          style={{ backfaceVisibility: 'hidden' }}
-        >
-          <div className="relative h-full bg-gradient-to-br from-[#722F37] via-[#8B3A42] to-[#5a252c] p-8">
-            {/* Card pattern */}
-            <div
-              className="absolute inset-0 opacity-10"
-              style={{
-                backgroundImage:
-                  'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-              }}
-            />
-
-            {/* Canada wordmark */}
-            <div className="absolute top-6 left-8 flex items-center gap-2">
-              <Leaf className="w-5 h-5 text-white/80" />
-              <span className="text-white/80 text-sm font-medium tracking-wider">
-                CANADA
-              </span>
-            </div>
-
-            {/* Main content */}
-            <div className="relative h-full flex flex-col justify-end">
-              <div className="mb-4">
-                <span className="text-white/60 text-xs uppercase tracking-wider">
-                  Canadian Dental Care Plan
-                </span>
-                <h3 className="text-2xl font-bold text-white mt-1">CDCP</h3>
-              </div>
-
-              <div className="flex items-end justify-between">
-                <div>
-                  <span className="text-white/60 text-xs uppercase tracking-wider">
-                    Member Since
-                  </span>
-                  <p className="text-white font-mono text-lg">2024</p>
-                </div>
-                <div className="text-right">
-                  <span className="text-white/60 text-xs uppercase tracking-wider">
-                    Status
-                  </span>
-                  <p className="text-green-400 font-semibold">Active</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Holographic effect */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-transparent"
-              animate={{
-                opacity: [0, 0.3, 0],
-                x: ['-100%', '100%'],
-              }}
-              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
-            />
-          </div>
-        </div>
-
-        {/* Back of card */}
-        <div
-          className="absolute inset-0 rounded-2xl overflow-hidden shadow-2xl"
-          style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
-        >
-          <div className="relative h-full bg-gradient-to-br from-neutral-100 to-neutral-200 p-8">
-            <div className="h-full flex flex-col justify-between">
-              <div>
-                <h4 className="text-neutral-800 font-semibold mb-4">Coverage Includes:</h4>
-                <ul className="space-y-2 text-sm text-neutral-600">
-                  <li className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-600" />
-                    Preventive Care
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-600" />
-                    Diagnostics & X-rays
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-600" />
-                    Restorative Treatments
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-600" />
-                    Periodontal Services
-                  </li>
-                </ul>
-              </div>
-              <div className="text-center">
-                <span className="text-xs text-neutral-500">Hover to flip card</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Floating info badges */}
-      <motion.div
-        className="absolute -top-4 -right-4 px-4 py-2 bg-white rounded-full shadow-lg border border-neutral-100"
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.6 }}
-      >
-        <span className="text-sm font-semibold text-green-600">100% Coverage</span>
-      </motion.div>
-
-      <motion.div
-        className="absolute -bottom-4 -left-4 px-4 py-2 bg-white rounded-full shadow-lg border border-neutral-100"
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.8 }}
-      >
-        <span className="text-sm font-semibold text-[#722F37]">Federal Program</span>
-      </motion.div>
-    </div>
   );
 }
 
@@ -730,6 +766,7 @@ function MagneticButton({
           initial={{ x: '-100%' }}
           animate={{ x: isHovered ? '200%' : '-100%' }}
           transition={{ duration: 0.6, ease: 'easeInOut' }}
+          aria-hidden="true"
         />
 
         <span className="relative flex items-center gap-3">
@@ -737,6 +774,225 @@ function MagneticButton({
         </span>
       </Component>
     </motion.div>
+  );
+}
+
+// ============================================================================
+// WHO QUALIFIES SECTION (NEW)
+// ============================================================================
+
+function WhoQualifiesSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+
+  return (
+    <section
+      ref={ref}
+      className="relative py-24 lg:py-32 bg-white overflow-hidden"
+    >
+      {/* Background decoration */}
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#FDF8F3] to-transparent" aria-hidden="true" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Left - Image and stats */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8 }}
+            className="relative"
+          >
+            <div className="relative rounded-3xl overflow-hidden">
+              <Image
+                src="/images/patient-info/cdcp/senior-dental.jpg"
+                alt="Elderly man at dental appointment, representing seniors eligible for CDCP coverage"
+                width={600}
+                height={450}
+                className="w-full h-auto object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#722F37]/30 to-transparent" />
+            </div>
+
+            {/* Stats overlay */}
+            <motion.div
+              className="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-xl p-6 border border-neutral-100"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.4 }}
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-full bg-[#722F37]/10 flex items-center justify-center">
+                  <UsersRound className="w-7 h-7 text-[#722F37]" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-3xl font-bold text-[#722F37]">9M+</p>
+                  <p className="text-sm text-neutral-500">Canadians Eligible</p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Right - Content */}
+          <motion.div
+            initial="hidden"
+            animate={isInView ? 'visible' : 'hidden'}
+            variants={staggerContainer}
+          >
+            <motion.div
+              variants={fadeInUp}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/5 text-[#722F37] text-sm font-medium mb-6"
+            >
+              <HandHeart className="w-4 h-4" aria-hidden="true" />
+              Eligibility Groups
+            </motion.div>
+
+            <motion.h2
+              variants={fadeInUp}
+              className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-6"
+            >
+              Who Qualifies for CDCP?
+            </motion.h2>
+
+            <motion.p
+              variants={fadeInUp}
+              className="text-xl text-neutral-600 mb-10"
+            >
+              The Canadian Dental Care Plan is designed to help those who need it most.
+              Check if you or your family members qualify.
+            </motion.p>
+
+            {/* Eligible groups grid */}
+            <motion.div variants={staggerContainer} className="grid sm:grid-cols-2 gap-4">
+              {eligibleGroups.map((group, index) => (
+                <motion.div
+                  key={index}
+                  variants={fadeInUp}
+                  className="group p-5 rounded-xl bg-neutral-50 border border-neutral-100 hover:border-[#722F37]/20 hover:bg-[#FDF8F3] transition-all duration-300"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center group-hover:bg-[#722F37]/10 transition-colors">
+                      <group.icon className="w-6 h-6 text-[#722F37]" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-neutral-900">{group.label}</h3>
+                      <p className="text-sm text-neutral-500">{group.description}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ============================================================================
+// COVERAGE TIERS SECTION (NEW)
+// ============================================================================
+
+function CoverageTiersSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+
+  return (
+    <section
+      ref={ref}
+      className="relative py-24 lg:py-32 bg-gradient-to-b from-[#FDF8F3] to-white overflow-hidden"
+    >
+      {/* Background illustration */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-5" aria-hidden="true">
+        <CoverageTiersIllustration />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          variants={staggerContainer}
+          className="text-center mb-16"
+        >
+          <motion.div
+            variants={fadeInUp}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/5 text-[#722F37] text-sm font-medium mb-6"
+          >
+            <CircleDollarSign className="w-4 h-4" aria-hidden="true" />
+            Income-Based Coverage
+          </motion.div>
+          <motion.h2
+            variants={fadeInUp}
+            className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-6"
+          >
+            Coverage Based on Your Income
+          </motion.h2>
+          <motion.p
+            variants={fadeInUp}
+            className="text-xl text-neutral-600 max-w-2xl mx-auto"
+          >
+            Your coverage level depends on your adjusted family net income.
+            Lower income means higher coverage.
+          </motion.p>
+        </motion.div>
+
+        <motion.div
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          variants={staggerContainer}
+          className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto"
+        >
+          {coverageTiers.map((tier, index) => (
+            <motion.div
+              key={index}
+              variants={fadeInUp}
+              className={`relative p-8 rounded-2xl border-2 transition-all duration-300 ${
+                tier.highlight
+                  ? 'bg-[#722F37] border-[#722F37] text-white shadow-xl shadow-[#722F37]/20'
+                  : 'bg-white border-neutral-200 hover:border-[#722F37]/30'
+              }`}
+            >
+              {tier.highlight && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-green-500 text-white text-sm font-semibold rounded-full">
+                  Full Coverage
+                </div>
+              )}
+
+              <div className={`w-14 h-14 rounded-xl ${tier.highlight ? 'bg-white/20' : 'bg-[#722F37]/10'} flex items-center justify-center mb-6`}>
+                <tier.icon className={`w-7 h-7 ${tier.highlight ? 'text-white' : 'text-[#722F37]'}`} aria-hidden="true" />
+              </div>
+
+              <p className={`text-sm font-medium ${tier.highlight ? 'text-white/80' : 'text-neutral-500'} mb-2`}>
+                Family Income
+              </p>
+              <p className={`text-2xl font-bold ${tier.highlight ? 'text-white' : 'text-neutral-900'} mb-6`}>
+                {tier.income}
+              </p>
+
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className={`text-sm ${tier.highlight ? 'text-white/80' : 'text-neutral-500'}`}>Coverage</span>
+                  <span className={`text-2xl font-bold ${tier.highlight ? 'text-white' : 'text-green-600'}`}>{tier.coverage}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className={`text-sm ${tier.highlight ? 'text-white/80' : 'text-neutral-500'}`}>Your Co-pay</span>
+                  <span className={`font-semibold ${tier.highlight ? 'text-white' : 'text-neutral-700'}`}>{tier.copay}</span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.6 }}
+          className="text-center text-neutral-500 text-sm mt-8 max-w-2xl mx-auto"
+        >
+          * Income thresholds are based on adjusted family net income as reported on your tax return.
+          Verify your specific coverage on the official CDCP website.
+        </motion.p>
+      </div>
+    </section>
   );
 }
 
@@ -781,7 +1037,7 @@ function EligibilityChecker() {
   return (
     <section
       ref={ref}
-      className="relative py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-[#FDF8F3] to-white"
+      className="relative py-24 lg:py-32 overflow-hidden bg-white"
     >
       {/* Background pattern */}
       <div
@@ -790,6 +1046,7 @@ function EligibilityChecker() {
           backgroundImage: `radial-gradient(circle at 1px 1px, #722F37 1px, transparent 0)`,
           backgroundSize: '40px 40px',
         }}
+        aria-hidden="true"
       />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -803,7 +1060,7 @@ function EligibilityChecker() {
             variants={fadeInUp}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/5 text-[#722F37] text-sm font-medium mb-6"
           >
-            <Sparkles className="w-4 h-4" />
+            <Sparkles className="w-4 h-4" aria-hidden="true" />
             Interactive Tool
           </motion.div>
           <motion.h2
@@ -835,6 +1092,10 @@ function EligibilityChecker() {
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                role="progressbar"
+                aria-valuenow={progress}
+                aria-valuemin={0}
+                aria-valuemax={100}
               />
             </div>
 
@@ -849,7 +1110,7 @@ function EligibilityChecker() {
                     transition={{ duration: 0.4 }}
                   >
                     {/* Question counter */}
-                    <div className="flex items-center gap-3 mb-8">
+                    <div className="flex items-center gap-3 mb-8" role="group" aria-label="Question progress">
                       {eligibilityQuestions.map((_, index) => (
                         <motion.div
                           key={index}
@@ -860,9 +1121,10 @@ function EligibilityChecker() {
                               ? 'bg-green-500 text-white'
                               : 'bg-neutral-100 text-neutral-400'
                           }`}
+                          aria-current={index === currentQuestion ? 'step' : undefined}
                         >
                           {index < currentQuestion ? (
-                            <Check className="w-5 h-5" />
+                            <Check className="w-5 h-5" aria-hidden="true" />
                           ) : (
                             index + 1
                           )}
@@ -891,7 +1153,7 @@ function EligibilityChecker() {
                         }}
                         className="flex-1 py-4 px-6 rounded-xl font-semibold text-lg bg-green-500 text-white hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
                       >
-                        <CheckCircle2 className="w-5 h-5" />
+                        <CheckCircle2 className="w-5 h-5" aria-hidden="true" />
                         Yes
                       </motion.button>
                       <motion.button
@@ -903,7 +1165,7 @@ function EligibilityChecker() {
                         }}
                         className="flex-1 py-4 px-6 rounded-xl font-semibold text-lg bg-neutral-100 text-neutral-700 hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2"
                       >
-                        <XCircle className="w-5 h-5" />
+                        <XCircle className="w-5 h-5" aria-hidden="true" />
                         No
                       </motion.button>
                     </div>
@@ -925,9 +1187,9 @@ function EligibilityChecker() {
                       }`}
                     >
                       {isEligible() ? (
-                        <CheckCircle2 className="w-12 h-12 text-green-600" />
+                        <CheckCircle2 className="w-12 h-12 text-green-600" aria-hidden="true" />
                       ) : (
-                        <AlertCircle className="w-12 h-12 text-amber-600" />
+                        <AlertCircle className="w-12 h-12 text-amber-600" aria-hidden="true" />
                       )}
                     </motion.div>
 
@@ -948,7 +1210,7 @@ function EligibilityChecker() {
                           href="/contact#book"
                           className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#722F37] text-white rounded-xl font-semibold hover:bg-[#5a252c] transition-colors"
                         >
-                          <Calendar className="w-5 h-5" />
+                          <Calendar className="w-5 h-5" aria-hidden="true" />
                           Book Appointment
                         </Link>
                       )}
@@ -967,7 +1229,7 @@ function EligibilityChecker() {
             {/* Disclaimer */}
             <div className="px-8 lg:px-12 pb-8">
               <p className="text-xs text-neutral-400 flex items-start gap-2">
-                <Info className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <Info className="w-4 h-4 flex-shrink-0 mt-0.5" aria-hidden="true" />
                 This is a preliminary eligibility check only. Actual eligibility is
                 determined by the federal government. Visit the official CDCP website
                 for accurate information.
@@ -1005,7 +1267,7 @@ function CoverageBreakdown() {
             variants={fadeInUp}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/5 text-[#722F37] text-sm font-medium mb-6"
           >
-            <Shield className="w-4 h-4" />
+            <ShieldCheck className="w-4 h-4" aria-hidden="true" />
             Comprehensive Coverage
           </motion.div>
           <motion.h2
@@ -1038,13 +1300,14 @@ function CoverageBreakdown() {
               className="group relative"
             >
               <motion.div
-                className="relative h-full p-8 rounded-2xl bg-white border border-neutral-100 overflow-hidden cursor-pointer"
+                className="relative h-full p-8 rounded-2xl bg-white border border-neutral-100 overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-shadow"
                 whileHover={{ y: -8 }}
                 transition={{ duration: 0.3 }}
               >
                 {/* Gradient background on hover */}
                 <motion.div
                   className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}
+                  aria-hidden="true"
                 />
 
                 {/* Icon */}
@@ -1070,6 +1333,7 @@ function CoverageBreakdown() {
                         ? 'text-purple-600'
                         : 'text-cyan-600'
                     }`}
+                    aria-hidden="true"
                   />
                 </motion.div>
 
@@ -1091,7 +1355,7 @@ function CoverageBreakdown() {
                       <div
                         className={`w-5 h-5 rounded-full bg-gradient-to-br ${service.color} flex items-center justify-center flex-shrink-0`}
                       >
-                        <Check className="w-3 h-3 text-white" />
+                        <Check className="w-3 h-3 text-white" aria-hidden="true" />
                       </div>
                       <span className="text-sm">{item}</span>
                     </motion.li>
@@ -1101,6 +1365,7 @@ function CoverageBreakdown() {
                 {/* Decorative corner */}
                 <div
                   className={`absolute -bottom-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-br ${service.color} opacity-5`}
+                  aria-hidden="true"
                 />
               </motion.div>
             </motion.div>
@@ -1144,7 +1409,7 @@ function EnrollmentSteps() {
       className="relative py-24 lg:py-32 bg-gradient-to-b from-neutral-900 to-neutral-950 overflow-hidden"
     >
       {/* Background elements */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0" aria-hidden="true">
         <div
           className="absolute inset-0 opacity-[0.02]"
           style={{
@@ -1176,7 +1441,7 @@ function EnrollmentSteps() {
             variants={fadeInUp}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 text-[#FF6B6B] text-sm font-medium mb-6 border border-white/10"
           >
-            <ClipboardCheck className="w-4 h-4" />
+            <ClipboardCheck className="w-4 h-4" aria-hidden="true" />
             Step-by-Step Guide
           </motion.div>
           <motion.h2
@@ -1197,7 +1462,7 @@ function EnrollmentSteps() {
         {/* Steps timeline */}
         <div className="relative max-w-4xl mx-auto">
           {/* Connecting line */}
-          <div className="absolute left-[27px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#722F37] via-[#722F37]/50 to-transparent hidden lg:block" />
+          <div className="absolute left-[27px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#722F37] via-[#722F37]/50 to-transparent hidden lg:block" aria-hidden="true" />
 
           <motion.div
             initial="hidden"
@@ -1259,6 +1524,7 @@ function EnrollmentSteps() {
                               ? 'text-[#FF6B6B]'
                               : 'text-white/60'
                           }`}
+                          aria-hidden="true"
                         />
                       </div>
                       <div>
@@ -1316,7 +1582,7 @@ function DocumentChecklist() {
               variants={fadeInUp}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/5 text-[#722F37] text-sm font-medium mb-6"
             >
-              <FileText className="w-4 h-4" />
+              <FileText className="w-4 h-4" aria-hidden="true" />
               Be Prepared
             </motion.div>
             <motion.h2
@@ -1334,12 +1600,21 @@ function DocumentChecklist() {
             </motion.p>
 
             {/* Interactive checklist */}
-            <motion.div variants={staggerContainer} className="space-y-4">
+            <motion.div variants={staggerContainer} className="space-y-4" role="group" aria-label="Document checklist">
               {documentChecklist.map((doc, index) => (
                 <motion.div
                   key={index}
                   variants={fadeInUp}
                   onClick={() => toggleItem(index)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      toggleItem(index);
+                    }
+                  }}
+                  role="checkbox"
+                  aria-checked={checkedItems.has(index)}
+                  tabIndex={0}
                   className={`group flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-all duration-300 ${
                     checkedItems.has(index)
                       ? 'bg-green-50 border-green-200'
@@ -1358,7 +1633,7 @@ function DocumentChecklist() {
                     transition={{ duration: 0.3 }}
                   >
                     {checkedItems.has(index) && (
-                      <Check className="w-4 h-4 text-white" />
+                      <Check className="w-4 h-4 text-white" aria-hidden="true" />
                     )}
                   </motion.div>
                   <div className="flex-1">
@@ -1396,6 +1671,10 @@ function DocumentChecklist() {
                       width: `${(checkedItems.size / documentChecklist.length) * 100}%`,
                     }}
                     transition={{ duration: 0.5 }}
+                    role="progressbar"
+                    aria-valuenow={(checkedItems.size / documentChecklist.length) * 100}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
                   />
                 </div>
                 <span className="text-sm font-medium text-neutral-600">
@@ -1414,13 +1693,13 @@ function DocumentChecklist() {
           >
             <div className="bg-gradient-to-br from-[#FDF8F3] to-[#F5EDE5] rounded-3xl p-8 lg:p-10">
               <h3 className="text-xl font-bold text-neutral-900 mb-6 flex items-center gap-3">
-                <Clock className="w-6 h-6 text-[#722F37]" />
+                <Clock className="w-6 h-6 text-[#722F37]" aria-hidden="true" />
                 Important CDCP Dates
               </h3>
 
               <div className="relative">
                 {/* Timeline line */}
-                <div className="absolute left-[11px] top-0 bottom-0 w-0.5 bg-[#722F37]/20" />
+                <div className="absolute left-[11px] top-0 bottom-0 w-0.5 bg-[#722F37]/20" aria-hidden="true" />
 
                 <div className="space-y-6">
                   {importantDates.map((item, index) => (
@@ -1459,7 +1738,7 @@ function DocumentChecklist() {
                 whileHover={{ x: 4 }}
               >
                 Visit Official CDCP Website
-                <ExternalLink className="w-4 h-4" />
+                <ExternalLink className="w-4 h-4" aria-hidden="true" />
               </motion.a>
             </div>
           </motion.div>
@@ -1494,7 +1773,7 @@ function FAQSection() {
             variants={fadeInUp}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/5 text-[#722F37] text-sm font-medium mb-6"
           >
-            <HelpCircle className="w-4 h-4" />
+            <HelpCircle className="w-4 h-4" aria-hidden="true" />
             Common Questions
           </motion.div>
           <motion.h2
@@ -1535,6 +1814,7 @@ function FAQSection() {
                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
                   className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#722F37]/50 focus-visible:ring-offset-2 rounded-2xl"
                   aria-expanded={openIndex === index}
+                  aria-controls={`faq-answer-${index}`}
                 >
                   <span className="font-semibold text-neutral-900 pr-4">
                     {faq.question}
@@ -1544,13 +1824,14 @@ function FAQSection() {
                     transition={{ duration: 0.3 }}
                     className="flex-shrink-0"
                   >
-                    <ChevronDown className="w-5 h-5 text-[#722F37]" />
+                    <ChevronDown className="w-5 h-5 text-[#722F37]" aria-hidden="true" />
                   </motion.div>
                 </button>
 
                 <AnimatePresence mode="wait">
                   {openIndex === index && (
                     <motion.div
+                      id={`faq-answer-${index}`}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
@@ -1581,7 +1862,7 @@ function FAQSection() {
             href="tel:+16137336446"
             className="inline-flex items-center gap-2 text-[#722F37] font-semibold hover:underline"
           >
-            <Phone className="w-5 h-5" />
+            <Phone className="w-5 h-5" aria-hidden="true" />
             Call us at (613) 733-6446
           </a>
         </motion.div>
@@ -1610,7 +1891,7 @@ function CTASection() {
       className="relative overflow-hidden bg-gradient-to-br from-[#722F37] via-[#8B3A42] to-[#5a252c]"
     >
       {/* Parallax background elements */}
-      <motion.div className="absolute inset-0" style={{ y: backgroundY }}>
+      <motion.div className="absolute inset-0" style={{ y: backgroundY }} aria-hidden="true">
         <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/5" />
         <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] rounded-full bg-white/5" />
 
@@ -1651,7 +1932,7 @@ function CTASection() {
             variants={scaleIn}
             className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/10 backdrop-blur-sm mb-8"
           >
-            <BadgeCheck className="w-10 h-10 text-white" />
+            <HeartPulse className="w-10 h-10 text-white" aria-hidden="true" />
           </motion.div>
 
           <motion.h2
@@ -1677,14 +1958,14 @@ function CTASection() {
               href="/contact#book"
               className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-[#722F37] rounded-xl font-semibold text-lg hover:bg-neutral-100 transition-colors shadow-lg"
             >
-              <Calendar className="w-6 h-6" />
+              <Calendar className="w-6 h-6" aria-hidden="true" />
               Book Your Appointment
             </Link>
             <a
               href="tel:+16137336446"
               className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/10 text-white border-2 border-white/20 rounded-xl font-semibold text-lg hover:bg-white/20 transition-colors backdrop-blur-sm"
             >
-              <Phone className="w-6 h-6" />
+              <Phone className="w-6 h-6" aria-hidden="true" />
               (613) 733-6446
             </a>
           </motion.div>
@@ -1694,12 +1975,12 @@ function CTASection() {
             className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 text-white/80 text-sm"
           >
             <div className="flex items-center gap-2">
-              <MapPin className="w-5 h-5" />
+              <MapPin className="w-5 h-5" aria-hidden="true" />
               <span>1929 Russell Road, Suite 22, Ottawa</span>
             </div>
-            <div className="hidden sm:block w-1 h-1 rounded-full bg-white/40" />
+            <div className="hidden sm:block w-1 h-1 rounded-full bg-white/40" aria-hidden="true" />
             <div className="flex items-center gap-2">
-              <BadgeCheck className="w-5 h-5" />
+              <BadgeCheck className="w-5 h-5" aria-hidden="true" />
               <span>Registered CDCP Provider</span>
             </div>
           </motion.div>
@@ -1707,7 +1988,7 @@ function CTASection() {
       </div>
 
       {/* Bottom wave */}
-      <div className="absolute bottom-0 left-0 right-0">
+      <div className="absolute bottom-0 left-0 right-0" aria-hidden="true">
         <svg
           viewBox="0 0 1440 100"
           fill="none"
@@ -1732,6 +2013,8 @@ export function CDCPContent() {
   return (
     <main id="main-content" className="min-h-screen">
       <HeroSection />
+      <WhoQualifiesSection />
+      <CoverageTiersSection />
       <EligibilityChecker />
       <CoverageBreakdown />
       <EnrollmentSteps />

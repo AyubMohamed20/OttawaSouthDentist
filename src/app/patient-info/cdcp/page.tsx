@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { CDCPContent } from './CDCPContent';
+import { CDCPContentMobile } from './CDCPContent-mobile';
+import { ResponsiveWrapper } from '@/components/responsive-wrapper';
 
 export const metadata: Metadata = {
   title: 'CDCP Information | Ottawa South Dental',
@@ -39,5 +41,10 @@ export const metadata: Metadata = {
 };
 
 export default function CDCPPage() {
-  return <CDCPContent />;
+  return (
+    <ResponsiveWrapper
+      desktop={<CDCPContent />}
+      mobile={<CDCPContentMobile />}
+    />
+  );
 }

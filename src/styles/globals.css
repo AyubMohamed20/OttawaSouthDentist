@@ -357,6 +357,15 @@
     min-width: 44px;
   }
 
+  /* Safe area for notched devices */
+  .safe-area-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .safe-area-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+
   /* Optimize scroll performance */
   .scroll-smooth {
     scroll-behavior: smooth;

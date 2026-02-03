@@ -26,6 +26,15 @@ import {
   Leaf,
   Timer,
   CircleDot,
+  Smile,
+  ShieldCheck,
+  Gem,
+  Paintbrush,
+  CircleCheck,
+  Stethoscope,
+  BadgeCheck,
+  ThumbsUp,
+  Lightbulb,
 } from 'lucide-react';
 import {
   motion,
@@ -76,7 +85,7 @@ const faqs: FAQItem[] = [
 
 const benefits = [
   {
-    icon: Sparkles,
+    icon: Smile,
     title: 'Natural Appearance',
     description:
       'Color-matched to blend seamlessly with your natural teeth for an invisible restoration.',
@@ -84,7 +93,7 @@ const benefits = [
     statLabel: 'Shades Available',
   },
   {
-    icon: Shield,
+    icon: ShieldCheck,
     title: 'Mercury-Free',
     description:
       'Safe, biocompatible composite materials without any mercury or metal content.',
@@ -100,7 +109,7 @@ const benefits = [
     statLabel: 'Less Drilling',
   },
   {
-    icon: Timer,
+    icon: Zap,
     title: 'Same-Day',
     description:
       'Most white fillings can be completed in a single appointment, restoring your smile quickly.',
@@ -168,7 +177,7 @@ const procedureSteps = [
       'Final luster application',
     ],
     duration: '~10 min',
-    icon: Sparkles,
+    icon: Gem,
   },
 ];
 
@@ -264,7 +273,7 @@ const relatedServices = [
     description:
       'Regular examinations to catch cavities early and maintain optimal oral health.',
     href: '/services/routine-checkups',
-    icon: Check,
+    icon: Stethoscope,
   },
   {
     title: 'Teeth Whitening',
@@ -371,6 +380,210 @@ function useMagnetic(strength: number = 0.3) {
 }
 
 // ============================================================================
+// CUSTOM SVG ILLUSTRATIONS
+// ============================================================================
+
+// Tooth with filling illustration - clean, recognizable shape
+function ToothFillingIllustration({ className = '', fillingColor = '#FFF8E7' }: { className?: string; fillingColor?: string }) {
+  return (
+    <svg viewBox="0 0 120 160" fill="none" className={className} aria-hidden="true">
+      {/* Tooth outline - molar shape */}
+      <path
+        d="M20 60C20 30 35 10 60 10C85 10 100 30 100 60C100 80 95 100 90 120C87 135 80 150 70 155C65 158 55 158 50 155C40 150 33 135 30 120C25 100 20 80 20 60Z"
+        fill="#FDFBF9"
+        stroke="#E5DDD5"
+        strokeWidth="2"
+      />
+      {/* Crown cusps */}
+      <path
+        d="M30 50C30 35 42 20 60 20C78 20 90 35 90 50"
+        fill="none"
+        stroke="#E5DDD5"
+        strokeWidth="1.5"
+      />
+      {/* Filling area */}
+      <ellipse
+        cx="60"
+        cy="45"
+        rx="22"
+        ry="15"
+        fill={fillingColor}
+        stroke="#D4C8B8"
+        strokeWidth="1"
+      />
+      {/* Filling highlight */}
+      <ellipse
+        cx="55"
+        cy="40"
+        rx="12"
+        ry="6"
+        fill="white"
+        opacity="0.5"
+      />
+      {/* Root lines */}
+      <path
+        d="M45 120C43 135 42 145 45 155"
+        stroke="#E5DDD5"
+        strokeWidth="1.5"
+        fill="none"
+      />
+      <path
+        d="M75 120C77 135 78 145 75 155"
+        stroke="#E5DDD5"
+        strokeWidth="1.5"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
+// Before/After comparison illustration
+function BeforeAfterIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 240 100" fill="none" className={className} aria-hidden="true">
+      {/* Before - tooth with cavity */}
+      <g>
+        <text x="50" y="15" fontSize="10" fill="#9CA3AF" textAnchor="middle">Before</text>
+        <path
+          d="M30 35C30 25 40 20 50 20C60 20 70 25 70 35C70 45 68 55 65 65C63 72 58 78 50 78C42 78 37 72 35 65C32 55 30 45 30 35Z"
+          fill="#FDFBF9"
+          stroke="#E5DDD5"
+          strokeWidth="1.5"
+        />
+        {/* Cavity/decay */}
+        <ellipse cx="50" cy="35" rx="10" ry="8" fill="#4A4A4A" />
+        <ellipse cx="48" cy="33" rx="3" ry="2" fill="#6B6B6B" />
+      </g>
+
+      {/* Arrow */}
+      <path
+        d="M90 50 L130 50 M125 45 L130 50 L125 55"
+        stroke="#722F37"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+
+      {/* After - tooth with white filling */}
+      <g>
+        <text x="180" y="15" fontSize="10" fill="#9CA3AF" textAnchor="middle">After</text>
+        <path
+          d="M160 35C160 25 170 20 180 20C190 20 200 25 200 35C200 45 198 55 195 65C193 72 188 78 180 78C172 78 167 72 165 65C162 55 160 45 160 35Z"
+          fill="#FDFBF9"
+          stroke="#E5DDD5"
+          strokeWidth="1.5"
+        />
+        {/* White filling */}
+        <ellipse cx="180" cy="35" rx="10" ry="8" fill="#FFF8E7" stroke="#E8DFD5" strokeWidth="0.5" />
+        <ellipse cx="177" cy="32" rx="4" ry="2" fill="white" opacity="0.6" />
+      </g>
+    </svg>
+  );
+}
+
+// Layering process illustration
+function LayeringIllustration({ className = '', activeLayer = -1 }: { className?: string; activeLayer?: number }) {
+  const layers = [
+    { y: 10, height: 20, fill: 'url(#enamelGradient)', label: 'Enamel' },
+    { y: 30, height: 35, fill: 'url(#dentinGradient)', label: 'Dentin' },
+    { y: 65, height: 15, fill: 'url(#bondingGradient)', label: 'Bonding' },
+    { y: 80, height: 20, fill: 'url(#toothGradient)', label: 'Tooth' },
+  ];
+
+  return (
+    <svg viewBox="0 0 160 120" fill="none" className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id="enamelGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="100%" stopColor="#F0F8FF" />
+        </linearGradient>
+        <linearGradient id="dentinGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#FFF8E7" />
+          <stop offset="100%" stopColor="#FFEFD5" />
+        </linearGradient>
+        <linearGradient id="bondingGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#E0F0FF" />
+          <stop offset="100%" stopColor="#D0E8FF" />
+        </linearGradient>
+        <linearGradient id="toothGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#F5EDE5" />
+          <stop offset="100%" stopColor="#EDE5DD" />
+        </linearGradient>
+      </defs>
+
+      {/* Tooth cross-section shape */}
+      <clipPath id="toothClip">
+        <path d="M30 10 Q80 0 130 10 Q140 50 135 90 Q80 110 30 90 Q20 50 30 10Z" />
+      </clipPath>
+
+      <g clipPath="url(#toothClip)">
+        {layers.map((layer, index) => (
+          <rect
+            key={index}
+            x="20"
+            y={layer.y}
+            width="120"
+            height={layer.height}
+            fill={layer.fill}
+            opacity={activeLayer === -1 || activeLayer === index ? 1 : 0.4}
+            style={{ transition: 'opacity 0.3s ease' }}
+          />
+        ))}
+      </g>
+
+      {/* Outline */}
+      <path
+        d="M30 10 Q80 0 130 10 Q140 50 135 90 Q80 110 30 90 Q20 50 30 10Z"
+        fill="none"
+        stroke="#D4C8B8"
+        strokeWidth="2"
+      />
+    </svg>
+  );
+}
+
+// Shade matching illustration
+function ShadeMatchIllustration({ className = '', selectedShade = '#FFF8E7' }: { className?: string; selectedShade?: string }) {
+  return (
+    <svg viewBox="0 0 200 120" fill="none" className={className} aria-hidden="true">
+      {/* Shade guide fan */}
+      {[0, 1, 2, 3, 4].map((i) => {
+        const angle = -20 + i * 10;
+        const colors = ['#FFFEF0', '#FFF8E7', '#FFEFD5', '#FFE4C4', '#FFFAF5'];
+        return (
+          <g key={i} transform={`rotate(${angle} 100 100)`}>
+            <rect
+              x="90"
+              y="20"
+              width="20"
+              height="60"
+              rx="3"
+              fill={colors[i]}
+              stroke="#E5DDD5"
+              strokeWidth="1"
+            />
+            <rect
+              x="93"
+              y="70"
+              width="14"
+              height="15"
+              fill="#8B7355"
+              rx="2"
+            />
+          </g>
+        );
+      })}
+
+      {/* Selected indicator */}
+      <circle cx="100" cy="100" r="8" fill="#722F37" />
+      <text x="100" y="118" fontSize="8" fill="#722F37" textAnchor="middle" fontWeight="600">
+        Perfect Match
+      </text>
+    </svg>
+  );
+}
+
+// ============================================================================
 // HERO SECTION
 // ============================================================================
 
@@ -393,6 +606,19 @@ function HeroSection() {
       ref={containerRef}
       className="relative min-h-[90vh] overflow-hidden bg-gradient-to-br from-[#FDFCFB] via-[#F8F6F3] to-[#F5F2EF]"
     >
+      {/* Hero background image with overlay */}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/services/white-fillings/shade-guide-hero.jpg"
+          alt=""
+          fill
+          className="object-cover opacity-15"
+          priority
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#FDFCFB]/95 via-[#F8F6F3]/90 to-[#F5F2EF]/95" />
+      </div>
+
       {/* Animated background pattern */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Organic blob shapes */}
@@ -430,9 +656,9 @@ function HeroSection() {
           }}
         />
 
-        {/* Floating tooth shapes */}
+        {/* Floating tooth illustration */}
         <motion.div
-          className="absolute top-1/4 right-[15%] w-16 h-20"
+          className="absolute top-1/4 right-[15%] w-20 h-28 opacity-10"
           animate={{
             y: [-10, 10, -10],
             rotate: [-5, 5, -5],
@@ -443,12 +669,7 @@ function HeroSection() {
             ease: 'easeInOut',
           }}
         >
-          <svg viewBox="0 0 64 80" fill="none" className="w-full h-full opacity-10">
-            <path
-              d="M32 0C20 0 12 8 12 20C12 32 16 44 20 56C22 62 26 68 32 80C38 68 42 62 44 56C48 44 52 32 52 20C52 8 44 0 32 0Z"
-              fill="#722F37"
-            />
-          </svg>
+          <ToothFillingIllustration className="w-full h-full" fillingColor={shadeColors[selectedShade]} />
         </motion.div>
 
         {/* Subtle grid overlay */}
@@ -486,7 +707,7 @@ function HeroSection() {
                     Home
                   </Link>
                 </li>
-                <ChevronRight className="w-4 h-4 text-neutral-300" />
+                <ChevronRight className="w-4 h-4 text-neutral-300" aria-hidden="true" />
                 <li>
                   <Link
                     href="/services"
@@ -495,7 +716,7 @@ function HeroSection() {
                     Services
                   </Link>
                 </li>
-                <ChevronRight className="w-4 h-4 text-neutral-300" />
+                <ChevronRight className="w-4 h-4 text-neutral-300" aria-hidden="true" />
                 <li className="text-[#722F37] font-medium">White Fillings</li>
               </ol>
             </motion.nav>
@@ -503,7 +724,7 @@ function HeroSection() {
             {/* Badge */}
             <motion.div variants={itemVariants} className="mb-6">
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200/50 text-emerald-700 text-sm font-medium">
-                <Leaf className="w-4 h-4" />
+                <ShieldCheck className="w-4 h-4" aria-hidden="true" />
                 100% Mercury-Free
               </span>
             </motion.div>
@@ -548,7 +769,7 @@ function HeroSection() {
                     transition={{ duration: 0.6 }}
                   />
                   <span className="relative flex items-center justify-center gap-2">
-                    <Calendar className="w-5 h-5" />
+                    <Calendar className="w-5 h-5" aria-hidden="true" />
                     Book Consultation
                   </span>
                 </motion.button>
@@ -560,7 +781,7 @@ function HeroSection() {
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Phone className="w-5 h-5" />
+                <Phone className="w-5 h-5" aria-hidden="true" />
                 (613) 733-6446
               </motion.a>
             </motion.div>
@@ -571,11 +792,12 @@ function HeroSection() {
               className="mt-12 grid grid-cols-3 gap-6"
             >
               {[
-                { value: '5-10+', label: 'Year Lifespan' },
-                { value: '~45', label: 'Min Procedure' },
-                { value: '16+', label: 'Shade Options' },
+                { value: '5-10+', label: 'Year Lifespan', icon: Clock },
+                { value: '~45', label: 'Min Procedure', icon: Timer },
+                { value: '16+', label: 'Shade Options', icon: Palette },
               ].map((stat, index) => (
                 <div key={index} className="text-center">
+                  <stat.icon className="w-5 h-5 mx-auto mb-2 text-[#722F37]/60" aria-hidden="true" />
                   <div className="text-2xl font-bold text-[#722F37]">{stat.value}</div>
                   <div className="text-sm text-neutral-500">{stat.label}</div>
                 </div>
@@ -590,126 +812,71 @@ function HeroSection() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="relative"
           >
-            {/* Main tooth visualization */}
-            <div className="relative aspect-square max-w-lg mx-auto">
-              {/* Outer glow ring */}
-              <motion.div
-                className="absolute inset-0 rounded-full"
-                style={{
-                  background: `radial-gradient(circle, ${shadeColors[selectedShade]}40 0%, transparent 70%)`,
-                }}
-                animate={{
-                  scale: [1, 1.05, 1],
-                  opacity: [0.5, 0.7, 0.5],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-              />
+            {/* Main visualization card */}
+            <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-neutral-100">
+              {/* Hero image */}
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6">
+                <Image
+                  src="/images/services/white-fillings/confident-smile.jpg"
+                  alt="Beautiful natural smile showing results of white filling restorations"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 text-neutral-800 text-sm font-medium">
+                    <Sparkles className="w-4 h-4 text-[#722F37]" aria-hidden="true" />
+                    Natural-Looking Results
+                  </span>
+                </div>
+              </div>
 
-              {/* Central tooth shape */}
-              <motion.div
-                className="absolute inset-[15%] rounded-[40%] overflow-hidden shadow-2xl"
-                style={{
-                  background: `linear-gradient(145deg, ${shadeColors[selectedShade]}, ${shadeColors[selectedShade]}ee)`,
-                }}
-                animate={{
-                  boxShadow: [
-                    '0 25px 50px -12px rgba(0,0,0,0.15)',
-                    '0 35px 60px -12px rgba(0,0,0,0.2)',
-                    '0 25px 50px -12px rgba(0,0,0,0.15)',
-                  ],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-              >
-                {/* Enamel layer effect */}
-                <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-transparent to-transparent" />
-
-                {/* Natural texture lines */}
-                <div className="absolute inset-0 opacity-10">
-                  {[...Array(8)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="absolute h-full w-px bg-neutral-400"
-                      style={{ left: `${15 + i * 10}%`, transform: `rotate(${-10 + i * 2}deg)` }}
+              {/* Shade selector */}
+              <div className="p-4 bg-[#FDF8F3] rounded-xl">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold text-neutral-800 flex items-center gap-2">
+                    <Palette className="w-5 h-5 text-[#722F37]" aria-hidden="true" />
+                    Shade Matching
+                  </h3>
+                </div>
+                <div className="flex gap-2 justify-center flex-wrap" role="group" aria-label="Select tooth shade">
+                  {shadeColors.map((color, index) => (
+                    <motion.button
+                      key={index}
+                      onClick={() => setSelectedShade(index)}
+                      aria-label={`Shade ${shadeGuide[index]?.name}`}
+                      aria-pressed={selectedShade === index}
+                      className={`w-10 h-10 rounded-lg border-2 transition-all ${
+                        selectedShade === index
+                          ? 'border-[#722F37] ring-2 ring-[#722F37]/30 scale-110'
+                          : 'border-neutral-200 hover:border-neutral-300'
+                      }`}
+                      style={{ backgroundColor: color }}
+                      whileHover={{ scale: selectedShade === index ? 1.1 : 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     />
                   ))}
                 </div>
-
-                {/* Shine highlight */}
-                <motion.div
-                  className="absolute top-4 left-1/4 w-1/3 h-1/4 rounded-full bg-white/40 blur-md"
-                  animate={{
-                    opacity: [0.3, 0.5, 0.3],
-                    scale: [1, 1.1, 1],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                  }}
-                />
-
-                {/* Shade label */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-2 bg-white/90 rounded-lg shadow-lg">
-                  <p className="text-sm font-semibold text-neutral-800">
-                    Shade {shadeGuide[selectedShade]?.name}
-                  </p>
-                  <p className="text-xs text-neutral-500">
-                    {shadeGuide[selectedShade]?.description}
-                  </p>
-                </div>
-              </motion.div>
-
-              {/* Decorative elements */}
-              <motion.div
-                className="absolute -top-4 -right-4 w-24 h-24 rounded-full border-2 border-[#722F37]/10"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-              />
-              <motion.div
-                className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full border-2 border-dashed border-amber-200/50"
-                animate={{ rotate: -360 }}
-                transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-              />
+                <p className="text-sm text-neutral-500 text-center mt-3">
+                  Selected: <span className="font-medium text-[#722F37]">{shadeGuide[selectedShade]?.name}</span> - {shadeGuide[selectedShade]?.description}
+                </p>
+              </div>
             </div>
 
-            {/* Shade selector */}
+            {/* Decorative elements */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="mt-8 p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-neutral-200/50 shadow-lg"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-neutral-800">Shade Matching</h3>
-                <Palette className="w-5 h-5 text-[#722F37]" />
-              </div>
-              <div className="flex gap-2 justify-center flex-wrap">
-                {shadeColors.map((color, index) => (
-                  <motion.button
-                    key={index}
-                    onClick={() => setSelectedShade(index)}
-                    className={`w-10 h-10 rounded-lg border-2 transition-all ${
-                      selectedShade === index
-                        ? 'border-[#722F37] ring-2 ring-[#722F37]/30 scale-110'
-                        : 'border-neutral-200 hover:border-neutral-300'
-                    }`}
-                    style={{ backgroundColor: color }}
-                    whileHover={{ scale: selectedShade === index ? 1.1 : 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  />
-                ))}
-              </div>
-              <p className="text-sm text-neutral-500 text-center mt-3">
-                We precisely match fillings to your natural tooth shade
-              </p>
-            </motion.div>
+              className="absolute -top-4 -right-4 w-24 h-24 rounded-full border-2 border-[#722F37]/10"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+              aria-hidden="true"
+            />
+            <motion.div
+              className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full border-2 border-dashed border-amber-200/50"
+              animate={{ rotate: -360 }}
+              transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+              aria-hidden="true"
+            />
           </motion.div>
         </div>
       </motion.div>
@@ -719,6 +886,7 @@ function HeroSection() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
+        aria-hidden="true"
       >
         <div className="w-6 h-10 rounded-full border-2 border-neutral-300 flex items-start justify-center p-2">
           <motion.div
@@ -728,6 +896,94 @@ function HeroSection() {
           />
         </div>
       </motion.div>
+    </section>
+  );
+}
+
+// ============================================================================
+// BEFORE/AFTER VISUAL SECTION
+// ============================================================================
+
+function BeforeAfterSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+
+  return (
+    <section ref={ref} className="py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#722F37]/10 text-[#722F37] text-sm font-medium mb-4">
+            <Sparkles className="w-4 h-4" aria-hidden="true" />
+            Invisible Restorations
+          </span>
+          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+            Seamless, Natural Results
+          </h2>
+          <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+            White fillings blend perfectly with your natural tooth structure, making restorations virtually invisible.
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          {/* Illustration */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex justify-center"
+          >
+            <div className="relative p-8 bg-gradient-to-br from-[#FDF8F3] to-white rounded-3xl border border-neutral-100 shadow-lg">
+              <BeforeAfterIllustration className="w-full max-w-sm h-auto" />
+              <div className="mt-4 flex justify-center gap-8">
+                <div className="flex items-center gap-2 text-sm text-neutral-600">
+                  <div className="w-3 h-3 rounded-full bg-neutral-400" aria-hidden="true" />
+                  Cavity/Decay
+                </div>
+                <div className="flex items-center gap-2 text-sm text-neutral-600">
+                  <div className="w-3 h-3 rounded-full bg-[#FFF8E7] border border-neutral-300" aria-hidden="true" />
+                  White Filling
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Benefits list */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="space-y-4"
+          >
+            {[
+              { icon: Eye, title: 'Invisible to the Eye', desc: 'Matches your natural tooth color perfectly' },
+              { icon: ShieldCheck, title: 'Preserves Tooth Structure', desc: 'Requires less drilling than metal fillings' },
+              { icon: ThumbsUp, title: 'Bonds Directly', desc: 'Creates a stronger, more stable restoration' },
+              { icon: Lightbulb, title: 'Modern Materials', desc: 'Advanced composites that last for years' },
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
+                className="flex items-start gap-4 p-4 rounded-xl bg-white border border-neutral-100 hover:border-[#722F37]/20 hover:shadow-md transition-all"
+              >
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FDF8F3] to-[#EDE5DD] flex items-center justify-center flex-shrink-0">
+                  <item.icon className="w-6 h-6 text-[#722F37]" aria-hidden="true" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-neutral-900">{item.title}</h3>
+                  <p className="text-sm text-neutral-600">{item.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
     </section>
   );
 }
@@ -778,32 +1034,15 @@ function ComparisonSection() {
               transition={{ duration: 0.3 }}
             >
               <div className="absolute top-4 right-4">
-                <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold">
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold">
+                  <BadgeCheck className="w-3 h-3" aria-hidden="true" />
                   RECOMMENDED
                 </span>
               </div>
 
               {/* Tooth visualization */}
-              <div className="relative w-32 h-40 mx-auto mb-6">
-                <motion.div
-                  className="absolute inset-0 rounded-t-full rounded-b-[40%] overflow-hidden"
-                  style={{
-                    background: 'linear-gradient(180deg, #FFF8E7 0%, #FFEFD5 100%)',
-                    boxShadow: 'inset 0 -10px 30px rgba(0,0,0,0.05)',
-                  }}
-                  animate={{
-                    boxShadow: [
-                      'inset 0 -10px 30px rgba(0,0,0,0.05)',
-                      'inset 0 -15px 40px rgba(0,0,0,0.08)',
-                      'inset 0 -10px 30px rgba(0,0,0,0.05)',
-                    ],
-                  }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  {/* Filling area - matches tooth */}
-                  <div className="absolute top-4 left-1/2 -translate-x-1/2 w-12 h-8 rounded-lg bg-gradient-to-b from-[#FFF5EB] to-[#FFEFD5]" />
-                  <div className="absolute top-3 left-1/2 -translate-x-1/2 w-8 h-4 rounded-full bg-white/50" />
-                </motion.div>
+              <div className="relative w-24 h-32 mx-auto mb-6">
+                <ToothFillingIllustration className="w-full h-full" fillingColor="#FFF8E7" />
               </div>
 
               <h3 className="text-2xl font-bold text-neutral-900 mb-2 text-center">
@@ -827,7 +1066,7 @@ function ComparisonSection() {
                     transition={{ delay: 0.4 + i * 0.1 }}
                     className="flex items-center gap-3 text-neutral-700"
                   >
-                    <div className="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center">
+                    <div className="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center" aria-hidden="true">
                       <Check className="w-3 h-3 text-emerald-600" />
                     </div>
                     {item}
@@ -849,16 +1088,8 @@ function ComparisonSection() {
               </div>
 
               {/* Tooth visualization with silver filling */}
-              <div className="relative w-32 h-40 mx-auto mb-6">
-                <motion.div
-                  className="absolute inset-0 rounded-t-full rounded-b-[40%] overflow-hidden"
-                  style={{
-                    background: 'linear-gradient(180deg, #FFF8E7 0%, #FFEFD5 100%)',
-                  }}
-                >
-                  {/* Silver filling */}
-                  <div className="absolute top-4 left-1/2 -translate-x-1/2 w-12 h-8 rounded-lg bg-gradient-to-b from-neutral-400 to-neutral-500" />
-                </motion.div>
+              <div className="relative w-24 h-32 mx-auto mb-6">
+                <ToothFillingIllustration className="w-full h-full" fillingColor="#9CA3AF" />
               </div>
 
               <h3 className="text-2xl font-bold text-neutral-700 mb-2 text-center">
@@ -882,7 +1113,7 @@ function ComparisonSection() {
                     transition={{ delay: 0.4 + i * 0.1 }}
                     className="flex items-center gap-3 text-neutral-500"
                   >
-                    <div className="w-5 h-5 rounded-full bg-neutral-200 flex items-center justify-center">
+                    <div className="w-5 h-5 rounded-full bg-neutral-200 flex items-center justify-center" aria-hidden="true">
                       <X className="w-3 h-3 text-neutral-400" />
                     </div>
                     {item}
@@ -929,7 +1160,7 @@ function ComparisonSection() {
                 >
                   <div className="flex items-center justify-center gap-2">
                     {row.winner === 'composite' && (
-                      <Check className="w-4 h-4 text-emerald-500" />
+                      <Check className="w-4 h-4 text-emerald-500" aria-hidden="true" />
                     )}
                     {row.composite}
                   </div>
@@ -941,7 +1172,7 @@ function ComparisonSection() {
                 >
                   <div className="flex items-center justify-center gap-2">
                     {row.winner === 'amalgam' && (
-                      <Check className="w-4 h-4 text-emerald-500" />
+                      <Check className="w-4 h-4 text-emerald-500" aria-hidden="true" />
                     )}
                     {row.amalgam}
                   </div>
@@ -974,7 +1205,8 @@ function BenefitsSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-amber-100 text-amber-700 text-sm font-medium mb-4">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 text-amber-700 text-sm font-medium mb-4">
+            <Award className="w-4 h-4" aria-hidden="true" />
             Key Benefits
           </span>
           <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6">
@@ -1012,6 +1244,7 @@ function BenefitsSection() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
                   transition={{ duration: 0.3 }}
+                  aria-hidden="true"
                 />
 
                 {/* Icon */}
@@ -1022,7 +1255,7 @@ function BenefitsSection() {
                   }}
                   transition={{ duration: 0.5 }}
                 >
-                  <benefit.icon className="w-8 h-8" />
+                  <benefit.icon className="w-8 h-8" aria-hidden="true" />
                 </motion.div>
 
                 {/* Stat */}
@@ -1056,6 +1289,7 @@ function BenefitsSection() {
                     scale: hoveredIndex === index ? 1.2 : 1,
                   }}
                   transition={{ duration: 0.3 }}
+                  aria-hidden="true"
                 />
               </motion.div>
             </motion.div>
@@ -1087,8 +1321,9 @@ function MaterialTechnologySection() {
           >
             <motion.span
               variants={itemVariants}
-              className="inline-block px-4 py-1.5 rounded-full bg-[#722F37]/10 text-[#722F37] text-sm font-medium mb-4"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#722F37]/10 text-[#722F37] text-sm font-medium mb-4"
             >
+              <Layers className="w-4 h-4" aria-hidden="true" />
               Advanced Materials
             </motion.span>
 
@@ -1112,12 +1347,15 @@ function MaterialTechnologySection() {
             </motion.p>
 
             {/* Layer descriptions */}
-            <motion.div variants={containerVariants} className="space-y-4">
+            <motion.div variants={containerVariants} className="space-y-4" role="tablist">
               {materialLayers.map((layer, index) => (
-                <motion.div
+                <motion.button
                   key={index}
                   variants={itemVariants}
-                  className={`p-4 rounded-xl border transition-all cursor-pointer ${
+                  role="tab"
+                  aria-selected={activeLayer === index}
+                  aria-controls={`layer-panel-${index}`}
+                  className={`w-full text-left p-4 rounded-xl border transition-all ${
                     activeLayer === index
                       ? 'bg-white border-[#722F37]/30 shadow-lg'
                       : 'bg-transparent border-neutral-200 hover:border-neutral-300'
@@ -1132,6 +1370,7 @@ function MaterialTechnologySection() {
                           ? 'bg-[#722F37] scale-125'
                           : 'bg-neutral-300'
                       }`}
+                      aria-hidden="true"
                     />
                     <div className="flex-1">
                       <h4 className="font-semibold text-neutral-900">{layer.name}</h4>
@@ -1142,6 +1381,8 @@ function MaterialTechnologySection() {
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
                             className="text-sm text-neutral-600 mt-1"
+                            id={`layer-panel-${index}`}
+                            role="tabpanel"
                           >
                             {layer.description}
                           </motion.p>
@@ -1149,7 +1390,7 @@ function MaterialTechnologySection() {
                       </AnimatePresence>
                     </div>
                   </div>
-                </motion.div>
+                </motion.button>
               ))}
             </motion.div>
 
@@ -1158,7 +1399,7 @@ function MaterialTechnologySection() {
               variants={itemVariants}
               className="mt-8 flex items-center gap-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200/50"
             >
-              <Shield className="w-8 h-8 text-emerald-600" />
+              <ShieldCheck className="w-8 h-8 text-emerald-600" aria-hidden="true" />
               <div>
                 <p className="font-semibold text-neutral-900">100% Mercury-Free</p>
                 <p className="text-sm text-neutral-600">
@@ -1175,62 +1416,34 @@ function MaterialTechnologySection() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="relative"
           >
-            <div className="relative aspect-[4/5] max-w-md mx-auto">
-              {/* Tooth cross-section */}
-              <div className="absolute inset-0 rounded-[30%_30%_50%_50%] overflow-hidden shadow-2xl">
-                {materialLayers.map((layer, index) => {
-                  const topPercent = index === 0 ? 0 : materialLayers.slice(0, index).reduce((acc, l) => acc + parseInt(l.height), 0);
-                  return (
-                    <motion.div
-                      key={index}
-                      className={`absolute left-0 right-0 bg-gradient-to-b ${layer.gradient}`}
-                      style={{
-                        top: `${topPercent}%`,
-                        height: layer.height,
-                      }}
-                      animate={{
-                        opacity: activeLayer === index ? 1 : 0.6,
-                        filter: activeLayer === index ? 'brightness(1.1)' : 'brightness(1)',
-                      }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      {/* Highlight effect for active layer */}
-                      {activeLayer === index && (
-                        <motion.div
-                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                          initial={{ x: '-100%' }}
-                          animate={{ x: '100%' }}
-                          transition={{ duration: 1, repeat: Infinity, repeatDelay: 1 }}
-                        />
-                      )}
-                    </motion.div>
-                  );
-                })}
-              </div>
+            <div className="relative max-w-md mx-auto">
+              {/* Layering illustration */}
+              <div className="bg-white rounded-3xl p-8 shadow-2xl border border-neutral-100">
+                <LayeringIllustration className="w-full h-auto" activeLayer={activeLayer} />
 
-              {/* Layer indicators */}
-              <div className="absolute -right-4 top-0 bottom-0 flex flex-col justify-around">
-                {materialLayers.map((layer, index) => (
-                  <motion.div
-                    key={index}
-                    className="flex items-center gap-2"
-                    animate={{
-                      x: activeLayer === index ? 0 : 10,
-                      opacity: activeLayer === index ? 1 : 0.5,
-                    }}
-                  >
-                    <div className="w-8 h-px bg-neutral-300" />
-                    <motion.div
-                      className={`w-2 h-2 rounded-full ${
-                        activeLayer === index ? 'bg-[#722F37]' : 'bg-neutral-300'
+                {/* Layer labels */}
+                <div className="mt-6 grid grid-cols-2 gap-3">
+                  {materialLayers.map((layer, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setActiveLayer(index)}
+                      className={`p-3 rounded-lg text-left transition-all ${
+                        activeLayer === index
+                          ? 'bg-[#722F37]/10 border border-[#722F37]/30'
+                          : 'bg-neutral-50 border border-transparent hover:bg-neutral-100'
                       }`}
-                      animate={{
-                        scale: activeLayer === index ? [1, 1.3, 1] : 1,
-                      }}
-                      transition={{ duration: 0.5, repeat: activeLayer === index ? Infinity : 0, repeatDelay: 1 }}
-                    />
-                  </motion.div>
-                ))}
+                    >
+                      <div className={`w-2 h-2 rounded-full mb-1 ${
+                        activeLayer === index ? 'bg-[#722F37]' : 'bg-neutral-300'
+                      }`} aria-hidden="true" />
+                      <p className={`text-xs font-medium ${
+                        activeLayer === index ? 'text-[#722F37]' : 'text-neutral-600'
+                      }`}>
+                        {layer.name}
+                      </p>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Decorative elements */}
@@ -1240,6 +1453,7 @@ function MaterialTechnologySection() {
                   scale: [1, 1.1, 1],
                 }}
                 transition={{ duration: 4, repeat: Infinity }}
+                aria-hidden="true"
               />
               <motion.div
                 className="absolute -z-10 -bottom-10 -right-10 w-32 h-32 rounded-full bg-amber-200/30"
@@ -1247,6 +1461,7 @@ function MaterialTechnologySection() {
                   scale: [1, 1.15, 1],
                 }}
                 transition={{ duration: 5, repeat: Infinity }}
+                aria-hidden="true"
               />
             </div>
           </motion.div>
@@ -1287,7 +1502,8 @@ function ProcedureSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-blue-100 text-blue-700 text-sm font-medium mb-4">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 text-blue-700 text-sm font-medium mb-4">
+            <Stethoscope className="w-4 h-4" aria-hidden="true" />
             Simple Process
           </span>
           <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6">
@@ -1306,9 +1522,9 @@ function ProcedureSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="max-w-3xl mx-auto mb-12"
         >
-          <div className="flex items-center justify-between relative">
+          <div className="flex items-center justify-between relative" role="tablist" aria-label="Procedure steps">
             {/* Progress line background */}
-            <div className="absolute top-6 left-0 right-0 h-1 bg-neutral-200 rounded-full" />
+            <div className="absolute top-6 left-0 right-0 h-1 bg-neutral-200 rounded-full" aria-hidden="true" />
 
             {/* Animated progress line */}
             <motion.div
@@ -1316,6 +1532,7 @@ function ProcedureSection() {
               initial={{ width: '0%' }}
               animate={{ width: `${(activeStep / (procedureSteps.length - 1)) * 100}%` }}
               transition={{ duration: 0.5, ease: 'easeInOut' }}
+              aria-hidden="true"
             />
 
             {/* Step indicators */}
@@ -1329,6 +1546,9 @@ function ProcedureSection() {
                 className="relative z-10 flex flex-col items-center"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                role="tab"
+                aria-selected={index === activeStep}
+                aria-label={`Step ${step.step}: ${step.title}`}
               >
                 <motion.div
                   className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all ${
@@ -1341,7 +1561,7 @@ function ProcedureSection() {
                   }}
                   transition={{ duration: 0.5, repeat: index === activeStep ? Infinity : 0, repeatDelay: 3 }}
                 >
-                  <step.icon className="w-5 h-5" />
+                  <step.icon className="w-5 h-5" aria-hidden="true" />
                 </motion.div>
                 <span
                   className={`mt-3 text-sm font-medium transition-colors ${
@@ -1370,6 +1590,8 @@ function ProcedureSection() {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.4 }}
               className="grid md:grid-cols-2 gap-8 items-center"
+              role="tabpanel"
+              aria-label={`Step ${currentProcedure.step}: ${currentProcedure.title}`}
             >
               {/* Step visualization */}
               <div className="relative aspect-square max-w-sm mx-auto">
@@ -1396,6 +1618,7 @@ function ProcedureSection() {
                     >
                       {React.createElement(currentProcedure.icon, {
                         className: 'w-16 h-16 text-[#722F37]',
+                        'aria-hidden': true,
                       })}
                     </motion.div>
                   </div>
@@ -1419,6 +1642,7 @@ function ProcedureSection() {
                         repeat: Infinity,
                         delay: i * 0.2,
                       }}
+                      aria-hidden="true"
                     />
                   ))}
                 </motion.div>
@@ -1431,7 +1655,7 @@ function ProcedureSection() {
                   transition={{ delay: 0.2 }}
                 >
                   <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-[#722F37]" />
+                    <Clock className="w-4 h-4 text-[#722F37]" aria-hidden="true" />
                     <span className="font-semibold text-neutral-800">
                       {currentProcedure.duration}
                     </span>
@@ -1462,7 +1686,7 @@ function ProcedureSection() {
                       transition={{ delay: i * 0.1 }}
                       className="flex items-center gap-3 text-neutral-700"
                     >
-                      <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                      <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0" aria-hidden="true">
                         <Check className="w-4 h-4 text-emerald-600" />
                       </div>
                       {detail}
@@ -1480,10 +1704,11 @@ function ProcedureSection() {
               className="flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-100 hover:bg-neutral-200 transition-colors text-neutral-600"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              aria-label={isPlaying ? 'Pause auto-advance' : 'Play auto-advance'}
             >
               {isPlaying ? (
                 <>
-                  <div className="w-4 h-4 flex items-center gap-0.5">
+                  <div className="w-4 h-4 flex items-center gap-0.5" aria-hidden="true">
                     <div className="w-1 h-3 bg-current" />
                     <div className="w-1 h-3 bg-current" />
                   </div>
@@ -1491,7 +1716,7 @@ function ProcedureSection() {
                 </>
               ) : (
                 <>
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M8 5v14l11-7z" />
                   </svg>
                   <span className="text-sm font-medium">Play</span>
@@ -1508,10 +1733,20 @@ function ProcedureSection() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="max-w-3xl mx-auto mt-16"
         >
-          <div className="p-8 rounded-3xl bg-gradient-to-r from-[#722F37] to-[#8B3A42] text-white">
-            <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+          <div className="relative overflow-hidden p-8 rounded-3xl bg-gradient-to-r from-[#722F37] to-[#8B3A42] text-white">
+            {/* Background image */}
+            <div className="absolute inset-0 opacity-10">
+              <Image
+                src="/images/services/white-fillings/dental-clinic.jpg"
+                alt=""
+                fill
+                className="object-cover"
+                aria-hidden="true"
+              />
+            </div>
+            <div className="relative flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
               <div className="w-20 h-20 rounded-2xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                <Timer className="w-10 h-10" />
+                <Timer className="w-10 h-10" aria-hidden="true" />
               </div>
               <div>
                 <h3 className="text-2xl font-bold mb-2">Quick & Comfortable</h3>
@@ -1547,7 +1782,8 @@ function FAQSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-purple-100 text-purple-700 text-sm font-medium mb-4">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-100 text-purple-700 text-sm font-medium mb-4">
+            <CircleCheck className="w-4 h-4" aria-hidden="true" />
             Have Questions?
           </span>
           <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6">
@@ -1578,6 +1814,8 @@ function FAQSection() {
                 <button
                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
                   className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#722F37]/50"
+                  aria-expanded={openIndex === index}
+                  aria-controls={`faq-answer-${index}`}
                 >
                   <span className="font-semibold text-neutral-900 pr-4">
                     {faq.question}
@@ -1586,6 +1824,7 @@ function FAQSection() {
                     animate={{ rotate: openIndex === index ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
                     className="flex-shrink-0"
+                    aria-hidden="true"
                   >
                     <ChevronDown className="w-5 h-5 text-[#722F37]" />
                   </motion.div>
@@ -1594,6 +1833,7 @@ function FAQSection() {
                 <AnimatePresence>
                   {openIndex === index && (
                     <motion.div
+                      id={`faq-answer-${index}`}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
@@ -1623,7 +1863,7 @@ function FAQSection() {
             className="inline-flex items-center gap-2 text-[#722F37] font-semibold hover:underline"
             whileHover={{ x: 3 }}
           >
-            <Phone className="w-5 h-5" />
+            <Phone className="w-5 h-5" aria-hidden="true" />
             Call us at (613) 733-6446
           </motion.a>
         </motion.div>
@@ -1650,7 +1890,8 @@ function RelatedServicesSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-rose-100 text-rose-700 text-sm font-medium mb-4">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-100 text-rose-700 text-sm font-medium mb-4">
+            <Heart className="w-4 h-4" aria-hidden="true" />
             Explore More
           </span>
           <h2 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6">
@@ -1683,6 +1924,7 @@ function RelatedServicesSection() {
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-br from-[#722F37]/5 to-transparent opacity-0 group-hover:opacity-100"
                     transition={{ duration: 0.3 }}
+                    aria-hidden="true"
                   />
 
                   {/* Icon */}
@@ -1691,7 +1933,7 @@ function RelatedServicesSection() {
                     whileHover={{ rotate: [0, -5, 5, 0] }}
                     transition={{ duration: 0.5 }}
                   >
-                    <service.icon className="w-7 h-7" />
+                    <service.icon className="w-7 h-7" aria-hidden="true" />
                   </motion.div>
 
                   <h3 className="relative text-xl font-bold text-neutral-900 mb-3 group-hover:text-[#722F37] transition-colors">
@@ -1706,7 +1948,7 @@ function RelatedServicesSection() {
                     whileHover={{ x: 4 }}
                   >
                     Learn More
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
                   </motion.div>
                 </motion.div>
               </Link>
@@ -1726,7 +1968,7 @@ function RelatedServicesSection() {
             className="inline-flex items-center gap-2 text-[#722F37] font-semibold hover:underline group"
           >
             View All Services
-            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
           </Link>
         </motion.div>
       </div>
@@ -1748,8 +1990,19 @@ function CTASection() {
       ref={ref}
       className="relative py-24 overflow-hidden bg-gradient-to-br from-[#722F37] via-[#5a252c] to-[#4a1f24]"
     >
+      {/* Background image with overlay */}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/services/white-fillings/dental-procedure.jpg"
+          alt=""
+          fill
+          className="object-cover opacity-10"
+          aria-hidden="true"
+        />
+      </div>
+
       {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
         <motion.div
           className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-white/5"
           animate={{
@@ -1807,7 +2060,7 @@ function CTASection() {
             }}
             transition={{ duration: 3, repeat: Infinity }}
           >
-            <Sparkles className="w-4 h-4" />
+            <Sparkles className="w-4 h-4" aria-hidden="true" />
             Natural-Looking Results
           </motion.span>
 
@@ -1842,9 +2095,10 @@ function CTASection() {
                     initial={{ x: '100%' }}
                     whileHover={{ x: 0 }}
                     transition={{ duration: 0.3 }}
+                    aria-hidden="true"
                   />
                   <span className="relative flex items-center justify-center gap-3 text-lg">
-                    <Calendar className="w-6 h-6" />
+                    <Calendar className="w-6 h-6" aria-hidden="true" />
                     Book Your Appointment
                   </span>
                 </motion.button>
@@ -1857,7 +2111,7 @@ function CTASection() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <Phone className="w-6 h-6" />
+              <Phone className="w-6 h-6" aria-hidden="true" />
               (613) 733-6446
             </motion.a>
           </div>
@@ -1870,12 +2124,12 @@ function CTASection() {
             className="mt-12 flex flex-wrap justify-center gap-8 text-white/60"
           >
             {[
-              { icon: Shield, text: 'Mercury-Free' },
-              { icon: Award, text: 'Same-Day Service' },
+              { icon: ShieldCheck, text: 'Mercury-Free' },
+              { icon: Zap, text: 'Same-Day Service' },
               { icon: Heart, text: 'Gentle Care' },
             ].map((item, index) => (
               <div key={index} className="flex items-center gap-2">
-                <item.icon className="w-5 h-5" />
+                <item.icon className="w-5 h-5" aria-hidden="true" />
                 <span className="text-sm font-medium">{item.text}</span>
               </div>
             ))}
@@ -1894,6 +2148,7 @@ export function WhiteFillingsContent() {
   return (
     <main id="main-content" className="min-h-screen">
       <HeroSection />
+      <BeforeAfterSection />
       <ComparisonSection />
       <BenefitsSection />
       <MaterialTechnologySection />

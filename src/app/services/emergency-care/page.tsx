@@ -10,7 +10,6 @@ import {
   Shield,
   Clock,
   Phone,
-  Calendar,
   ArrowRight,
   Zap,
   Heart,
@@ -26,7 +25,14 @@ import {
   CheckCircle2,
   ChevronRight,
   AlertCircle,
-  Sparkles,
+  ShieldCheck,
+  ClockAlert,
+  HeartPulse,
+  Siren,
+  HandHeart,
+  BadgeAlert,
+  ShieldPlus,
+  TriangleAlert,
 } from 'lucide-react';
 import {
   motion,
@@ -39,7 +45,8 @@ import {
 } from 'framer-motion';
 import { FAQAccordion } from '@/components/ui/faq-accordion';
 import { ContactCtaBanner } from '@/components/sections/contact-cta';
-import { contactInfo, businessHours } from '@/data/site-config';
+import { ResponsiveWrapperCSS } from '@/components/responsive-wrapper';
+import EmergencyCarePageMobile from './page-mobile';
 
 // ============================================================================
 // DATA
@@ -170,7 +177,7 @@ const emergencyTypes = [
 
 const benefits = [
   {
-    icon: <Clock className="w-6 h-6" />,
+    icon: <ClockAlert className="w-6 h-6" />,
     title: 'Same-Day Appointments',
     description: 'We prioritize emergencies and work to see urgent cases the same day you call.',
   },
@@ -180,12 +187,12 @@ const benefits = [
     description: 'Our first priority is getting you out of pain quickly and effectively.',
   },
   {
-    icon: <Shield className="w-6 h-6" />,
+    icon: <ShieldCheck className="w-6 h-6" />,
     title: 'Expert Care',
     description: 'Our experienced team handles all types of dental emergencies with skill and compassion.',
   },
   {
-    icon: <Heart className="w-6 h-6" />,
+    icon: <HandHeart className="w-6 h-6" />,
     title: 'Compassionate Approach',
     description: "We understand emergencies are stressful and provide calm, reassuring care.",
   },
@@ -197,23 +204,274 @@ const relatedServices = [
     description: 'Save infected teeth with gentle root canal treatment to relieve pain.',
     href: '/services/root-canal',
     icon: <Activity className="w-6 h-6" />,
-    image: '/images/hygiene/hygiene-05.jpg',
+    image: '/images/services/emergency-care/dental-treatment.jpg',
   },
   {
     title: 'Oral Surgery',
     description: 'Surgical solutions for extractions and complex dental issues.',
     href: '/services/oral-surgery',
-    icon: <Shield className="w-6 h-6" />,
-    image: '/images/hygiene/hygiene-06.jpg',
+    icon: <ShieldPlus className="w-6 h-6" />,
+    image: '/images/services/emergency-care/dental-team.jpg',
   },
   {
     title: 'White Fillings',
     description: 'Restore damaged teeth with natural-looking composite fillings.',
     href: '/services/white-fillings',
     icon: <Check className="w-6 h-6" />,
-    image: '/images/hygiene/hygiene-07.jpg',
+    image: '/images/services/emergency-care/dental-consultation.jpg',
   },
 ];
+
+// ============================================================================
+// SVG ILLUSTRATIONS
+// ============================================================================
+
+// Professional tooth illustration
+function ToothIllustration({ className = '', animated = false }: { className?: string; animated?: boolean }) {
+  return (
+    <motion.svg
+      viewBox="0 0 100 120"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      initial={animated ? { opacity: 0, scale: 0.8 } : undefined}
+      animate={animated ? { opacity: 1, scale: 1 } : undefined}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      aria-hidden="true"
+    >
+      {/* Tooth crown (upper part) */}
+      <path
+        d="M50 8C32 8 20 20 20 38C20 50 24 56 28 62C32 68 34 76 34 86C34 94 38 100 44 100C50 100 52 94 52 88C52 82 50 76 50 70C50 66 52 64 56 64C60 64 62 66 62 70C62 76 60 82 60 88C60 94 62 100 68 100C74 100 78 94 78 86C78 76 80 68 84 62C88 56 92 50 92 38C92 20 80 8 50 8Z"
+        fill="url(#toothGradient)"
+        stroke="#722F37"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      {/* Highlight on tooth */}
+      <path
+        d="M35 28C35 28 40 22 50 22C60 22 65 28 65 28"
+        stroke="white"
+        strokeWidth="3"
+        strokeLinecap="round"
+        opacity="0.6"
+      />
+      {/* Gradient definition */}
+      <defs>
+        <linearGradient id="toothGradient" x1="50" y1="8" x2="50" y2="100" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFFFFF" />
+          <stop offset="1" stopColor="#F5F0EB" />
+        </linearGradient>
+      </defs>
+    </motion.svg>
+  );
+}
+
+// Emergency alert illustration with tooth
+function EmergencyToothIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 140 140"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Pulsing background circle */}
+      <circle cx="70" cy="70" r="60" fill="#722F37" fillOpacity="0.1" />
+      <circle cx="70" cy="70" r="45" fill="#722F37" fillOpacity="0.15" />
+
+      {/* Tooth shape */}
+      <path
+        d="M70 30C55 30 45 40 45 55C45 65 48 70 51 75C54 80 56 86 56 94C56 100 59 105 64 105C69 105 71 100 71 95C71 90 69 85 69 80C69 77 71 75 74 75C77 75 79 77 79 80C79 85 77 90 77 95C77 100 79 105 84 105C89 105 92 100 92 94C92 86 94 80 97 75C100 70 103 65 103 55C103 40 93 30 70 30Z"
+        fill="white"
+        stroke="#722F37"
+        strokeWidth="2.5"
+      />
+
+      {/* Alert triangle on tooth */}
+      <path
+        d="M70 50L78 65H62L70 50Z"
+        fill="#722F37"
+        stroke="#722F37"
+        strokeWidth="1"
+        strokeLinejoin="round"
+      />
+      <line x1="70" y1="54" x2="70" y2="59" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <circle cx="70" cy="62" r="1.5" fill="white" />
+    </svg>
+  );
+}
+
+// First aid kit illustration
+function FirstAidIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Kit body */}
+      <rect x="15" y="30" width="70" height="55" rx="6" fill="#722F37" />
+      <rect x="20" y="35" width="60" height="45" rx="4" fill="#8a3a44" />
+
+      {/* Handle */}
+      <path
+        d="M35 30V22C35 18 40 15 50 15C60 15 65 18 65 22V30"
+        stroke="#722F37"
+        strokeWidth="4"
+        strokeLinecap="round"
+      />
+
+      {/* Cross symbol */}
+      <rect x="44" y="45" width="12" height="24" rx="2" fill="white" />
+      <rect x="38" y="51" width="24" height="12" rx="2" fill="white" />
+
+      {/* Highlight */}
+      <rect x="22" y="38" width="20" height="4" rx="2" fill="white" fillOpacity="0.3" />
+    </svg>
+  );
+}
+
+// Clock urgent illustration
+function UrgentClockIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Clock body */}
+      <circle cx="50" cy="50" r="40" fill="white" stroke="#722F37" strokeWidth="4" />
+      <circle cx="50" cy="50" r="35" fill="#FDF8F3" />
+
+      {/* Clock marks */}
+      {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle, i) => (
+        <line
+          key={i}
+          x1="50"
+          y1="18"
+          x2="50"
+          y2={i % 3 === 0 ? "24" : "21"}
+          stroke="#722F37"
+          strokeWidth={i % 3 === 0 ? "3" : "2"}
+          strokeLinecap="round"
+          transform={`rotate(${angle} 50 50)`}
+        />
+      ))}
+
+      {/* Clock hands */}
+      <line x1="50" y1="50" x2="50" y2="28" stroke="#722F37" strokeWidth="3" strokeLinecap="round" />
+      <line x1="50" y1="50" x2="68" y2="50" stroke="#722F37" strokeWidth="3" strokeLinecap="round" />
+
+      {/* Center dot */}
+      <circle cx="50" cy="50" r="4" fill="#722F37" />
+
+      {/* Urgent indicator */}
+      <circle cx="75" cy="25" r="12" fill="#ef4444" />
+      <text x="75" y="30" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">!</text>
+    </svg>
+  );
+}
+
+// Phone call illustration
+function PhoneCallIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Phone body */}
+      <path
+        d="M25 15C25 12 27 10 30 10H70C73 10 75 12 75 15V85C75 88 73 90 70 90H30C27 90 25 88 25 85V15Z"
+        fill="#722F37"
+      />
+      <rect x="30" y="18" width="40" height="60" rx="2" fill="white" />
+
+      {/* Call waves */}
+      <path
+        d="M80 35C85 40 85 55 80 60"
+        stroke="#722F37"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <path
+        d="M88 28C98 38 98 58 88 68"
+        stroke="#722F37"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+
+      {/* Phone icon on screen */}
+      <circle cx="50" cy="48" r="15" fill="#722F37" fillOpacity="0.1" />
+      <path
+        d="M43 40C43 40 44 44 48 48C52 52 56 53 56 53L54 56C54 56 49 55 45 51C41 47 40 42 40 42L43 40Z"
+        fill="#722F37"
+      />
+
+      {/* Home button */}
+      <circle cx="50" cy="83" r="4" stroke="#EDE5DD" strokeWidth="2" />
+    </svg>
+  );
+}
+
+// Calming heart illustration for compassionate care
+function CompassionateIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Hands */}
+      <path
+        d="M20 55C20 55 25 45 35 45C45 45 50 55 50 55C50 55 55 45 65 45C75 45 80 55 80 55"
+        stroke="#722F37"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <path
+        d="M25 60C25 60 30 52 38 52C46 52 50 60 50 60"
+        stroke="#722F37"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M50 60C50 60 54 52 62 52C70 52 75 60 75 60"
+        stroke="#722F37"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+
+      {/* Heart */}
+      <path
+        d="M50 35C50 35 45 25 38 25C31 25 26 31 26 38C26 52 50 65 50 65C50 65 74 52 74 38C74 31 69 25 62 25C55 25 50 35 50 35Z"
+        fill="#722F37"
+        fillOpacity="0.2"
+        stroke="#722F37"
+        strokeWidth="2"
+      />
+
+      {/* Pulse line */}
+      <path
+        d="M35 45L42 45L45 38L50 52L55 42L58 45L65 45"
+        stroke="#722F37"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 // ============================================================================
 // ANIMATION VARIANTS
@@ -239,12 +497,12 @@ const staggerContainer = {
   },
 };
 
-const pulseAnimation = {
-  scale: [1, 1.05, 1],
-  transition: {
-    duration: 2,
-    repeat: Infinity,
-    ease: 'easeInOut',
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -297,14 +555,12 @@ function LiveStatusIndicator() {
       const minute = now.getMinutes();
       const currentMinutes = hour * 60 + minute;
 
-      // Check if currently open based on business hours
-      // Mon-Fri: 9:00 AM - 5:00 PM, Sat: 9:00 AM - 2:00 PM
       if (day === 0) {
-        setIsOpen(false); // Sunday
+        setIsOpen(false);
       } else if (day === 6) {
-        setIsOpen(currentMinutes >= 540 && currentMinutes < 840); // Sat 9am-2pm
+        setIsOpen(currentMinutes >= 540 && currentMinutes < 840);
       } else {
-        setIsOpen(currentMinutes >= 540 && currentMinutes < 1020); // Mon-Fri 9am-5pm
+        setIsOpen(currentMinutes >= 540 && currentMinutes < 1020);
       }
     };
 
@@ -324,10 +580,7 @@ function LiveStatusIndicator() {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, delay: 0.3 }}
     >
-      <motion.span
-        className={`relative flex h-3 w-3`}
-        aria-hidden="true"
-      >
+      <motion.span className="relative flex h-3 w-3" aria-hidden="true">
         <motion.span
           className={`absolute inline-flex h-full w-full rounded-full ${
             isOpen ? 'bg-green-500' : 'bg-amber-500'
@@ -369,7 +622,7 @@ function EmergencyCallButton({ size = 'large' }: { size?: 'small' | 'large' }) {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
-        <Phone className="w-4 h-4" />
+        <Phone className="w-4 h-4" aria-hidden="true" />
         Call Now
       </motion.a>
     );
@@ -398,6 +651,7 @@ function EmergencyCallButton({ size = 'large' }: { size?: 'small' | 'large' }) {
           repeat: Infinity,
           ease: 'easeOut',
         }}
+        aria-hidden="true"
       />
       <motion.div
         className="absolute inset-0 rounded-2xl bg-[#722F37]"
@@ -411,6 +665,7 @@ function EmergencyCallButton({ size = 'large' }: { size?: 'small' | 'large' }) {
           ease: 'easeOut',
           delay: 0.5,
         }}
+        aria-hidden="true"
       />
 
       <motion.a
@@ -418,6 +673,7 @@ function EmergencyCallButton({ size = 'large' }: { size?: 'small' | 'large' }) {
         className="relative group flex items-center gap-4 px-8 py-5 bg-gradient-to-r from-[#722F37] via-[#8a3a44] to-[#722F37] text-white rounded-2xl font-bold text-xl overflow-hidden shadow-2xl shadow-[#722F37]/30"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
+        aria-label={`Call our emergency line at ${EMERGENCY_PHONE}`}
       >
         {/* Shimmer effect */}
         <motion.div
@@ -425,6 +681,7 @@ function EmergencyCallButton({ size = 'large' }: { size?: 'small' | 'large' }) {
           initial={{ x: '-100%' }}
           animate={{ x: isHovered ? '200%' : '-100%' }}
           transition={{ duration: 0.6, ease: 'easeInOut' }}
+          aria-hidden="true"
         />
 
         <motion.div
@@ -432,7 +689,7 @@ function EmergencyCallButton({ size = 'large' }: { size?: 'small' | 'large' }) {
           animate={isHovered ? { rotate: [0, -10, 10, -10, 0] } : {}}
           transition={{ duration: 0.5 }}
         >
-          <PhoneCall className="w-7 h-7" />
+          <PhoneCall className="w-7 h-7" aria-hidden="true" />
         </motion.div>
 
         <div className="relative flex flex-col items-start">
@@ -445,7 +702,7 @@ function EmergencyCallButton({ size = 'large' }: { size?: 'small' | 'large' }) {
           animate={{ x: isHovered ? 5 : 0 }}
           transition={{ duration: 0.2 }}
         >
-          <ArrowRight className="w-6 h-6" />
+          <ArrowRight className="w-6 h-6" aria-hidden="true" />
         </motion.div>
       </motion.a>
     </motion.div>
@@ -476,20 +733,23 @@ function FloatingEmergencyBanner() {
           exit={{ y: -100, opacity: 0 }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className="fixed top-20 left-1/2 -translate-x-1/2 z-40"
+          role="banner"
+          aria-label="Emergency contact banner"
         >
           <div className="flex items-center gap-4 px-6 py-3 bg-[#722F37]/95 backdrop-blur-md rounded-full shadow-2xl border border-white/10">
             <motion.div
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ duration: 1.5, repeat: Infinity }}
+              aria-hidden="true"
             >
-              <AlertTriangle className="w-5 h-5 text-white" />
+              <TriangleAlert className="w-5 h-5 text-white" />
             </motion.div>
             <span className="text-white font-medium">Dental Emergency?</span>
             <a
               href={EMERGENCY_PHONE_HREF}
               className="flex items-center gap-2 px-4 py-2 bg-white text-[#722F37] rounded-full font-bold text-sm hover:bg-white/90 transition-colors"
             >
-              <Phone className="w-4 h-4" />
+              <Phone className="w-4 h-4" aria-hidden="true" />
               {EMERGENCY_PHONE}
             </a>
           </div>
@@ -556,6 +816,8 @@ function SymptomCheckerCard({
         }`}
         whileHover={{ y: -4 }}
         whileTap={{ scale: 0.98 }}
+        aria-expanded={isSelected}
+        aria-label={`${emergency.title} - ${emergency.urgency} urgency. Click to view first aid tips.`}
       >
         <div className="flex items-start justify-between mb-4">
           <motion.div
@@ -566,12 +828,14 @@ function SymptomCheckerCard({
             }`}
             animate={isSelected ? { rotate: [0, -5, 5, 0] } : {}}
             transition={{ duration: 0.4 }}
+            aria-hidden="true"
           >
             <span className={colors.icon}>{emergency.icon}</span>
           </motion.div>
 
           <span
             className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${colors.badge}`}
+            aria-label={`Urgency level: ${emergency.urgency}`}
           >
             {emergency.urgency}
           </span>
@@ -585,7 +849,7 @@ function SymptomCheckerCard({
           animate={{ x: isSelected ? 5 : 0 }}
         >
           <span>View first aid tips</span>
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight className="w-4 h-4" aria-hidden="true" />
         </motion.div>
       </motion.button>
     </motion.div>
@@ -605,11 +869,11 @@ function FirstAidPanel({ emergency }: { emergency: (typeof emergencyTypes)[0] | 
         animate={{ opacity: 1 }}
       >
         <motion.div
-          className="w-20 h-20 rounded-full bg-[#722F37]/10 flex items-center justify-center mb-6"
+          className="w-24 h-24 mb-6"
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 3, repeat: Infinity }}
         >
-          <Stethoscope className="w-10 h-10 text-[#722F37]" />
+          <FirstAidIllustration className="w-full h-full" />
         </motion.div>
         <h3 className="text-xl font-bold text-neutral-900 mb-3">Select an Emergency Type</h3>
         <p className="text-neutral-600 max-w-sm">
@@ -627,11 +891,13 @@ function FirstAidPanel({ emergency }: { emergency: (typeof emergencyTypes)[0] | 
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       className="h-full bg-white rounded-3xl border border-[#EDE5DD] overflow-hidden shadow-xl"
+      role="region"
+      aria-label={`First aid information for ${emergency.title}`}
     >
       {/* Header */}
       <div className="bg-gradient-to-r from-[#722F37] to-[#5a252c] p-8 text-white">
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+          <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center" aria-hidden="true">
             {emergency.icon}
           </div>
           <div>
@@ -645,7 +911,7 @@ function FirstAidPanel({ emergency }: { emergency: (typeof emergencyTypes)[0] | 
         {/* Symptoms */}
         <div>
           <h4 className="flex items-center gap-2 text-lg font-bold text-neutral-900 mb-4">
-            <AlertCircle className="w-5 h-5 text-amber-500" />
+            <AlertCircle className="w-5 h-5 text-amber-500" aria-hidden="true" />
             Common Symptoms
           </h4>
           <div className="grid grid-cols-2 gap-3">
@@ -657,7 +923,7 @@ function FirstAidPanel({ emergency }: { emergency: (typeof emergencyTypes)[0] | 
                 transition={{ delay: i * 0.1 }}
                 className="flex items-center gap-2 text-neutral-700"
               >
-                <span className="w-2 h-2 rounded-full bg-amber-500" />
+                <span className="w-2 h-2 rounded-full bg-amber-500" aria-hidden="true" />
                 <span className="text-sm">{symptom}</span>
               </motion.div>
             ))}
@@ -667,25 +933,25 @@ function FirstAidPanel({ emergency }: { emergency: (typeof emergencyTypes)[0] | 
         {/* First Aid Steps */}
         <div>
           <h4 className="flex items-center gap-2 text-lg font-bold text-neutral-900 mb-4">
-            <Bandage className="w-5 h-5 text-[#722F37]" />
+            <Bandage className="w-5 h-5 text-[#722F37]" aria-hidden="true" />
             First Aid Steps
           </h4>
-          <div className="space-y-3">
+          <ol className="space-y-3" aria-label="First aid steps">
             {emergency.firstAid.map((step, i) => (
-              <motion.div
+              <motion.li
                 key={step}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 + i * 0.1 }}
                 className="flex items-start gap-4 p-4 bg-gradient-to-r from-[#FDF8F3] to-white rounded-xl"
               >
-                <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#722F37] text-white flex items-center justify-center font-bold text-sm">
+                <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#722F37] text-white flex items-center justify-center font-bold text-sm" aria-hidden="true">
                   {i + 1}
                 </span>
                 <p className="text-neutral-700 pt-1">{step}</p>
-              </motion.div>
+              </motion.li>
             ))}
-          </div>
+          </ol>
         </div>
 
         {/* Emergency CTA */}
@@ -699,6 +965,7 @@ function FirstAidPanel({ emergency }: { emergency: (typeof emergencyTypes)[0] | 
             <motion.div
               animate={{ scale: [1, 1.1, 1] }}
               transition={{ duration: 1.5, repeat: Infinity }}
+              aria-hidden="true"
             >
               <AlertTriangle className="w-8 h-8 text-red-500" />
             </motion.div>
@@ -710,7 +977,7 @@ function FirstAidPanel({ emergency }: { emergency: (typeof emergencyTypes)[0] | 
               href={EMERGENCY_PHONE_HREF}
               className="flex items-center gap-2 px-5 py-3 bg-[#722F37] text-white rounded-xl font-semibold hover:bg-[#5a252c] transition-colors"
             >
-              <Phone className="w-4 h-4" />
+              <Phone className="w-4 h-4" aria-hidden="true" />
               Call Now
             </a>
           </div>
@@ -752,7 +1019,7 @@ function OfficeHoursDisplay() {
       <div className="bg-gradient-to-r from-[#722F37] to-[#5a252c] p-6 text-white">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center" aria-hidden="true">
               <Clock className="w-6 h-6" />
             </div>
             <div>
@@ -784,6 +1051,7 @@ function OfficeHoursDisplay() {
                   className="w-2 h-2 rounded-full bg-[#722F37]"
                   animate={{ scale: [1, 1.5, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
+                  aria-hidden="true"
                 />
               )}
               <span
@@ -818,7 +1086,7 @@ function OfficeHoursDisplay() {
       <div className="px-6 pb-6">
         <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5" />
+            <TriangleAlert className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
             <div>
               <p className="font-semibold text-amber-800 text-sm">After-Hours Emergencies</p>
               <p className="text-amber-700 text-sm mt-1">
@@ -851,8 +1119,8 @@ function HeroSection() {
       {/* Background with parallax */}
       <motion.div className="absolute inset-0" style={{ y }}>
         <Image
-          src="/images/hygiene/hygiene-03.jpg"
-          alt="Emergency dental care"
+          src="/images/services/emergency-care/emergency-hero.jpg"
+          alt="Patient receiving emergency dental care with cold compress for pain relief"
           fill
           priority
           className="object-cover"
@@ -863,7 +1131,7 @@ function HeroSection() {
       </motion.div>
 
       {/* Animated emergency pulse overlay */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
         <motion.div
           className="absolute top-1/4 right-1/4 w-[600px] h-[600px] rounded-full"
           style={{
@@ -901,6 +1169,7 @@ function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mb-8"
+              aria-label="Breadcrumb"
             >
               <ol className="flex items-center gap-2 text-sm text-white/60">
                 <li>
@@ -908,14 +1177,14 @@ function HeroSection() {
                     Home
                   </Link>
                 </li>
-                <li>/</li>
+                <li aria-hidden="true">/</li>
                 <li>
                   <Link href="/services" className="hover:text-white transition-colors">
                     Services
                   </Link>
                 </li>
-                <li>/</li>
-                <li className="text-white font-medium">Emergency Care</li>
+                <li aria-hidden="true">/</li>
+                <li className="text-white font-medium" aria-current="page">Emergency Care</li>
               </ol>
             </motion.nav>
 
@@ -965,15 +1234,15 @@ function HeroSection() {
 
               <div className="flex flex-wrap items-center gap-6 text-white/60 text-sm">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-400" />
+                  <CheckCircle2 className="w-4 h-4 text-green-400" aria-hidden="true" />
                   Same-day appointments
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-400" />
+                  <CheckCircle2 className="w-4 h-4 text-green-400" aria-hidden="true" />
                   Walk-ins welcome
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-400" />
+                  <CheckCircle2 className="w-4 h-4 text-green-400" aria-hidden="true" />
                   Insurance accepted
                 </div>
               </div>
@@ -990,11 +1259,11 @@ function HeroSection() {
             <div className="w-80 bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20">
               <div className="text-center mb-6">
                 <motion.div
-                  className="w-16 h-16 mx-auto rounded-2xl bg-[#722F37] flex items-center justify-center mb-4"
+                  className="w-20 h-20 mx-auto mb-4"
                   animate={{ rotate: [0, -5, 5, 0] }}
                   transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                 >
-                  <AlertTriangle className="w-8 h-8 text-white" />
+                  <EmergencyToothIllustration className="w-full h-full" />
                 </motion.div>
                 <h3 className="text-white font-bold text-lg">Need Immediate Help?</h3>
               </div>
@@ -1004,7 +1273,7 @@ function HeroSection() {
                   href={EMERGENCY_PHONE_HREF}
                   className="flex items-center gap-3 p-4 bg-white/10 rounded-xl hover:bg-white/20 transition-colors"
                 >
-                  <Phone className="w-5 h-5 text-white" />
+                  <Phone className="w-5 h-5 text-white" aria-hidden="true" />
                   <div className="text-white">
                     <div className="text-xs opacity-70">Call Now</div>
                     <div className="font-bold">{EMERGENCY_PHONE}</div>
@@ -1012,7 +1281,7 @@ function HeroSection() {
                 </a>
 
                 <div className="flex items-center gap-3 p-4 bg-white/10 rounded-xl">
-                  <MapPin className="w-5 h-5 text-white" />
+                  <MapPin className="w-5 h-5 text-white" aria-hidden="true" />
                   <div className="text-white">
                     <div className="text-xs opacity-70">Location</div>
                     <div className="font-medium text-sm">1729 Bank St, Ottawa</div>
@@ -1020,7 +1289,7 @@ function HeroSection() {
                 </div>
 
                 <div className="flex items-center gap-3 p-4 bg-white/10 rounded-xl">
-                  <Timer className="w-5 h-5 text-white" />
+                  <Timer className="w-5 h-5 text-white" aria-hidden="true" />
                   <div className="text-white">
                     <div className="text-xs opacity-70">Response Time</div>
                     <div className="font-medium text-sm">Usually same day</div>
@@ -1038,6 +1307,7 @@ function HeroSection() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
+        aria-hidden="true"
       >
         <span className="text-xs uppercase tracking-widest">Scroll for Help</span>
         <motion.div
@@ -1058,6 +1328,13 @@ function HeroSection() {
 function BenefitsSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+
+  const illustrations = [
+    <UrgentClockIllustration key="clock" className="w-16 h-16" />,
+    <FirstAidIllustration key="firstaid" className="w-16 h-16" />,
+    <ToothIllustration key="tooth" className="w-16 h-16" />,
+    <CompassionateIllustration key="heart" className="w-16 h-16" />,
+  ];
 
   return (
     <section className="py-24 bg-white" ref={containerRef}>
@@ -1090,12 +1367,17 @@ function BenefitsSection() {
               className="group relative p-8 rounded-3xl bg-gradient-to-br from-white to-[#FDF8F3] border border-[#EDE5DD] hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
             >
               <motion.div
-                className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/5 flex items-center justify-center text-[#722F37] mb-6 group-hover:bg-[#722F37] group-hover:text-white transition-all duration-300"
+                className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#722F37]/5 to-[#722F37]/10 flex items-center justify-center text-[#722F37] mb-6 group-hover:scale-110 transition-transform duration-300"
                 whileHover={{ rotate: [0, -5, 5, 0] }}
+                aria-hidden="true"
               >
-                {benefit.icon}
+                {illustrations[index]}
               </motion.div>
-              <h3 className="text-xl font-bold text-neutral-900 mb-3">{benefit.title}</h3>
+
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-[#722F37]" aria-hidden="true">{benefit.icon}</span>
+                <h3 className="text-xl font-bold text-neutral-900">{benefit.title}</h3>
+              </div>
               <p className="text-neutral-600 leading-relaxed">{benefit.description}</p>
             </motion.div>
           ))}
@@ -1125,6 +1407,14 @@ function SymptomCheckerSection() {
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
           transition={{ duration: 0.8 }}
         >
+          <div className="flex justify-center mb-6">
+            <motion.div
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            >
+              <EmergencyToothIllustration className="w-24 h-24" />
+            </motion.div>
+          </div>
           <span className="inline-block text-[#722F37] text-sm font-semibold tracking-widest uppercase mb-4">
             Symptom Checker
           </span>
@@ -1139,7 +1429,7 @@ function SymptomCheckerSection() {
 
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Emergency Type Cards */}
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 gap-4" role="listbox" aria-label="Emergency types">
             {emergencyTypes.map((emergency, index) => (
               <SymptomCheckerCard
                 key={emergency.id}
@@ -1179,7 +1469,8 @@ function WhatToDoSection() {
       title: 'Stay Calm',
       description:
         'Take a deep breath. Most dental emergencies are treatable, especially with prompt care.',
-      icon: <Heart className="w-6 h-6" />,
+      icon: <HeartPulse className="w-6 h-6" />,
+      illustration: <CompassionateIllustration className="w-12 h-12" />,
     },
     {
       number: '02',
@@ -1187,6 +1478,7 @@ function WhatToDoSection() {
       description:
         'Check for severe bleeding, loose teeth, or swelling. Note your symptoms to share with us.',
       icon: <Stethoscope className="w-6 h-6" />,
+      illustration: <ToothIllustration className="w-12 h-12" />,
     },
     {
       number: '03',
@@ -1194,6 +1486,7 @@ function WhatToDoSection() {
       description:
         'Use the symptom checker above for specific guidance while you prepare to contact us.',
       icon: <Bandage className="w-6 h-6" />,
+      illustration: <FirstAidIllustration className="w-12 h-12" />,
     },
     {
       number: '04',
@@ -1201,6 +1494,7 @@ function WhatToDoSection() {
       description:
         "Reach out to our emergency line. We'll prioritize your care and see you as soon as possible.",
       icon: <PhoneCall className="w-6 h-6" />,
+      illustration: <PhoneCallIllustration className="w-12 h-12" />,
     },
   ];
 
@@ -1232,7 +1526,7 @@ function WhatToDoSection() {
             >
               {/* Connector line */}
               {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-16 left-full w-full h-0.5 bg-gradient-to-r from-[#722F37]/30 to-transparent z-0" />
+                <div className="hidden lg:block absolute top-16 left-full w-full h-0.5 bg-gradient-to-r from-[#722F37]/30 to-transparent z-0" aria-hidden="true" />
               )}
 
               <div className="relative p-8 bg-gradient-to-br from-white to-[#FDF8F3] rounded-3xl border border-[#EDE5DD] h-full">
@@ -1242,12 +1536,16 @@ function WhatToDoSection() {
                   whileInView={{ scale: [0, 1.2, 1] }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.3 + index * 0.15 }}
+                  aria-hidden="true"
                 >
                   {step.number}
                 </motion.div>
 
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/5 flex items-center justify-center text-[#722F37] mb-6">
-                  {step.icon}
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/5 flex items-center justify-center text-[#722F37]" aria-hidden="true">
+                    {step.icon}
+                  </div>
+                  <div aria-hidden="true">{step.illustration}</div>
                 </div>
 
                 <h3 className="text-xl font-bold text-neutral-900 mb-3">{step.title}</h3>
@@ -1269,8 +1567,9 @@ function WhatToDoSection() {
               <motion.div
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
+                aria-hidden="true"
               >
-                <AlertTriangle className="w-10 h-10 text-white" />
+                <TriangleAlert className="w-10 h-10 text-white" />
               </motion.div>
               <div className="text-white">
                 <h3 className="text-2xl font-bold">Experiencing an Emergency Right Now?</h3>
@@ -1280,6 +1579,102 @@ function WhatToDoSection() {
             <EmergencyCallButton size="small" />
           </div>
         </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// ============================================================================
+// TEAM IMAGE SECTION
+// ============================================================================
+
+function TeamImageSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+
+  return (
+    <section className="py-24 bg-gradient-to-b from-white to-[#FDF8F3]" ref={containerRef}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Image */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 }}
+            transition={{ duration: 0.8 }}
+            className="relative"
+          >
+            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
+              <Image
+                src="/images/services/emergency-care/dental-team.jpg"
+                alt="Our experienced dental team providing emergency care to a patient"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+            </div>
+
+            {/* Floating badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-xl p-6 border border-[#EDE5DD]"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-full bg-[#722F37]/10 flex items-center justify-center" aria-hidden="true">
+                  <ShieldCheck className="w-7 h-7 text-[#722F37]" />
+                </div>
+                <div>
+                  <p className="font-bold text-neutral-900">Experienced Team</p>
+                  <p className="text-sm text-neutral-600">24+ years serving Ottawa</p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Content */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <span className="inline-block text-[#722F37] text-sm font-semibold tracking-widest uppercase mb-4">
+              Expert Emergency Team
+            </span>
+            <h2 className="font-display font-bold text-4xl md:text-5xl text-neutral-900 mb-6">
+              Caring Professionals <span className="text-[#722F37]">Ready to Help</span>
+            </h2>
+            <p className="text-neutral-600 text-lg leading-relaxed mb-8">
+              Our team understands that dental emergencies are stressful and often painful.
+              We prioritize getting you out of pain quickly while providing the compassionate
+              care you deserve. With years of experience handling all types of dental emergencies,
+              you can trust us to provide expert treatment when you need it most.
+            </p>
+
+            <div className="grid sm:grid-cols-2 gap-4 mb-8">
+              {[
+                { icon: <Clock className="w-5 h-5" />, text: 'Same-Day Appointments' },
+                { icon: <ShieldCheck className="w-5 h-5" />, text: 'Experienced Professionals' },
+                { icon: <HandHeart className="w-5 h-5" />, text: 'Compassionate Care' },
+                { icon: <Zap className="w-5 h-5" />, text: 'Fast Pain Relief' },
+              ].map((item, index) => (
+                <motion.div
+                  key={item.text}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
+                  className="flex items-center gap-3 p-4 bg-white rounded-xl border border-[#EDE5DD]"
+                >
+                  <span className="text-[#722F37]" aria-hidden="true">{item.icon}</span>
+                  <span className="font-medium text-neutral-700">{item.text}</span>
+                </motion.div>
+              ))}
+            </div>
+
+            <EmergencyCallButton size="small" />
+          </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -1324,8 +1719,8 @@ function HoursLocationSection() {
             {/* Map placeholder */}
             <div className="relative h-64 bg-gradient-to-br from-neutral-200 to-neutral-300">
               <Image
-                src="/images/hygiene/hygiene-08.jpg"
-                alt="Our dental office"
+                src="/images/services/emergency-care/dental-consultation.jpg"
+                alt="Dental consultation at our Ottawa office"
                 fill
                 className="object-cover"
               />
@@ -1334,7 +1729,7 @@ function HoursLocationSection() {
 
             <div className="p-8">
               <div className="flex items-start gap-4 mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-[#722F37] flex items-center justify-center text-white flex-shrink-0">
+                <div className="w-14 h-14 rounded-2xl bg-[#722F37] flex items-center justify-center text-white flex-shrink-0" aria-hidden="true">
                   <MapPin className="w-7 h-7" />
                 </div>
                 <div>
@@ -1349,13 +1744,13 @@ function HoursLocationSection() {
 
               <div className="space-y-4">
                 <a
-                  href={`https://maps.google.com/?q=1729+Bank+St+Ottawa+ON+K1V+7Z4`}
+                  href="https://maps.google.com/?q=1729+Bank+St+Ottawa+ON+K1V+7Z4"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-between p-4 bg-[#FDF8F3] rounded-xl hover:bg-[#EDE5DD] transition-colors group"
                 >
                   <span className="font-medium text-neutral-700">Get Directions</span>
-                  <ArrowRight className="w-5 h-5 text-[#722F37] group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 text-[#722F37] group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                 </a>
 
                 <a
@@ -1363,7 +1758,7 @@ function HoursLocationSection() {
                   className="flex items-center justify-between p-4 bg-[#722F37] text-white rounded-xl hover:bg-[#5a252c] transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <Phone className="w-5 h-5" />
+                    <Phone className="w-5 h-5" aria-hidden="true" />
                     <span className="font-medium">Call for Emergency</span>
                   </div>
                   <span className="font-bold">{EMERGENCY_PHONE}</span>
@@ -1425,7 +1820,7 @@ function FAQSection() {
             href={EMERGENCY_PHONE_HREF}
             className="inline-flex items-center gap-2 text-[#722F37] font-bold text-lg hover:underline"
           >
-            <Phone className="w-5 h-5" />
+            <Phone className="w-5 h-5" aria-hidden="true" />
             {EMERGENCY_PHONE}
           </a>
         </motion.div>
@@ -1480,13 +1875,13 @@ function RelatedServicesSection() {
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="absolute bottom-4 right-4 w-12 h-12 rounded-full bg-[#722F37] flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
+                  <div className="absolute bottom-4 right-4 w-12 h-12 rounded-full bg-[#722F37] flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0" aria-hidden="true">
                     <ArrowRight className="w-5 h-5" />
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FDF8F3] to-[#EDE5DD] flex items-center justify-center text-[#722F37] group-hover:bg-[#722F37] group-hover:text-white transition-all duration-300 flex-shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FDF8F3] to-[#EDE5DD] flex items-center justify-center text-[#722F37] group-hover:bg-[#722F37] group-hover:text-white transition-all duration-300 flex-shrink-0" aria-hidden="true">
                     {service.icon}
                   </div>
                   <div>
@@ -1514,7 +1909,7 @@ function RelatedServicesSection() {
             className="inline-flex items-center gap-2 text-[#722F37] font-semibold hover:underline group"
           >
             View All Services
-            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
           </Link>
         </motion.div>
       </div>
@@ -1523,10 +1918,10 @@ function RelatedServicesSection() {
 }
 
 // ============================================================================
-// MAIN PAGE COMPONENT
+// DESKTOP PAGE COMPONENT
 // ============================================================================
 
-export default function EmergencyCarePage() {
+function EmergencyCarePageDesktop() {
   return (
     <main id="main-content" className="min-h-screen">
       {/* Floating Emergency Banner */}
@@ -1543,6 +1938,9 @@ export default function EmergencyCarePage() {
 
       {/* What To Do Section */}
       <WhatToDoSection />
+
+      {/* Team Image Section */}
+      <TeamImageSection />
 
       {/* Hours & Location Section */}
       <HoursLocationSection />
@@ -1561,5 +1959,18 @@ export default function EmergencyCarePage() {
         background="gradient"
       />
     </main>
+  );
+}
+
+// ============================================================================
+// MAIN PAGE COMPONENT WITH RESPONSIVE WRAPPER
+// ============================================================================
+
+export default function EmergencyCarePage() {
+  return (
+    <ResponsiveWrapperCSS
+      desktop={<EmergencyCarePageDesktop />}
+      mobile={<EmergencyCarePageMobile />}
+    />
   );
 }

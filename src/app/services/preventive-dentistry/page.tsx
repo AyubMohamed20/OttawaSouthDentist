@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import { structuredData, JsonLd } from '@/lib/metadata';
 import { PreventiveDentistryContent } from './PreventiveDentistryContent';
+import { PreventiveDentistryContentMobile } from './PreventiveDentistryContent-mobile';
+import { ResponsiveWrapper } from '@/components/responsive-wrapper';
 
 export const metadata: Metadata = {
   title: 'Preventive Dentistry | Ottawa South Dental',
@@ -83,7 +85,10 @@ export default function PreventiveDentistryPage() {
         url: serviceData.url,
       })} />
 
-      <PreventiveDentistryContent />
+      <ResponsiveWrapper
+        desktop={<PreventiveDentistryContent />}
+        mobile={<PreventiveDentistryContentMobile />}
+      />
     </>
   );
 }

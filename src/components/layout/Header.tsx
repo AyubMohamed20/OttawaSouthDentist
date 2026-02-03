@@ -3,7 +3,31 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Phone, Globe, ChevronDown, Sparkles, Calendar, ArrowRight, Smile, Shield, Heart, Star, Zap, Eye, Baby, AlertCircle } from 'lucide-react';
+import {
+  Phone,
+  PhoneCall,
+  Globe,
+  ChevronDown,
+  Sparkles,
+  Calendar,
+  CalendarCheck,
+  ArrowRight,
+  Smile,
+  SmilePlus,
+  Shield,
+  ShieldCheck,
+  Heart,
+  HeartPulse,
+  Star,
+  Baby,
+  Siren,
+  Stethoscope,
+  WandSparkles,
+  HandHeart,
+  ScanHeart,
+  Activity,
+  Users
+} from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import { MobileNav } from './MobileNav';
 
@@ -13,45 +37,151 @@ export interface NavItem {
   children?: { label: string; href: string; icon?: React.ReactNode; description?: string }[];
 }
 
-// Service categories with icons and descriptions for mega menu
+// Animated icon wrapper for consistent hover effects
+function AnimatedIcon({
+  children,
+  className = "",
+  hoverScale = 1.1,
+  hoverRotate = 0
+}: {
+  children: React.ReactNode;
+  className?: string;
+  hoverScale?: number;
+  hoverRotate?: number;
+}) {
+  return (
+    <motion.div
+      className={className}
+      whileHover={{
+        scale: hoverScale,
+        rotate: hoverRotate,
+        transition: { type: "spring", stiffness: 400, damping: 17 }
+      }}
+      whileTap={{ scale: 0.95 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// Service categories with dental-themed icons and descriptions for mega menu
 const serviceCategories = {
   preventive: {
     title: 'Preventive Care',
-    icon: <Shield className="w-5 h-5" />,
+    icon: <ShieldCheck className="w-5 h-5" aria-hidden="true" />,
+    iconHover: <Shield className="w-5 h-5" aria-hidden="true" />,
     items: [
-      { label: 'Routine Checkups', href: '/services/routine-checkups', description: 'Regular dental examinations' },
-      { label: 'Dental Hygiene', href: '/services/dental-hygiene', description: 'Professional cleaning' },
-      { label: 'Preventive Dentistry', href: '/services/preventive-dentistry', description: 'Protect your smile' },
+      {
+        label: 'Routine Checkups',
+        href: '/services/routine-checkups',
+        description: 'Regular dental examinations',
+        icon: <Stethoscope className="w-4 h-4" aria-hidden="true" />
+      },
+      {
+        label: 'Dental Hygiene',
+        href: '/services/dental-hygiene',
+        description: 'Professional cleaning',
+        icon: <Sparkles className="w-4 h-4" aria-hidden="true" />
+      },
+      {
+        label: 'Preventive Dentistry',
+        href: '/services/preventive-dentistry',
+        description: 'Protect your smile',
+        icon: <ShieldCheck className="w-4 h-4" aria-hidden="true" />
+      },
     ],
   },
   cosmetic: {
     title: 'Cosmetic',
-    icon: <Sparkles className="w-5 h-5" />,
+    icon: <WandSparkles className="w-5 h-5" aria-hidden="true" />,
+    iconHover: <Sparkles className="w-5 h-5" aria-hidden="true" />,
     items: [
-      { label: 'Cosmetic Dentistry', href: '/services/cosmetic-dentistry', description: 'Smile transformations' },
-      { label: 'Teeth Whitening', href: '/services/teeth-whitening', description: 'Brighten your smile' },
-      { label: 'Invisalign', href: '/services/invisalign', description: 'Clear aligners' },
+      {
+        label: 'Cosmetic Dentistry',
+        href: '/services/cosmetic-dentistry',
+        description: 'Smile transformations',
+        icon: <WandSparkles className="w-4 h-4" aria-hidden="true" />
+      },
+      {
+        label: 'Teeth Whitening',
+        href: '/services/teeth-whitening',
+        description: 'Brighten your smile',
+        icon: <Sparkles className="w-4 h-4" aria-hidden="true" />
+      },
+      {
+        label: 'Invisalign',
+        href: '/services/invisalign',
+        description: 'Clear aligners',
+        icon: <SmilePlus className="w-4 h-4" aria-hidden="true" />
+      },
     ],
   },
   restorative: {
     title: 'Restorative',
-    icon: <Heart className="w-5 h-5" />,
+    icon: <HeartPulse className="w-5 h-5" aria-hidden="true" />,
+    iconHover: <Heart className="w-5 h-5" aria-hidden="true" />,
     items: [
-      { label: 'Dental Implants', href: '/services/dental-implants', description: 'Permanent tooth replacement' },
-      { label: 'Dentures', href: '/services/dentures', description: 'Custom-fit dentures' },
-      { label: 'Missing Teeth', href: '/services/missing-teeth', description: 'Complete your smile' },
-      { label: 'White Fillings', href: '/services/white-fillings', description: 'Natural-looking restorations' },
+      {
+        label: 'Dental Implants',
+        href: '/services/dental-implants',
+        description: 'Permanent tooth replacement',
+        icon: <Activity className="w-4 h-4" aria-hidden="true" />
+      },
+      {
+        label: 'Dentures',
+        href: '/services/dentures',
+        description: 'Custom-fit dentures',
+        icon: <Smile className="w-4 h-4" aria-hidden="true" />
+      },
+      {
+        label: 'Missing Teeth',
+        href: '/services/missing-teeth',
+        description: 'Complete your smile',
+        icon: <SmilePlus className="w-4 h-4" aria-hidden="true" />
+      },
+      {
+        label: 'White Fillings',
+        href: '/services/white-fillings',
+        description: 'Natural-looking restorations',
+        icon: <Star className="w-4 h-4" aria-hidden="true" />
+      },
     ],
   },
   specialized: {
     title: 'Specialized',
-    icon: <Star className="w-5 h-5" />,
+    icon: <Star className="w-5 h-5" aria-hidden="true" />,
+    iconHover: <Sparkles className="w-5 h-5" aria-hidden="true" />,
     items: [
-      { label: 'Root Canal', href: '/services/root-canal', description: 'Pain-free treatment' },
-      { label: 'Gum Therapy', href: '/services/gum-therapy', description: 'Periodontal health' },
-      { label: 'Oral Surgery', href: '/services/oral-surgery', description: 'Expert surgical care' },
-      { label: "Children's Dentistry", href: '/services/childrens-dentistry', description: 'Gentle pediatric care' },
-      { label: 'Emergency Care', href: '/services/emergency-care', description: '24/7 urgent dental' },
+      {
+        label: 'Root Canal',
+        href: '/services/root-canal',
+        description: 'Pain-free treatment',
+        icon: <ScanHeart className="w-4 h-4" aria-hidden="true" />
+      },
+      {
+        label: 'Gum Therapy',
+        href: '/services/gum-therapy',
+        description: 'Periodontal health',
+        icon: <HeartPulse className="w-4 h-4" aria-hidden="true" />
+      },
+      {
+        label: 'Oral Surgery',
+        href: '/services/oral-surgery',
+        description: 'Expert surgical care',
+        icon: <Stethoscope className="w-4 h-4" aria-hidden="true" />
+      },
+      {
+        label: "Children's Dentistry",
+        href: '/services/childrens-dentistry',
+        description: 'Gentle pediatric care',
+        icon: <Baby className="w-4 h-4" aria-hidden="true" />
+      },
+      {
+        label: 'Emergency Care',
+        href: '/services/emergency-care',
+        description: '24/7 urgent dental',
+        icon: <Siren className="w-4 h-4" aria-hidden="true" />
+      },
     ],
   },
 };
@@ -172,6 +302,33 @@ function NavLink({
   );
 }
 
+// Category icon with hover state transition
+function CategoryIcon({
+  icon,
+  isHovered
+}: {
+  icon: React.ReactNode;
+  isHovered: boolean;
+}) {
+  return (
+    <motion.div
+      className="p-2 rounded-lg bg-[#722F37]/10 text-[#722F37]"
+      animate={{
+        scale: isHovered ? 1.1 : 1,
+        backgroundColor: isHovered ? 'rgba(114, 47, 55, 0.15)' : 'rgba(114, 47, 55, 0.1)',
+      }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+    >
+      <motion.div
+        animate={{ rotate: isHovered ? 5 : 0 }}
+        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+      >
+        {icon}
+      </motion.div>
+    </motion.div>
+  );
+}
+
 // Services Mega Menu
 function ServicesMegaMenu({
   isOpen,
@@ -181,6 +338,7 @@ function ServicesMegaMenu({
   onClose: () => void;
 }) {
   const categories = Object.entries(serviceCategories);
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
   return (
     <AnimatePresence>
@@ -223,12 +381,15 @@ function ServicesMegaMenu({
                         duration: 0.4,
                         ease: [0.22, 1, 0.36, 1],
                       }}
+                      onMouseEnter={() => setHoveredCategory(key)}
+                      onMouseLeave={() => setHoveredCategory(null)}
                     >
                       {/* Category Header */}
                       <div className="flex items-center gap-2 mb-4 pb-3 border-b border-neutral-100">
-                        <div className="p-2 rounded-lg bg-[#722F37]/10 text-[#722F37]">
-                          {category.icon}
-                        </div>
+                        <CategoryIcon
+                          icon={category.icon}
+                          isHovered={hoveredCategory === key}
+                        />
                         <span className="font-semibold text-neutral-800 tracking-wide">
                           {category.title}
                         </span>
@@ -251,13 +412,23 @@ function ServicesMegaMenu({
                               onClick={onClose}
                               className="group block py-2.5 px-3 -mx-3 rounded-lg transition-all duration-200 hover:bg-[#722F37]/5"
                             >
-                              <div className="flex items-center justify-between">
-                                <span className="text-sm text-neutral-700 group-hover:text-[#722F37] transition-colors font-medium">
+                              <div className="flex items-center gap-2">
+                                <motion.span
+                                  className="text-neutral-400 group-hover:text-[#722F37] transition-colors"
+                                  whileHover={{ scale: 1.15, rotate: 5 }}
+                                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                                >
+                                  {item.icon}
+                                </motion.span>
+                                <span className="text-sm text-neutral-700 group-hover:text-[#722F37] transition-colors font-medium flex-1">
                                   {item.label}
                                 </span>
-                                <ArrowRight className="w-3.5 h-3.5 text-neutral-300 group-hover:text-[#722F37] group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100" />
+                                <ArrowRight
+                                  className="w-3.5 h-3.5 text-neutral-300 group-hover:text-[#722F37] group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100"
+                                  aria-hidden="true"
+                                />
                               </div>
-                              <p className="text-xs text-neutral-400 mt-0.5 group-hover:text-neutral-500 transition-colors">
+                              <p className="text-xs text-neutral-400 mt-0.5 ml-6 group-hover:text-neutral-500 transition-colors">
                                 {item.description}
                               </p>
                             </Link>
@@ -277,9 +448,13 @@ function ServicesMegaMenu({
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#722F37] to-[#8B3A42] flex items-center justify-center shadow-lg shadow-[#722F37]/20">
-                        <Smile className="w-6 h-6 text-white" />
-                      </div>
+                      <motion.div
+                        className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#722F37] to-[#8B3A42] flex items-center justify-center shadow-lg shadow-[#722F37]/20"
+                        whileHover={{ scale: 1.05, rotate: 5 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                      >
+                        <HandHeart className="w-6 h-6 text-white" aria-hidden="true" />
+                      </motion.div>
                       <div>
                         <p className="font-semibold text-neutral-800">Not sure which service you need?</p>
                         <p className="text-sm text-neutral-500">Schedule a consultation and we&apos;ll guide you</p>
@@ -288,10 +463,16 @@ function ServicesMegaMenu({
                     <Link
                       href="/services"
                       onClick={onClose}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#FDF8F3] text-[#722F37] font-medium rounded-xl hover:bg-[#F5EDE5] transition-colors"
+                      className="group inline-flex items-center gap-2 px-5 py-2.5 bg-[#FDF8F3] text-[#722F37] font-medium rounded-xl hover:bg-[#F5EDE5] transition-colors"
                     >
-                      View All Services
-                      <ArrowRight className="w-4 h-4" />
+                      <span>View All Services</span>
+                      <motion.span
+                        className="inline-block"
+                        whileHover={{ x: 3 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                      >
+                        <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                      </motion.span>
                     </Link>
                   </div>
                 </motion.div>
@@ -340,7 +521,10 @@ function SimpleDropdown({
                 className="group flex items-center justify-between px-4 py-2.5 text-sm text-neutral-700 hover:bg-[#722F37]/5 hover:text-[#722F37] transition-all"
               >
                 <span className="font-medium">{child.label}</span>
-                <ArrowRight className="w-3.5 h-3.5 text-neutral-300 group-hover:text-[#722F37] group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100" />
+                <ArrowRight
+                  className="w-3.5 h-3.5 text-neutral-300 group-hover:text-[#722F37] group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100"
+                  aria-hidden="true"
+                />
               </Link>
             </motion.div>
           ))}
@@ -399,7 +583,7 @@ function DropdownTrigger({
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.2 }}
         >
-          <ChevronDown className="w-4 h-4" />
+          <ChevronDown className="w-4 h-4" aria-hidden="true" />
         </motion.div>
         <AnimatedUnderline isHovered={isHovered || isOpen} />
       </motion.button>
@@ -451,12 +635,50 @@ function AnimatedLogo({ scrollProgress }: { scrollProgress: number }) {
           height={50}
           className="relative w-auto h-11 transition-all duration-300"
           style={{
+            width: 'auto',
             height: scrollProgress > 0.1 ? '40px' : '44px',
           }}
           priority
         />
       </motion.div>
     </Link>
+  );
+}
+
+// Animated phone icon with pulse effect
+function AnimatedPhoneIcon({ isHovered }: { isHovered: boolean }) {
+  return (
+    <motion.div className="relative">
+      {/* Pulse ring on hover */}
+      <motion.div
+        className="absolute inset-0 rounded-full bg-[#722F37]/20"
+        initial={{ scale: 1, opacity: 0 }}
+        animate={{
+          scale: isHovered ? [1, 1.5, 1.5] : 1,
+          opacity: isHovered ? [0, 0.5, 0] : 0,
+        }}
+        transition={{
+          duration: 1,
+          repeat: isHovered ? Infinity : 0,
+          ease: "easeOut"
+        }}
+      />
+      <motion.div
+        animate={{
+          rotate: isHovered ? [0, -10, 10, -10, 10, 0] : 0,
+        }}
+        transition={{
+          duration: 0.5,
+          ease: "easeInOut"
+        }}
+      >
+        {isHovered ? (
+          <PhoneCall className="w-4 h-4" aria-hidden="true" />
+        ) : (
+          <Phone className="w-4 h-4" aria-hidden="true" />
+        )}
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -502,7 +724,19 @@ function BookAppointmentButton() {
           />
 
           <span className="relative flex items-center gap-2 text-[15px]">
-            <Calendar className="w-4 h-4" />
+            <motion.span
+              animate={{
+                rotate: isHovered ? [0, -5, 5, 0] : 0,
+                scale: isHovered ? 1.1 : 1
+              }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+            >
+              {isHovered ? (
+                <CalendarCheck className="w-4 h-4" aria-hidden="true" />
+              ) : (
+                <Calendar className="w-4 h-4" aria-hidden="true" />
+              )}
+            </motion.span>
             Book Appointment
           </span>
         </motion.div>
@@ -511,9 +745,10 @@ function BookAppointmentButton() {
   );
 }
 
-// Animated hamburger icon
+// Premium animated hamburger icon for mobile
 function AnimatedHamburger({ onClick }: { onClick: () => void }) {
   const [isHovered, setIsHovered] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
 
   return (
     <motion.button
@@ -521,57 +756,113 @@ function AnimatedHamburger({ onClick }: { onClick: () => void }) {
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="lg:hidden relative p-2.5 rounded-xl text-neutral-700 hover:text-[#722F37] transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#722F37]"
+      onTapStart={() => setIsPressed(true)}
+      onTap={() => setIsPressed(false)}
+      onTapCancel={() => setIsPressed(false)}
+      className="lg:hidden relative p-3 rounded-2xl text-neutral-700 hover:text-[#722F37] transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#722F37] touch-target"
       aria-label="Open menu"
       whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileTap={{ scale: 0.92 }}
+      suppressHydrationWarning
     >
+      {/* Animated background glow */}
       <motion.div
-        className="absolute inset-0 rounded-xl bg-[#722F37]/5"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.2 }}
+        className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/5"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{
+          opacity: isHovered || isPressed ? 1 : 0,
+          scale: isHovered || isPressed ? 1 : 0.8,
+        }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
       />
 
-      <svg
-        className="relative w-6 h-6"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
-        <motion.path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M4 6h16"
+      {/* Pulse ring on press */}
+      <motion.div
+        className="absolute inset-0 rounded-2xl border-2 border-[#722F37]/30"
+        initial={{ scale: 1, opacity: 0 }}
+        animate={{
+          scale: isPressed ? [1, 1.3, 1.3] : 1,
+          opacity: isPressed ? [0, 0.5, 0] : 0,
+        }}
+        transition={{ duration: 0.4 }}
+      />
+
+      {/* Hamburger lines with staggered animation */}
+      <div className="relative w-6 h-5 flex flex-col justify-between">
+        {/* Top line */}
+        <motion.span
+          className="block h-[2.5px] bg-current rounded-full origin-left"
           animate={{
+            width: isHovered ? '100%' : '100%',
             x: isHovered ? 2 : 0,
           }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.2, delay: 0 }}
         />
-        <motion.path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M4 12h16"
+
+        {/* Middle line */}
+        <motion.span
+          className="block h-[2.5px] bg-current rounded-full origin-left"
           animate={{
-            width: isHovered ? 12 : 16,
+            width: isHovered ? '70%' : '100%',
+            x: isHovered ? 0 : 0,
           }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.2, delay: 0.05 }}
         />
-        <motion.path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M4 18h16"
+
+        {/* Bottom line */}
+        <motion.span
+          className="block h-[2.5px] bg-current rounded-full origin-left"
           animate={{
+            width: isHovered ? '85%' : '100%',
             x: isHovered ? 2 : 0,
           }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.2, delay: 0.1 }}
         />
-      </svg>
+      </div>
+
+      {/* Hover sparkle effect */}
+      <AnimatePresence>
+        {isHovered && (
+          <motion.div
+            className="absolute -top-1 -right-1"
+            initial={{ scale: 0, opacity: 0, rotate: -45 }}
+            animate={{ scale: 1, opacity: 1, rotate: 0 }}
+            exit={{ scale: 0, opacity: 0, rotate: 45 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Sparkles className="w-3 h-3 text-[#722F37]" />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.button>
+  );
+}
+
+// Language indicator with globe animation
+function LanguageIndicator() {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.4 }}
+      className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-50/80 text-neutral-500 text-sm font-medium cursor-default"
+      role="group"
+      aria-label="Available languages: English and French"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <motion.span
+        animate={{
+          rotate: isHovered ? 360 : 0,
+        }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
+      >
+        <Globe className="w-3.5 h-3.5" aria-hidden="true" />
+      </motion.span>
+      <span aria-hidden="true" className="text-xs tracking-wide">EN / FR</span>
+    </motion.div>
   );
 }
 
@@ -579,6 +870,7 @@ export function Header() {
   const [mounted, setMounted] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [isPhoneHovered, setIsPhoneHovered] = useState(false);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const headerRef = useRef<HTMLElement>(null);
 
@@ -698,17 +990,7 @@ export function Header() {
             {/* Right side actions */}
             <div className="flex items-center gap-3 sm:gap-4">
               {/* Language indicator - Desktop only */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-50/80 text-neutral-500 text-sm font-medium"
-                role="group"
-                aria-label="Available languages: English and French"
-              >
-                <Globe className="w-3.5 h-3.5" aria-hidden="true" />
-                <span aria-hidden="true" className="text-xs tracking-wide">EN / FR</span>
-              </motion.div>
+              <LanguageIndicator />
 
               {/* Phone number - Desktop */}
               <motion.a
@@ -718,10 +1000,12 @@ export function Header() {
                 href={PHONE_HREF}
                 className="hidden sm:flex items-center gap-2 px-4 py-2 text-[#722F37] font-semibold rounded-xl hover:bg-[#722F37]/5 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#722F37]"
                 aria-label={`Call us at ${PHONE_NUMBER}`}
+                onMouseEnter={() => setIsPhoneHovered(true)}
+                onMouseLeave={() => setIsPhoneHovered(false)}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Phone className="w-4 h-4" aria-hidden="true" />
+                <AnimatedPhoneIcon isHovered={isPhoneHovered} />
                 <span className="hidden md:inline text-[15px] tracking-wide">{PHONE_NUMBER}</span>
               </motion.a>
 

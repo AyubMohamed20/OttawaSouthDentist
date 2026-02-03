@@ -27,6 +27,14 @@ import {
   Check,
   X,
   ChevronDown,
+  Stethoscope,
+  CircleDot,
+  Layers,
+  Crown,
+  Activity,
+  BadgeCheck,
+  Gem,
+  HeartPulse,
 } from 'lucide-react';
 import {
   motion,
@@ -40,6 +48,8 @@ import {
 } from 'framer-motion';
 import { SectionContainer } from '@/components/ui/section-container';
 import { ContactCTA } from '@/components/sections/ContactCTA';
+import { ResponsiveWrapper } from '@/components/ui/responsive-wrapper';
+import MissingTeethMobilePage from './page-mobile';
 
 // ============================================================================
 // DATA
@@ -79,6 +89,7 @@ const treatmentOptions = [
     title: 'Dental Implants',
     shortTitle: 'Implants',
     icon: Target,
+    secondaryIcon: CircleDot,
     description: 'Permanent, standalone tooth replacements with titanium posts that fuse with your jawbone.',
     benefits: [
       'Best for long-term durability',
@@ -102,6 +113,7 @@ const treatmentOptions = [
     title: 'Dental Bridges',
     shortTitle: 'Bridges',
     icon: Puzzle,
+    secondaryIcon: Layers,
     description: 'Fixed prosthetic anchored to adjacent teeth to span the gap of missing teeth.',
     benefits: [
       'Non-surgical solution',
@@ -125,6 +137,7 @@ const treatmentOptions = [
     title: 'Partial Dentures',
     shortTitle: 'Partials',
     icon: RotateCcw,
+    secondaryIcon: Crown,
     description: 'Removable appliance that replaces multiple missing teeth while preserving remaining teeth.',
     benefits: [
       'Cost-effective option',
@@ -148,6 +161,7 @@ const treatmentOptions = [
     title: 'Full Dentures',
     shortTitle: 'Full',
     icon: Smile,
+    secondaryIcon: BadgeCheck,
     description: 'Complete tooth replacement for upper or lower arch when all teeth are missing.',
     benefits: [
       'Restores full smile',
@@ -204,7 +218,7 @@ const processSteps = [
     step: 1,
     title: 'Consultation',
     description: 'Comprehensive exam, X-rays, and discussion of your goals and options.',
-    icon: Calendar,
+    icon: Stethoscope,
     duration: '60 min',
   },
   {
@@ -218,14 +232,14 @@ const processSteps = [
     step: 3,
     title: 'Treatment',
     description: 'Comfortable procedures with clear communication at every step.',
-    icon: Zap,
+    icon: Activity,
     duration: 'Varies',
   },
   {
     step: 4,
     title: 'Follow-Up Care',
     description: 'Regular checkups to ensure long-lasting results and your satisfaction.',
-    icon: ThumbsUp,
+    icon: HeartPulse,
     duration: 'Ongoing',
   },
 ];
@@ -260,6 +274,386 @@ const decisionQuestions = [
     ],
   },
 ];
+
+// ============================================================================
+// SVG ILLUSTRATIONS
+// ============================================================================
+
+// Dental Implant Illustration - showing titanium post in jawbone
+function ImplantIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true">
+      {/* Jawbone base */}
+      <motion.path
+        d="M10 70 Q30 60 60 60 Q90 60 110 70 L110 90 Q90 85 60 85 Q30 85 10 90 Z"
+        fill="#E8D5C4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      />
+      {/* Jawbone texture */}
+      <motion.path
+        d="M25 72 Q35 68 45 72"
+        stroke="#D4C4B0"
+        strokeWidth="2"
+        strokeLinecap="round"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.8, delay: 0.3 }}
+      />
+      <motion.path
+        d="M75 72 Q85 68 95 72"
+        stroke="#D4C4B0"
+        strokeWidth="2"
+        strokeLinecap="round"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.8, delay: 0.4 }}
+      />
+      {/* Titanium implant post */}
+      <motion.rect
+        x="52"
+        y="35"
+        width="16"
+        height="35"
+        rx="2"
+        fill="url(#implantGradient)"
+        initial={{ y: 0, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+      />
+      {/* Implant threads */}
+      {[0, 6, 12, 18, 24].map((offset, i) => (
+        <motion.line
+          key={i}
+          x1="52"
+          y1={42 + offset}
+          x2="68"
+          y2={42 + offset}
+          stroke="#7C8792"
+          strokeWidth="1.5"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.3, delay: 0.7 + i * 0.1 }}
+        />
+      ))}
+      {/* Abutment */}
+      <motion.rect
+        x="54"
+        y="28"
+        width="12"
+        height="10"
+        rx="1"
+        fill="#A0ADB8"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 1.2 }}
+      />
+      {/* Crown */}
+      <motion.path
+        d="M50 28 Q50 12 60 10 Q70 12 70 28 L68 28 Q68 16 60 14 Q52 16 52 28 Z"
+        fill="url(#toothGradient)"
+        initial={{ opacity: 0, y: -15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 1.5, type: 'spring' }}
+      />
+      {/* Shine on crown */}
+      <motion.ellipse
+        cx="57"
+        cy="18"
+        rx="3"
+        ry="4"
+        fill="white"
+        opacity="0.4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.4 }}
+        transition={{ duration: 0.3, delay: 1.8 }}
+      />
+      <defs>
+        <linearGradient id="implantGradient" x1="52" y1="35" x2="68" y2="70" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#9CA8B3" />
+          <stop offset="1" stopColor="#6B7B8A" />
+        </linearGradient>
+        <linearGradient id="toothGradient" x1="50" y1="10" x2="70" y2="28" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFFFFF" />
+          <stop offset="1" stopColor="#F0F0F0" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+// Dental Bridge Illustration - showing bridge spanning gap
+function BridgeIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 140 80" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true">
+      {/* Gumline */}
+      <motion.path
+        d="M5 50 Q35 45 70 45 Q105 45 135 50 L135 70 Q105 65 70 65 Q35 65 5 70 Z"
+        fill="#F5C6C6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      />
+      {/* Left anchor tooth */}
+      <motion.path
+        d="M20 50 Q20 25 30 20 Q40 25 40 50"
+        fill="url(#anchorTooth1)"
+        stroke="#E8E8E8"
+        strokeWidth="1"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+      />
+      {/* Right anchor tooth */}
+      <motion.path
+        d="M100 50 Q100 25 110 20 Q120 25 120 50"
+        fill="url(#anchorTooth2)"
+        stroke="#E8E8E8"
+        strokeWidth="1"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      />
+      {/* Bridge framework */}
+      <motion.rect
+        x="35"
+        y="22"
+        width="70"
+        height="8"
+        rx="2"
+        fill="#D4D4D4"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 0.6, delay: 0.7 }}
+        style={{ transformOrigin: 'center' }}
+      />
+      {/* Pontic teeth (replacement teeth in bridge) */}
+      <motion.path
+        d="M50 30 Q50 15 60 12 Q70 15 70 30"
+        fill="url(#ponticTooth1)"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 1 }}
+      />
+      <motion.path
+        d="M70 30 Q70 15 80 12 Q90 15 90 30"
+        fill="url(#ponticTooth2)"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 1.1 }}
+      />
+      {/* Crown caps on anchor teeth */}
+      <motion.path
+        d="M18 32 Q18 20 30 16 Q42 20 42 32 L40 32 Q40 22 30 19 Q20 22 20 32 Z"
+        fill="url(#crownCap1)"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, delay: 1.3 }}
+      />
+      <motion.path
+        d="M98 32 Q98 20 110 16 Q122 20 122 32 L120 32 Q120 22 110 19 Q100 22 100 32 Z"
+        fill="url(#crownCap2)"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, delay: 1.4 }}
+      />
+      <defs>
+        <linearGradient id="anchorTooth1" x1="20" y1="20" x2="40" y2="50" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F8F8F8" />
+          <stop offset="1" stopColor="#E0E0E0" />
+        </linearGradient>
+        <linearGradient id="anchorTooth2" x1="100" y1="20" x2="120" y2="50" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F8F8F8" />
+          <stop offset="1" stopColor="#E0E0E0" />
+        </linearGradient>
+        <linearGradient id="ponticTooth1" x1="50" y1="12" x2="70" y2="30" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFFFFF" />
+          <stop offset="1" stopColor="#F5F5F5" />
+        </linearGradient>
+        <linearGradient id="ponticTooth2" x1="70" y1="12" x2="90" y2="30" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFFFFF" />
+          <stop offset="1" stopColor="#F5F5F5" />
+        </linearGradient>
+        <linearGradient id="crownCap1" x1="18" y1="16" x2="42" y2="32" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFFFFF" />
+          <stop offset="1" stopColor="#F0F0F0" />
+        </linearGradient>
+        <linearGradient id="crownCap2" x1="98" y1="16" x2="122" y2="32" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFFFFF" />
+          <stop offset="1" stopColor="#F0F0F0" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+// Denture Illustration - showing removable partial denture
+function DentureIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true">
+      {/* Base plate */}
+      <motion.path
+        d="M15 50 Q30 35 60 35 Q90 35 105 50 Q100 65 60 65 Q20 65 15 50 Z"
+        fill="url(#dentureBase)"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6 }}
+      />
+      {/* Teeth row */}
+      {[25, 38, 51, 64, 77, 90].map((x, i) => (
+        <motion.rect
+          key={i}
+          x={x}
+          y="38"
+          width="10"
+          height="16"
+          rx="3"
+          fill="url(#dentureTooth)"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.3 + i * 0.08 }}
+        />
+      ))}
+      {/* Metal clasp left */}
+      <motion.path
+        d="M20 45 Q10 50 15 58 Q18 55 20 52"
+        stroke="#A0A0A0"
+        strokeWidth="3"
+        strokeLinecap="round"
+        fill="none"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.5, delay: 0.8 }}
+      />
+      {/* Metal clasp right */}
+      <motion.path
+        d="M100 45 Q110 50 105 58 Q102 55 100 52"
+        stroke="#A0A0A0"
+        strokeWidth="3"
+        strokeLinecap="round"
+        fill="none"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.5, delay: 0.9 }}
+      />
+      {/* Gum simulation on plate */}
+      <motion.ellipse
+        cx="60"
+        cy="55"
+        rx="35"
+        ry="8"
+        fill="#E8A0A0"
+        opacity="0.5"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.5 }}
+        transition={{ duration: 0.4, delay: 1 }}
+      />
+      <defs>
+        <linearGradient id="dentureBase" x1="15" y1="35" x2="105" y2="65" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFB6B6" />
+          <stop offset="1" stopColor="#E89090" />
+        </linearGradient>
+        <linearGradient id="dentureTooth" x1="0" y1="38" x2="0" y2="54" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFFFFF" />
+          <stop offset="1" stopColor="#F0F0F0" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+// Full Denture Illustration
+function FullDentureIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true">
+      {/* Full arch base */}
+      <motion.path
+        d="M10 55 Q20 30 60 25 Q100 30 110 55 Q105 75 60 80 Q15 75 10 55 Z"
+        fill="url(#fullDentureBase)"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6 }}
+      />
+      {/* Upper teeth arc */}
+      {[
+        { x: 22, w: 8 },
+        { x: 32, w: 9 },
+        { x: 43, w: 10 },
+        { x: 55, w: 10 },
+        { x: 67, w: 10 },
+        { x: 79, w: 9 },
+        { x: 90, w: 8 },
+      ].map((tooth, i) => (
+        <motion.rect
+          key={i}
+          x={tooth.x}
+          y="32"
+          width={tooth.w}
+          height="20"
+          rx="4"
+          fill="url(#fullDentureTooth)"
+          initial={{ opacity: 0, y: -15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.4 + i * 0.06 }}
+        />
+      ))}
+      {/* Palate */}
+      <motion.ellipse
+        cx="60"
+        cy="58"
+        rx="40"
+        ry="15"
+        fill="#E8A0A0"
+        opacity="0.6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.6 }}
+        transition={{ duration: 0.5, delay: 1 }}
+      />
+      {/* Gum detail */}
+      <motion.path
+        d="M25 50 Q40 48 60 48 Q80 48 95 50"
+        stroke="#D08080"
+        strokeWidth="2"
+        strokeLinecap="round"
+        fill="none"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.6, delay: 1.1 }}
+      />
+      <defs>
+        <linearGradient id="fullDentureBase" x1="10" y1="25" x2="110" y2="80" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFB6B6" />
+          <stop offset="1" stopColor="#E88080" />
+        </linearGradient>
+        <linearGradient id="fullDentureTooth" x1="0" y1="32" x2="0" y2="52" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFFFFF" />
+          <stop offset="1" stopColor="#ECECEC" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+// Tooth anatomy icon for benefits
+function ToothIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true">
+      <path
+        d="M12 2C9.5 2 7.5 3.5 7 5.5C6.5 7.5 5 9 4 11C3 13 3 16 5 18C7 20 7 22 8 22C9 22 9.5 20 12 20C14.5 20 15 22 16 22C17 22 17 20 19 18C21 16 21 13 20 11C19 9 17.5 7.5 17 5.5C16.5 3.5 14.5 2 12 2Z"
+        fill="currentColor"
+        opacity="0.2"
+      />
+      <path
+        d="M12 2C9.5 2 7.5 3.5 7 5.5C6.5 7.5 5 9 4 11C3 13 3 16 5 18C7 20 7 22 8 22C9 22 9.5 20 12 20C14.5 20 15 22 16 22C17 22 17 20 19 18C21 16 21 13 20 11C19 9 17.5 7.5 17 5.5C16.5 3.5 14.5 2 12 2Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 // ============================================================================
 // HOOKS
@@ -488,7 +882,7 @@ function HeroSection() {
                 animate={{ rotate: [0, 360] }}
                 transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
               >
-                <Puzzle className="w-4 h-4 text-[#722F37]" />
+                <Gem className="w-4 h-4 text-[#722F37]" />
               </motion.div>
               <span className="text-sm font-medium text-[#722F37]">Solutions That Restore Confidence</span>
             </motion.div>
@@ -569,8 +963,8 @@ function HeroSection() {
             >
               {[
                 { icon: CheckCircle2, text: 'Free Consultation' },
-                { icon: Star, text: 'Multiple Options' },
-                { icon: Heart, text: 'Compassionate Care' },
+                { icon: Layers, text: 'Multiple Options' },
+                { icon: HeartPulse, text: 'Compassionate Care' },
               ].map((item, i) => (
                 <motion.div
                   key={item.text}
@@ -596,8 +990,8 @@ function HeroSection() {
             {/* Main image */}
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
               <Image
-                src="/images/implants/implants-01.jpg"
-                alt="Missing teeth replacement solutions at Ottawa South Dental"
+                src="/images/services/missing-teeth/hero-dental-implant.jpg"
+                alt="Dental implant model showing tooth replacement solution at Ottawa South Dental"
                 fill
                 className="object-cover"
                 priority
@@ -655,6 +1049,22 @@ function SolutionComparisonSection() {
     { key: 'maintenance', label: 'Low Maintenance', icon: Zap },
   ];
 
+  // Get illustration based on option
+  const getIllustration = (optionId: string) => {
+    switch (optionId) {
+      case 'implants':
+        return <ImplantIllustration className="w-full h-32" />;
+      case 'bridges':
+        return <BridgeIllustration className="w-full h-32" />;
+      case 'partial':
+        return <DentureIllustration className="w-full h-32" />;
+      case 'full':
+        return <FullDentureIllustration className="w-full h-32" />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <section ref={sectionRef} className="relative py-32 bg-gradient-to-b from-white via-[#FDF8F3]/30 to-white overflow-hidden">
       {/* Background decoration */}
@@ -677,7 +1087,7 @@ function SolutionComparisonSection() {
             transition={{ delay: 0.2, type: 'spring' }}
             className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#722F37] to-[#8B3A42] shadow-lg shadow-[#722F37]/20 mb-6"
           >
-            <Puzzle className="w-8 h-8 text-white" />
+            <Layers className="w-8 h-8 text-white" />
           </motion.div>
           <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Compare Your{' '}
@@ -749,6 +1159,16 @@ function SolutionComparisonSection() {
                     </p>
                   </div>
                 </div>
+
+                {/* Illustration */}
+                <motion.div
+                  className="mb-6 p-4 bg-white/50 rounded-2xl"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: 0.2 }}
+                >
+                  {getIllustration(currentOption.id)}
+                </motion.div>
 
                 <p className="text-foreground-secondary mb-6 leading-relaxed">
                   {currentOption.description}
@@ -829,6 +1249,26 @@ function SolutionComparisonSection() {
                   </motion.div>
                 );
               })}
+
+              {/* Visual comparison image */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="relative aspect-[16/9] rounded-2xl overflow-hidden shadow-lg"
+              >
+                <Image
+                  src="/images/services/missing-teeth/dental-procedure.jpg"
+                  alt="Professional dental implant and restoration procedure"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <p className="text-white text-sm font-medium">Expert Care for Every Solution</p>
+                </div>
+              </motion.div>
 
               {/* Quick comparison all options */}
               <div className="mt-8 p-6 rounded-2xl bg-gradient-to-br from-[#FDF8F3] to-white border border-[#EDE5DD]">
@@ -1202,7 +1642,19 @@ function QualityOfLifeSection() {
             transition={{ delay: 0.4 }}
             className="bg-white rounded-3xl border border-[#EDE5DD] shadow-xl overflow-hidden"
           >
-            <div className="p-8">
+            {/* Image header */}
+            <div className="relative h-48 overflow-hidden">
+              <Image
+                src="/images/services/missing-teeth/happy-smile.jpg"
+                alt="Happy patient with confident smile after dental restoration"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 40vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
+            </div>
+
+            <div className="p-8 -mt-8 relative">
               <div className="flex items-center gap-2 mb-6">
                 <Sparkles className="w-5 h-5 text-[#722F37]" />
                 <span className="font-semibold text-foreground">The Transformation</span>
@@ -1420,7 +1872,10 @@ function FAQSection() {
                 whileHover={{ scale: openIndex === i ? 1 : 1.01 }}
               >
                 <div className="flex items-center justify-between gap-4">
-                  <span className={`font-semibold ${openIndex === i ? '' : 'text-foreground'}`}>{faq.question}</span>
+                  <div className="flex items-center gap-3">
+                    <ToothIcon className={`w-5 h-5 flex-shrink-0 ${openIndex === i ? 'text-white' : 'text-[#722F37]'}`} />
+                    <span className={`font-semibold ${openIndex === i ? '' : 'text-foreground'}`}>{faq.question}</span>
+                  </div>
                   <motion.div
                     animate={{ rotate: openIndex === i ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
@@ -1467,8 +1922,9 @@ function RelatedServicesSection() {
       title: 'Dental Implants',
       description: 'Permanent, natural-looking tooth replacements that preserve bone and function like real teeth.',
       href: '/services/dental-implants',
-      icon: Target,
+      icon: CircleDot,
       color: 'from-emerald-500 to-teal-500',
+      image: '/images/services/missing-teeth/dental-procedure.jpg',
     },
     {
       title: 'Dentures',
@@ -1476,6 +1932,7 @@ function RelatedServicesSection() {
       href: '/services/dentures',
       icon: Smile,
       color: 'from-purple-500 to-pink-500',
+      image: '/images/services/missing-teeth/confident-woman.jpg',
     },
     {
       title: 'Cosmetic Dentistry',
@@ -1483,6 +1940,7 @@ function RelatedServicesSection() {
       href: '/services/cosmetic-dentistry',
       icon: Sparkles,
       color: 'from-amber-500 to-orange-500',
+      image: '/images/services/missing-teeth/happy-smile.jpg',
     },
   ];
 
@@ -1517,24 +1975,29 @@ function RelatedServicesSection() {
             >
               <Link href={service.href} className="block group">
                 <motion.div
-                  className="relative bg-white rounded-3xl p-8 border border-[#EDE5DD] shadow-sm h-full overflow-hidden"
+                  className="relative bg-white rounded-3xl border border-[#EDE5DD] shadow-sm h-full overflow-hidden"
                   whileHover={{ y: -8, scale: 1.02 }}
                   transition={{ duration: 0.3 }}
                 >
-                  {/* Gradient overlay on hover */}
-                  <motion.div
-                    className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
-                  />
-
-                  <div className="relative">
-                    {/* Icon */}
+                  {/* Image */}
+                  <div className="relative h-48 overflow-hidden">
+                    <Image
+                      src={service.image}
+                      alt={service.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                     <motion.div
-                      className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-6 shadow-lg`}
+                      className={`absolute top-4 right-4 w-12 h-12 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center shadow-lg`}
                       whileHover={{ scale: 1.1, rotate: 5 }}
                     >
-                      <service.icon className="w-8 h-8 text-white" />
+                      <service.icon className="w-6 h-6 text-white" />
                     </motion.div>
+                  </div>
 
+                  <div className="p-8">
                     <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-[#722F37] transition-colors">
                       {service.title}
                     </h3>
@@ -1556,10 +2019,10 @@ function RelatedServicesSection() {
 }
 
 // ============================================================================
-// MAIN PAGE COMPONENT
+// DESKTOP PAGE COMPONENT
 // ============================================================================
 
-export default function MissingTeethPage() {
+function MissingTeethDesktopPage() {
   return (
     <main id="main-content" className="flex min-h-screen flex-col">
       <HeroSection />
@@ -1585,5 +2048,18 @@ export default function MissingTeethPage() {
         bookText="Book This Service"
       />
     </main>
+  );
+}
+
+// ============================================================================
+// MAIN PAGE COMPONENT WITH RESPONSIVE SWITCHING
+// ============================================================================
+
+export default function MissingTeethPage() {
+  return (
+    <ResponsiveWrapper
+      desktop={<MissingTeethDesktopPage />}
+      mobile={<MissingTeethMobilePage />}
+    />
   );
 }

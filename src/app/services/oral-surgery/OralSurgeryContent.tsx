@@ -24,7 +24,6 @@ import {
   Droplets,
   CircleCheckBig,
   Award,
-  Users,
   GraduationCap,
   Timer,
   Sparkles,
@@ -37,6 +36,12 @@ import {
   Gauge,
   Waves,
   HeartPulse,
+  Bone,
+  BriefcaseMedical,
+  ShieldCheck,
+  HandHeart,
+  Users,
+  Star,
 } from 'lucide-react';
 import {
   motion,
@@ -46,6 +51,7 @@ import {
   useMotionValue,
   useSpring,
   useInView,
+  useReducedMotion,
 } from 'framer-motion';
 
 // ============================================================================
@@ -153,7 +159,7 @@ const surgeryTypes = [
     ],
     duration: '60-120 min',
     recovery: '2-4 weeks',
-    icon: Heart,
+    icon: Bone,
     color: 'from-rose-500 to-rose-600',
     bgColor: 'bg-rose-50',
     textColor: 'text-rose-600',
@@ -347,6 +353,371 @@ const teamCredentials = [
 ];
 
 // ============================================================================
+// SVG ILLUSTRATIONS - Flat Design Dental-Themed
+// ============================================================================
+
+// Tooth extraction illustration
+function ToothExtractionSVG({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 120 120"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-hidden="true"
+    >
+      {/* Background circle */}
+      <circle cx="60" cy="60" r="55" fill="#FDF8F3" />
+
+      {/* Tooth shape - molar style */}
+      <path
+        d="M45 35C42 35 38 38 38 45V55C38 65 42 75 45 80C47 83 50 85 55 85H65C70 85 73 83 75 80C78 75 82 65 82 55V45C82 38 78 35 75 35H45Z"
+        fill="white"
+        stroke="#722F37"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+
+      {/* Tooth roots */}
+      <path
+        d="M48 85V95C48 98 50 100 52 100"
+        stroke="#722F37"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M60 85V98C60 100 60 102 60 102"
+        stroke="#722F37"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M72 85V95C72 98 70 100 68 100"
+        stroke="#722F37"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+
+      {/* Crown detail lines */}
+      <path
+        d="M50 55H70"
+        stroke="#EDE5DD"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M52 65H68"
+        stroke="#EDE5DD"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+
+      {/* Extraction arrow indicator */}
+      <motion.g
+        animate={{ y: [-3, 3, -3] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <path
+          d="M60 20V30"
+          stroke="#10B981"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+        <path
+          d="M55 25L60 20L65 25"
+          stroke="#10B981"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </motion.g>
+
+      {/* Sparkle effects */}
+      <circle cx="92" cy="35" r="3" fill="#722F37" opacity="0.3" />
+      <circle cx="28" cy="45" r="2" fill="#722F37" opacity="0.2" />
+      <circle cx="95" cy="70" r="2.5" fill="#10B981" opacity="0.4" />
+    </svg>
+  );
+}
+
+// Bone grafting illustration
+function BoneGraftingSVG({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 120 120"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-hidden="true"
+    >
+      {/* Background */}
+      <circle cx="60" cy="60" r="55" fill="#FDF8F3" />
+
+      {/* Jawbone base */}
+      <path
+        d="M25 70C25 55 35 45 60 45C85 45 95 55 95 70V85C95 90 90 95 85 95H35C30 95 25 90 25 85V70Z"
+        fill="#F5EDE5"
+        stroke="#722F37"
+        strokeWidth="2"
+      />
+
+      {/* Bone graft area highlight */}
+      <motion.path
+        d="M50 55C50 50 55 48 60 48C65 48 70 50 70 55V70H50V55Z"
+        fill="#10B981"
+        opacity="0.3"
+        animate={{ opacity: [0.2, 0.4, 0.2] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      />
+
+      {/* Graft particles */}
+      <motion.g
+        animate={{ y: [0, 2, 0] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <circle cx="55" cy="58" r="3" fill="#10B981" opacity="0.6" />
+        <circle cx="65" cy="60" r="2.5" fill="#10B981" opacity="0.5" />
+        <circle cx="58" cy="64" r="2" fill="#10B981" opacity="0.7" />
+        <circle cx="62" cy="56" r="2" fill="#10B981" opacity="0.5" />
+        <circle cx="60" cy="62" r="2.5" fill="#10B981" opacity="0.6" />
+      </motion.g>
+
+      {/* Bone texture lines */}
+      <path d="M35 75H45" stroke="#EDE5DD" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M75 75H85" stroke="#EDE5DD" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M40 82H50" stroke="#EDE5DD" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M70 82H80" stroke="#EDE5DD" strokeWidth="1.5" strokeLinecap="round" />
+
+      {/* Growth indicator arrows */}
+      <motion.g
+        animate={{ scale: [1, 1.1, 1] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        <path
+          d="M60 35V42"
+          stroke="#722F37"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        <path
+          d="M56 38L60 35L64 38"
+          stroke="#722F37"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </motion.g>
+
+      {/* Plus signs for regeneration */}
+      <g fill="#10B981" opacity="0.6">
+        <path d="M30 40H34M32 38V42" stroke="#10B981" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M86 40H90M88 38V42" stroke="#10B981" strokeWidth="1.5" strokeLinecap="round" />
+      </g>
+    </svg>
+  );
+}
+
+// Wisdom tooth illustration
+function WisdomToothSVG({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 120 120"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-hidden="true"
+    >
+      {/* Background */}
+      <circle cx="60" cy="60" r="55" fill="#FDF8F3" />
+
+      {/* Gum line */}
+      <path
+        d="M20 55C20 55 35 50 60 50C85 50 100 55 100 55V75C100 80 95 85 90 85H30C25 85 20 80 20 75V55Z"
+        fill="#F8D7DA"
+        stroke="#722F37"
+        strokeWidth="1.5"
+      />
+
+      {/* Regular teeth */}
+      <rect x="30" y="55" width="12" height="25" rx="3" fill="white" stroke="#722F37" strokeWidth="1.5" />
+      <rect x="45" y="55" width="12" height="25" rx="3" fill="white" stroke="#722F37" strokeWidth="1.5" />
+      <rect x="60" y="55" width="12" height="25" rx="3" fill="white" stroke="#722F37" strokeWidth="1.5" />
+
+      {/* Impacted wisdom tooth (tilted) */}
+      <motion.g
+        animate={{ rotate: [-5, 0, -5] }}
+        transition={{ duration: 3, repeat: Infinity }}
+        style={{ originX: '82px', originY: '67px' }}
+      >
+        <rect
+          x="75"
+          y="58"
+          width="12"
+          height="22"
+          rx="3"
+          fill="#FEF3C7"
+          stroke="#F59E0B"
+          strokeWidth="2"
+          transform="rotate(15 81 69)"
+        />
+      </motion.g>
+
+      {/* Alert indicator */}
+      <motion.circle
+        cx="88"
+        cy="45"
+        r="8"
+        fill="#F59E0B"
+        animate={{ scale: [1, 1.1, 1] }}
+        transition={{ duration: 1.5, repeat: Infinity }}
+      />
+      <text x="88" y="49" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">!</text>
+
+      {/* Pain indication lines */}
+      <motion.g
+        animate={{ opacity: [0.3, 0.7, 0.3] }}
+        transition={{ duration: 1.5, repeat: Infinity }}
+      >
+        <path d="M92 60L98 55" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" />
+        <path d="M94 68L100 68" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" />
+        <path d="M92 76L98 81" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" />
+      </motion.g>
+    </svg>
+  );
+}
+
+// Recovery healing illustration
+function RecoveryHealingSVG({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 120 120"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-hidden="true"
+    >
+      {/* Background */}
+      <circle cx="60" cy="60" r="55" fill="#FDF8F3" />
+
+      {/* Heart shape for care */}
+      <motion.path
+        d="M60 90C60 90 25 65 25 45C25 30 40 25 60 45C80 25 95 30 95 45C95 65 60 90 60 90Z"
+        fill="#FEE2E2"
+        stroke="#722F37"
+        strokeWidth="2"
+        animate={{ scale: [1, 1.05, 1] }}
+        transition={{ duration: 1.5, repeat: Infinity }}
+        style={{ originX: '60px', originY: '60px' }}
+      />
+
+      {/* Healing cross/plus inside heart */}
+      <g fill="#10B981">
+        <rect x="55" y="45" width="10" height="30" rx="2" />
+        <rect x="45" y="55" width="30" height="10" rx="2" />
+      </g>
+
+      {/* Sparkle effects for healing */}
+      <motion.g
+        animate={{ opacity: [0.5, 1, 0.5], scale: [0.9, 1.1, 0.9] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        <circle cx="35" cy="35" r="3" fill="#10B981" />
+        <circle cx="85" cy="35" r="2.5" fill="#10B981" />
+        <circle cx="25" cy="60" r="2" fill="#722F37" opacity="0.5" />
+        <circle cx="95" cy="60" r="2" fill="#722F37" opacity="0.5" />
+      </motion.g>
+
+      {/* Progress arc */}
+      <motion.path
+        d="M30 95A45 45 0 0 1 90 95"
+        fill="none"
+        stroke="#10B981"
+        strokeWidth="4"
+        strokeLinecap="round"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 3, repeat: Infinity }}
+      />
+    </svg>
+  );
+}
+
+// Sedation comfort illustration
+function SedationComfortSVG({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 120 120"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-hidden="true"
+    >
+      {/* Background */}
+      <circle cx="60" cy="60" r="55" fill="#FDF8F3" />
+
+      {/* Face outline - relaxed patient */}
+      <circle cx="60" cy="55" r="30" fill="#FEF3C7" stroke="#722F37" strokeWidth="2" />
+
+      {/* Closed relaxed eyes */}
+      <path d="M45 50C45 50 50 48 55 50" stroke="#722F37" strokeWidth="2" strokeLinecap="round" />
+      <path d="M65 50C65 50 70 48 75 50" stroke="#722F37" strokeWidth="2" strokeLinecap="round" />
+
+      {/* Peaceful smile */}
+      <path d="M50 65C50 65 55 70 60 70C65 70 70 65 70 65" stroke="#722F37" strokeWidth="2" strokeLinecap="round" />
+
+      {/* Z's for sleep/relaxation */}
+      <motion.g
+        animate={{ opacity: [0, 1, 0], y: [0, -10, -20] }}
+        transition={{ duration: 2, repeat: Infinity, repeatDelay: 0.5 }}
+      >
+        <text x="85" y="40" fill="#722F37" fontSize="14" fontWeight="bold" opacity="0.6">z</text>
+      </motion.g>
+      <motion.g
+        animate={{ opacity: [0, 1, 0], y: [0, -10, -20] }}
+        transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+      >
+        <text x="92" y="32" fill="#722F37" fontSize="12" fontWeight="bold" opacity="0.4">z</text>
+      </motion.g>
+      <motion.g
+        animate={{ opacity: [0, 1, 0], y: [0, -10, -20] }}
+        transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+      >
+        <text x="98" y="25" fill="#722F37" fontSize="10" fontWeight="bold" opacity="0.3">z</text>
+      </motion.g>
+
+      {/* Cloud/comfort waves */}
+      <motion.ellipse
+        cx="60"
+        cy="95"
+        rx="35"
+        ry="12"
+        fill="#E0E7FF"
+        opacity="0.5"
+        animate={{ scale: [1, 1.05, 1] }}
+        transition={{ duration: 3, repeat: Infinity }}
+      />
+
+      {/* Stars for comfort */}
+      <motion.g
+        animate={{ rotate: 360 }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        style={{ originX: '60px', originY: '55px' }}
+      >
+        <circle cx="25" cy="45" r="2" fill="#A78BFA" />
+        <circle cx="95" cy="50" r="2.5" fill="#A78BFA" />
+        <circle cx="30" cy="75" r="1.5" fill="#A78BFA" />
+      </motion.g>
+    </svg>
+  );
+}
+
+// ============================================================================
 // ANIMATION VARIANTS
 // ============================================================================
 
@@ -378,6 +749,7 @@ const staggerContainer = {
 // ============================================================================
 
 function useMagnetic(strength: number = 0.3) {
+  const prefersReducedMotion = useReducedMotion();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const springConfig = { damping: 20, stiffness: 200 };
@@ -386,6 +758,7 @@ function useMagnetic(strength: number = 0.3) {
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLElement>) => {
+      if (prefersReducedMotion) return;
       const rect = e.currentTarget.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
@@ -394,7 +767,7 @@ function useMagnetic(strength: number = 0.3) {
       x.set(deltaX);
       y.set(deltaY);
     },
-    [x, y, strength]
+    [x, y, strength, prefersReducedMotion]
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -406,17 +779,18 @@ function useMagnetic(strength: number = 0.3) {
 }
 
 // ============================================================================
-// HERO SECTION
+// HERO SECTION - Enhanced with new imagery
 // ============================================================================
 
 function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start'],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, prefersReducedMotion ? 0 : 150]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
 
@@ -428,31 +802,35 @@ function HeroSection() {
       <div className="absolute inset-0">
         <motion.div
           className="absolute inset-0 bg-gradient-to-br from-[#FDF8F3] via-white to-[#F5EDE5]"
-          style={{ y }}
+          style={{ y: prefersReducedMotion ? 0 : y }}
         />
 
         {/* Floating orbs with clinical-yet-warm aesthetic */}
-        <motion.div
-          className="absolute top-20 right-1/4 w-[600px] h-[600px] rounded-full opacity-30"
-          style={{
-            background: 'radial-gradient(circle, rgba(114,47,55,0.1) 0%, transparent 70%)',
-          }}
-          animate={{
-            y: [-20, 20, -20],
-            x: [-10, 10, -10],
-          }}
-          transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute -bottom-32 -left-32 w-[500px] h-[500px] rounded-full opacity-20"
-          style={{
-            background: 'radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%)',
-          }}
-          animate={{
-            y: [20, -20, 20],
-          }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-        />
+        {!prefersReducedMotion && (
+          <>
+            <motion.div
+              className="absolute top-20 right-1/4 w-[600px] h-[600px] rounded-full opacity-30"
+              style={{
+                background: 'radial-gradient(circle, rgba(114,47,55,0.1) 0%, transparent 70%)',
+              }}
+              animate={{
+                y: [-20, 20, -20],
+                x: [-10, 10, -10],
+              }}
+              transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+            />
+            <motion.div
+              className="absolute -bottom-32 -left-32 w-[500px] h-[500px] rounded-full opacity-20"
+              style={{
+                background: 'radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%)',
+              }}
+              animate={{
+                y: [20, -20, 20],
+              }}
+              transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          </>
+        )}
 
         {/* Subtle medical cross pattern */}
         <div
@@ -461,10 +839,11 @@ function HeroSection() {
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M27 27h6v-6h-6v6zm0 6h6v6h-6v-6zm6 0h6v-6h-6v6zm-12 0h6v-6h-6v6z' fill='%23722F37' fill-opacity='1'/%3E%3C/svg%3E")`,
             backgroundSize: '60px 60px',
           }}
+          aria-hidden="true"
         />
       </div>
 
-      <motion.div style={{ opacity, scale }} className="relative w-full">
+      <motion.div style={{ opacity, scale: prefersReducedMotion ? 1 : scale }} className="relative w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Content */}
@@ -479,6 +858,7 @@ function HeroSection() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
                 className="mb-8"
+                aria-label="Breadcrumb"
               >
                 <ol className="flex items-center gap-2 text-sm">
                   <li>
@@ -486,14 +866,14 @@ function HeroSection() {
                       Home
                     </Link>
                   </li>
-                  <li className="text-neutral-300">/</li>
+                  <li className="text-neutral-300" aria-hidden="true">/</li>
                   <li>
                     <Link href="/services" className="text-neutral-500 hover:text-[#722F37] transition-colors">
                       Services
                     </Link>
                   </li>
-                  <li className="text-neutral-300">/</li>
-                  <li className="text-[#722F37] font-medium">Oral Surgery</li>
+                  <li className="text-neutral-300" aria-hidden="true">/</li>
+                  <li className="text-[#722F37] font-medium" aria-current="page">Oral Surgery</li>
                 </ol>
               </motion.nav>
 
@@ -504,7 +884,7 @@ function HeroSection() {
                 transition={{ delay: 0.3 }}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 border border-emerald-200 mb-6"
               >
-                <Shield className="w-4 h-4 text-emerald-600" />
+                <ShieldCheck className="w-4 h-4 text-emerald-600" aria-hidden="true" />
                 <span className="text-sm font-medium text-emerald-700">
                   Safe, Gentle & Experienced Care
                 </span>
@@ -524,6 +904,7 @@ function HeroSection() {
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
                     transition={{ delay: 0.8, duration: 0.6 }}
+                    aria-hidden="true"
                   />
                 </span>
               </motion.h1>
@@ -553,25 +934,26 @@ function HeroSection() {
                 >
                   <Link
                     href="/contact#book"
-                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#722F37] to-[#8B3A42] text-white font-semibold rounded-xl overflow-hidden shadow-lg shadow-[#722F37]/25"
+                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#722F37] to-[#8B3A42] text-white font-semibold rounded-xl overflow-hidden shadow-lg shadow-[#722F37]/25 focus:outline-none focus:ring-2 focus:ring-[#722F37] focus:ring-offset-2"
                   >
                     <motion.span
                       className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12"
                       initial={{ x: '-100%' }}
                       whileHover={{ x: '200%' }}
                       transition={{ duration: 0.6 }}
+                      aria-hidden="true"
                     />
-                    <Calendar className="w-5 h-5" />
+                    <Calendar className="w-5 h-5" aria-hidden="true" />
                     <span className="relative">Book Consultation</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                   </Link>
                 </motion.div>
 
                 <a
                   href="tel:+16137336446"
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-white text-[#722F37] font-semibold rounded-xl border-2 border-[#722F37]/20 hover:border-[#722F37]/40 hover:bg-[#FDF8F3] transition-all"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-white text-[#722F37] font-semibold rounded-xl border-2 border-[#722F37]/20 hover:border-[#722F37]/40 hover:bg-[#FDF8F3] transition-all focus:outline-none focus:ring-2 focus:ring-[#722F37] focus:ring-offset-2"
                 >
-                  <Phone className="w-5 h-5" />
+                  <Phone className="w-5 h-5" aria-hidden="true" />
                   (613) 733-6446
                 </a>
               </motion.div>
@@ -584,15 +966,21 @@ function HeroSection() {
                 className="mt-12 grid grid-cols-3 gap-6"
               >
                 {[
-                  { label: 'Procedures', value: '10K+' },
-                  { label: 'Success Rate', value: '98%' },
-                  { label: 'Years Exp.', value: '25+' },
-                ].map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <p className="text-2xl font-bold text-[#722F37]">{stat.value}</p>
-                    <p className="text-sm text-neutral-500">{stat.label}</p>
-                  </div>
-                ))}
+                  { label: 'Procedures', value: '10K+', icon: BriefcaseMedical },
+                  { label: 'Success Rate', value: '98%', icon: Star },
+                  { label: 'Years Exp.', value: '25+', icon: Award },
+                ].map((stat, index) => {
+                  const Icon = stat.icon;
+                  return (
+                    <div key={index} className="text-center">
+                      <div className="flex items-center justify-center gap-2 mb-1">
+                        <Icon className="w-4 h-4 text-[#722F37]/60" aria-hidden="true" />
+                        <p className="text-2xl font-bold text-[#722F37]">{stat.value}</p>
+                      </div>
+                      <p className="text-sm text-neutral-500">{stat.label}</p>
+                    </div>
+                  );
+                })}
               </motion.div>
             </motion.div>
 
@@ -603,17 +991,17 @@ function HeroSection() {
               transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="relative"
             >
-              {/* Main image */}
+              {/* Main image - using new Pexels image */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-neutral-900/10 aspect-[4/3]">
                 <Image
-                  src="/images/clinic/clinic-08.jpg"
-                  alt="Oral surgery consultation at Ottawa South Dental"
+                  src="/images/services/oral-surgery/hero-dental-surgery.jpg"
+                  alt="Dental surgeons performing a procedure in a modern clinical setting"
                   fill
                   className="object-cover"
                   priority
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" aria-hidden="true" />
               </div>
 
               {/* Floating safety card */}
@@ -625,7 +1013,7 @@ function HeroSection() {
               >
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-100 to-emerald-50 flex items-center justify-center">
-                    <Shield className="w-7 h-7 text-emerald-600" />
+                    <Shield className="w-7 h-7 text-emerald-600" aria-hidden="true" />
                   </div>
                   <div>
                     <p className="font-semibold text-[#1e293b]">Safe & Sterile</p>
@@ -643,7 +1031,7 @@ function HeroSection() {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-                    <Pill className="w-5 h-5 text-purple-600" />
+                    <Pill className="w-5 h-5 text-purple-600" aria-hidden="true" />
                   </div>
                   <div>
                     <p className="font-semibold text-[#1e293b]">Sedation Options</p>
@@ -660,21 +1048,37 @@ function HeroSection() {
 }
 
 // ============================================================================
-// PROCEDURE TYPE SHOWCASE
+// PROCEDURE TYPE SHOWCASE - Enhanced with illustrations
 // ============================================================================
 
 function ProcedureShowcase() {
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+  const prefersReducedMotion = useReducedMotion();
 
   const currentSurgery = surgeryTypes[activeIndex]!;
+
+  // Get appropriate illustration based on procedure type
+  const getIllustration = (procedureId: string) => {
+    switch (procedureId) {
+      case 'simple':
+      case 'surgical':
+        return <ToothExtractionSVG className="w-full h-full max-w-[200px]" />;
+      case 'wisdom':
+        return <WisdomToothSVG className="w-full h-full max-w-[200px]" />;
+      case 'grafting':
+        return <BoneGraftingSVG className="w-full h-full max-w-[200px]" />;
+      default:
+        return <RecoveryHealingSVG className="w-full h-full max-w-[200px]" />;
+    }
+  };
 
   return (
     <div ref={containerRef}>
       {/* Procedure Type Selector - Carousel Style */}
       <div className="relative mb-12">
-        <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+        <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide" role="tablist" aria-label="Procedure types">
           {surgeryTypes.map((type, index) => {
             const Icon = type.icon;
             const isActive = index === activeIndex;
@@ -682,29 +1086,34 @@ function ProcedureShowcase() {
             return (
               <motion.button
                 key={type.id}
+                role="tab"
+                aria-selected={isActive}
+                aria-controls={`procedure-panel-${type.id}`}
+                id={`procedure-tab-${type.id}`}
                 onClick={() => setActiveIndex(index)}
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ delay: index * 0.08 }}
-                className={`relative flex-shrink-0 px-6 py-4 rounded-2xl border-2 transition-all duration-300 min-w-[180px] ${
+                transition={{ delay: prefersReducedMotion ? 0 : index * 0.08 }}
+                className={`relative flex-shrink-0 px-6 py-4 rounded-2xl border-2 transition-all duration-300 min-w-[180px] focus:outline-none focus:ring-2 focus:ring-[#722F37] focus:ring-offset-2 ${
                   isActive
                     ? 'border-[#722F37] bg-white shadow-lg shadow-[#722F37]/10'
                     : 'border-neutral-200 bg-white hover:border-[#722F37]/30'
                 }`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+                whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
               >
                 {isActive && (
                   <motion.div
                     layoutId="activeProcedure"
                     className="absolute inset-0 bg-gradient-to-br from-[#722F37]/5 to-transparent rounded-2xl"
                     transition={{ type: 'spring', bounce: 0.2 }}
+                    aria-hidden="true"
                   />
                 )}
 
                 <div className="relative flex flex-col items-center gap-2">
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${type.color} flex items-center justify-center shadow-sm`}>
-                    <Icon className="w-6 h-6 text-white" />
+                    <Icon className="w-6 h-6 text-white" aria-hidden="true" />
                   </div>
                   <span className={`text-sm font-medium ${isActive ? 'text-[#722F37]' : 'text-neutral-700'}`}>
                     {type.shortTitle}
@@ -720,10 +1129,13 @@ function ProcedureShowcase() {
       <AnimatePresence mode="wait">
         <motion.div
           key={activeIndex}
+          id={`procedure-panel-${currentSurgery.id}`}
+          role="tabpanel"
+          aria-labelledby={`procedure-tab-${currentSurgery.id}`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: prefersReducedMotion ? 0.1 : 0.4, ease: [0.22, 1, 0.36, 1] }}
           className="bg-white rounded-3xl border border-neutral-200 overflow-hidden shadow-sm"
         >
           <div className="grid lg:grid-cols-2">
@@ -733,7 +1145,7 @@ function ProcedureShowcase() {
                 <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${currentSurgery.color} flex items-center justify-center shadow-lg`}>
                   {(() => {
                     const Icon = currentSurgery.icon;
-                    return <Icon className="w-8 h-8 text-white" />;
+                    return <Icon className="w-8 h-8 text-white" aria-hidden="true" />;
                   })()}
                 </div>
                 <div>
@@ -742,11 +1154,12 @@ function ProcedureShowcase() {
                   </h3>
                   <div className="flex items-center gap-4 mt-1">
                     <span className="flex items-center gap-1 text-sm text-neutral-500">
-                      <Timer className="w-4 h-4" />
+                      <Timer className="w-4 h-4" aria-hidden="true" />
+                      <span className="sr-only">Duration:</span>
                       {currentSurgery.duration}
                     </span>
                     <span className="flex items-center gap-1 text-sm text-neutral-500">
-                      <Activity className="w-4 h-4" />
+                      <Activity className="w-4 h-4" aria-hidden="true" />
                       Recovery: {currentSurgery.recovery}
                     </span>
                   </div>
@@ -761,108 +1174,61 @@ function ProcedureShowcase() {
                 <p className="text-sm font-semibold text-[#1e293b] uppercase tracking-wide">
                   Key Features
                 </p>
-                {currentSurgery.details.map((detail, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2 + index * 0.1 }}
-                    className="flex items-center gap-3"
-                  >
-                    <div className={`w-6 h-6 rounded-full ${currentSurgery.bgColor} flex items-center justify-center flex-shrink-0`}>
-                      <Check className={`w-3.5 h-3.5 ${currentSurgery.textColor}`} />
-                    </div>
-                    <span className="text-sm text-neutral-700">{detail}</span>
-                  </motion.div>
-                ))}
+                <ul className="space-y-3">
+                  {currentSurgery.details.map((detail, index) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: prefersReducedMotion ? 0 : 0.2 + index * 0.1 }}
+                      className="flex items-center gap-3"
+                    >
+                      <div className={`w-6 h-6 rounded-full ${currentSurgery.bgColor} flex items-center justify-center flex-shrink-0`}>
+                        <Check className={`w-3.5 h-3.5 ${currentSurgery.textColor}`} aria-hidden="true" />
+                      </div>
+                      <span className="text-sm text-neutral-700">{detail}</span>
+                    </motion.li>
+                  ))}
+                </ul>
               </div>
 
               <div className="mt-8 pt-6 border-t border-neutral-100">
                 <Link
                   href="/contact#book"
-                  className="inline-flex items-center gap-2 text-[#722F37] font-semibold hover:gap-3 transition-all"
+                  className="inline-flex items-center gap-2 text-[#722F37] font-semibold hover:gap-3 transition-all focus:outline-none focus:underline"
                 >
                   Schedule Consultation
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
                 </Link>
               </div>
             </div>
 
-            {/* Visual Side */}
-            <div className="relative h-80 lg:h-auto">
-              <div className={`absolute inset-0 bg-gradient-to-br ${currentSurgery.color} opacity-10`} />
-              <div className="absolute inset-0 flex items-center justify-center p-12">
-                {/* Animated procedure visualization */}
+            {/* Visual Side - Now with SVG illustrations */}
+            <div className="relative h-80 lg:h-auto bg-gradient-to-br from-[#FDF8F3] to-[#F5EDE5]">
+              <div className="absolute inset-0 flex items-center justify-center p-8">
+                {/* SVG Illustration */}
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="relative"
+                  transition={{ duration: prefersReducedMotion ? 0.1 : 0.5 }}
+                  className="relative flex items-center justify-center"
                 >
-                  {/* Central icon */}
-                  <motion.div
-                    className={`w-32 h-32 rounded-full bg-gradient-to-br ${currentSurgery.color} flex items-center justify-center shadow-2xl`}
-                    animate={{
-                      boxShadow: [
-                        '0 25px 50px -12px rgba(114, 47, 55, 0.25)',
-                        '0 25px 50px -12px rgba(114, 47, 55, 0.4)',
-                        '0 25px 50px -12px rgba(114, 47, 55, 0.25)',
-                      ],
-                    }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    {(() => {
-                      const Icon = currentSurgery.icon;
-                      return <Icon className="w-16 h-16 text-white" />;
-                    })()}
-                  </motion.div>
-
-                  {/* Orbiting elements */}
-                  {[0, 1, 2, 3].map((i) => (
-                    <motion.div
-                      key={i}
-                      className="absolute w-8 h-8 rounded-full bg-white shadow-lg flex items-center justify-center"
-                      style={{
-                        top: '50%',
-                        left: '50%',
-                      }}
-                      animate={{
-                        x: [
-                          Math.cos((i * Math.PI) / 2) * 80 - 16,
-                          Math.cos((i * Math.PI) / 2 + Math.PI / 4) * 80 - 16,
-                          Math.cos((i * Math.PI) / 2) * 80 - 16,
-                        ],
-                        y: [
-                          Math.sin((i * Math.PI) / 2) * 80 - 16,
-                          Math.sin((i * Math.PI) / 2 + Math.PI / 4) * 80 - 16,
-                          Math.sin((i * Math.PI) / 2) * 80 - 16,
-                        ],
-                      }}
-                      transition={{
-                        duration: 4,
-                        delay: i * 0.5,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                      }}
-                    >
-                      <CircleDot className={`w-4 h-4 ${currentSurgery.textColor}`} />
-                    </motion.div>
-                  ))}
+                  {getIllustration(currentSurgery.id)}
                 </motion.div>
               </div>
 
               {/* Duration badge */}
               <div className="absolute bottom-6 left-6 right-6">
-                <div className="flex gap-3">
+                <div className="flex gap-3 flex-wrap">
                   <div className="px-4 py-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm">
-                    <span className="text-sm font-medium text-neutral-700">
-                      <Timer className="w-4 h-4 inline mr-1" />
+                    <span className="text-sm font-medium text-neutral-700 flex items-center gap-1">
+                      <Timer className="w-4 h-4" aria-hidden="true" />
                       {currentSurgery.duration}
                     </span>
                   </div>
                   <div className="px-4 py-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm">
-                    <span className="text-sm font-medium text-neutral-700">
-                      <Activity className="w-4 h-4 inline mr-1" />
+                    <span className="text-sm font-medium text-neutral-700 flex items-center gap-1">
+                      <Activity className="w-4 h-4" aria-hidden="true" />
                       {currentSurgery.recovery} recovery
                     </span>
                   </div>
@@ -874,13 +1240,16 @@ function ProcedureShowcase() {
       </AnimatePresence>
 
       {/* Navigation dots */}
-      <div className="flex justify-center gap-2 mt-6">
-        {surgeryTypes.map((_, index) => (
+      <div className="flex justify-center gap-2 mt-6" role="tablist" aria-label="Procedure navigation">
+        {surgeryTypes.map((type, index) => (
           <button
             key={index}
+            role="tab"
+            aria-selected={index === activeIndex}
+            aria-label={`View ${type.title}`}
             onClick={() => setActiveIndex(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              index === activeIndex ? 'w-8 bg-[#722F37]' : 'bg-neutral-300 hover:bg-neutral-400'
+            className={`h-2 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#722F37] focus:ring-offset-2 ${
+              index === activeIndex ? 'w-8 bg-[#722F37]' : 'w-2 bg-neutral-300 hover:bg-neutral-400'
             }`}
           />
         ))}
@@ -890,13 +1259,14 @@ function ProcedureShowcase() {
 }
 
 // ============================================================================
-// SEDATION OPTIONS DISPLAY
+// SEDATION OPTIONS DISPLAY - Enhanced with comfort illustration
 // ============================================================================
 
 function SedationOptions() {
-  const [selectedLevel, setSelectedLevel] = useState(2);
+  const [selectedLevel, setSelectedLevel] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+  const prefersReducedMotion = useReducedMotion();
 
   const currentSedation = sedationOptions[selectedLevel]!;
 
@@ -909,12 +1279,13 @@ function SedationOptions() {
           <span className="text-sm font-medium text-neutral-500">Deep Sedation</span>
         </div>
 
-        <div className="relative h-3 bg-neutral-100 rounded-full overflow-hidden">
+        <div className="relative h-3 bg-neutral-100 rounded-full overflow-hidden" role="slider" aria-label="Sedation level" aria-valuemin={1} aria-valuemax={4} aria-valuenow={selectedLevel + 1}>
           <motion.div
             className="absolute inset-y-0 left-0 bg-gradient-to-r from-emerald-400 via-amber-400 to-purple-500 rounded-full"
             initial={{ width: '0%' }}
             animate={{ width: isInView ? '100%' : '0%' }}
-            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: prefersReducedMotion ? 0.1 : 1.5, ease: [0.22, 1, 0.36, 1] }}
+            aria-hidden="true"
           />
 
           {/* Level indicators */}
@@ -922,14 +1293,15 @@ function SedationOptions() {
             <motion.button
               key={index}
               onClick={() => setSelectedLevel(index)}
-              className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border-4 transition-all duration-300 ${
+              aria-label={`Select ${option.title}`}
+              className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border-4 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#722F37] focus:ring-offset-2 ${
                 selectedLevel === index
                   ? 'bg-white border-[#722F37] scale-125 z-10 shadow-lg'
                   : 'bg-white border-neutral-300 hover:border-[#722F37]/50'
               }`}
               style={{ left: `${(index / (sedationOptions.length - 1)) * 100}%`, transform: 'translate(-50%, -50%)' }}
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.9 }}
+              whileHover={prefersReducedMotion ? {} : { scale: 1.2 }}
+              whileTap={prefersReducedMotion ? {} : { scale: 0.9 }}
             />
           ))}
         </div>
@@ -942,7 +1314,7 @@ function SedationOptions() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: prefersReducedMotion ? 0.1 : 0.4 }}
           className="bg-white rounded-3xl border border-neutral-200 overflow-hidden shadow-sm"
         >
           <div className="grid lg:grid-cols-3">
@@ -951,12 +1323,12 @@ function SedationOptions() {
               <div className="flex items-center gap-4 mb-6">
                 <motion.div
                   className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/5 flex items-center justify-center"
-                  animate={{ rotate: [0, 5, -5, 0] }}
+                  animate={prefersReducedMotion ? {} : { rotate: [0, 5, -5, 0] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
                   {(() => {
                     const Icon = currentSedation.icon;
-                    return <Icon className="w-8 h-8 text-[#722F37]" />;
+                    return <Icon className="w-8 h-8 text-[#722F37]" aria-hidden="true" />;
                   })()}
                 </motion.div>
                 <div>
@@ -983,10 +1355,10 @@ function SedationOptions() {
                         key={index}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
+                        transition={{ delay: prefersReducedMotion ? 0 : index * 0.1 }}
                         className="flex items-center gap-2 text-sm text-neutral-600"
                       >
-                        <Check className="w-4 h-4 text-emerald-500" />
+                        <Check className="w-4 h-4 text-emerald-500" aria-hidden="true" />
                         {item}
                       </motion.li>
                     ))}
@@ -1003,10 +1375,10 @@ function SedationOptions() {
                         key={index}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 + index * 0.1 }}
+                        transition={{ delay: prefersReducedMotion ? 0 : 0.2 + index * 0.1 }}
                         className="flex items-center gap-2 text-sm text-neutral-600"
                       >
-                        <Sparkles className="w-4 h-4 text-amber-500" />
+                        <Sparkles className="w-4 h-4 text-amber-500" aria-hidden="true" />
                         {feature}
                       </motion.li>
                     ))}
@@ -1015,41 +1387,9 @@ function SedationOptions() {
               </div>
             </div>
 
-            {/* Sedation level visualization */}
+            {/* Sedation level visualization - with SVG illustration */}
             <div className="relative bg-gradient-to-br from-[#FDF8F3] to-[#F5EDE5] p-8 flex items-center justify-center">
-              <div className="relative">
-                <motion.div
-                  className="w-32 h-32 rounded-full bg-white shadow-lg flex items-center justify-center"
-                  animate={{
-                    boxShadow: [
-                      '0 10px 40px rgba(114, 47, 55, 0.1)',
-                      '0 10px 40px rgba(114, 47, 55, 0.3)',
-                      '0 10px 40px rgba(114, 47, 55, 0.1)',
-                    ],
-                  }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  <Gauge className="w-12 h-12 text-[#722F37]" />
-                </motion.div>
-
-                {/* Animated rings based on level */}
-                {Array.from({ length: currentSedation.level }).map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute inset-0 rounded-full border-2 border-[#722F37]/20"
-                    initial={{ scale: 1, opacity: 0 }}
-                    animate={{
-                      scale: [1, 1.5 + i * 0.3, 1.5 + i * 0.3],
-                      opacity: [0.5, 0, 0],
-                    }}
-                    transition={{
-                      duration: 2,
-                      delay: i * 0.3,
-                      repeat: Infinity,
-                    }}
-                  />
-                ))}
-              </div>
+              <SedationComfortSVG className="w-full h-full max-w-[180px]" />
 
               <div className="absolute bottom-4 left-4 right-4 text-center">
                 <p className="text-sm font-medium text-neutral-600">
@@ -1062,7 +1402,7 @@ function SedationOptions() {
       </AnimatePresence>
 
       {/* All options grid */}
-      <div className="grid grid-cols-4 gap-4 mt-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
         {sedationOptions.map((option, index) => {
           const Icon = option.icon;
           const isSelected = index === selectedLevel;
@@ -1073,17 +1413,17 @@ function SedationOptions() {
               onClick={() => setSelectedLevel(index)}
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ delay: index * 0.1 }}
-              className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+              transition={{ delay: prefersReducedMotion ? 0 : index * 0.1 }}
+              className={`p-4 rounded-xl border-2 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#722F37] focus:ring-offset-2 ${
                 isSelected
                   ? 'border-[#722F37] bg-[#722F37]/5'
                   : 'border-neutral-200 bg-white hover:border-[#722F37]/30'
               }`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+              whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
             >
               <div className="flex flex-col items-center text-center gap-2">
-                <Icon className={`w-6 h-6 ${isSelected ? 'text-[#722F37]' : 'text-neutral-400'}`} />
+                <Icon className={`w-6 h-6 ${isSelected ? 'text-[#722F37]' : 'text-neutral-400'}`} aria-hidden="true" />
                 <span className={`text-sm font-medium ${isSelected ? 'text-[#722F37]' : 'text-neutral-600'}`}>
                   {option.title}
                 </span>
@@ -1097,7 +1437,7 @@ function SedationOptions() {
 }
 
 // ============================================================================
-// RECOVERY TIMELINE ANIMATION
+// RECOVERY TIMELINE ANIMATION - Enhanced with illustration
 // ============================================================================
 
 function RecoveryTimeline() {
@@ -1105,6 +1445,7 @@ function RecoveryTimeline() {
   const [isPlaying, setIsPlaying] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+  const prefersReducedMotion = useReducedMotion();
 
   const currentRecovery = recoveryTimeline[activeDay]!;
 
@@ -1112,6 +1453,11 @@ function RecoveryTimeline() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const startPlayback = () => {
+    if (prefersReducedMotion) {
+      // Just cycle through without animation
+      setActiveDay((prev) => (prev + 1) % recoveryTimeline.length);
+      return;
+    }
     setIsPlaying(true);
     intervalRef.current = setInterval(() => {
       setActiveDay((prev) => {
@@ -1135,18 +1481,19 @@ function RecoveryTimeline() {
       {/* Timeline Navigation */}
       <div className="relative mb-12">
         {/* Timeline line */}
-        <div className="absolute top-8 left-0 right-0 h-1 bg-neutral-200 rounded-full" />
+        <div className="absolute top-8 left-0 right-0 h-1 bg-neutral-200 rounded-full" aria-hidden="true" />
         <motion.div
           className="absolute top-8 left-0 h-1 bg-gradient-to-r from-red-500 via-amber-500 to-green-500 rounded-full"
           initial={{ width: '0%' }}
           animate={{
             width: isInView ? `${(activeDay / (recoveryTimeline.length - 1)) * 100}%` : '0%',
           }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: prefersReducedMotion ? 0.1 : 0.5, ease: [0.22, 1, 0.36, 1] }}
+          aria-hidden="true"
         />
 
         {/* Day markers */}
-        <div className="relative flex justify-between">
+        <div className="relative flex justify-between" role="tablist" aria-label="Recovery timeline days">
           {recoveryTimeline.map((item, index) => {
             const Icon = item.icon;
             const isActive = index === activeDay;
@@ -1155,11 +1502,14 @@ function RecoveryTimeline() {
             return (
               <motion.button
                 key={index}
+                role="tab"
+                aria-selected={isActive}
+                aria-label={`${item.day}: ${item.title}`}
                 onClick={() => { stopPlayback(); setActiveDay(index); }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ delay: index * 0.1 }}
-                className="relative flex flex-col items-center"
+                transition={{ delay: prefersReducedMotion ? 0 : index * 0.1 }}
+                className="relative flex flex-col items-center focus:outline-none focus:ring-2 focus:ring-[#722F37] focus:ring-offset-2 rounded-full"
               >
                 <motion.div
                   className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 ${
@@ -1169,16 +1519,16 @@ function RecoveryTimeline() {
                         ? 'bg-green-500'
                         : 'bg-white border-2 border-neutral-200 hover:border-[#722F37]/30'
                   }`}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={prefersReducedMotion ? {} : { scale: 1.1 }}
+                  whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
                 >
                   {isPast && !isActive ? (
-                    <Check className="w-6 h-6 text-white" />
+                    <Check className="w-6 h-6 text-white" aria-hidden="true" />
                   ) : (
-                    <Icon className={`w-6 h-6 ${isActive || isPast ? 'text-white' : 'text-neutral-400'}`} />
+                    <Icon className={`w-6 h-6 ${isActive || isPast ? 'text-white' : 'text-neutral-400'}`} aria-hidden="true" />
                   )}
 
-                  {isActive && (
+                  {isActive && !prefersReducedMotion && (
                     <motion.div
                       className="absolute inset-0 rounded-full border-4 border-current"
                       style={{ borderColor: 'inherit' }}
@@ -1187,6 +1537,7 @@ function RecoveryTimeline() {
                         opacity: [0.5, 0, 0],
                       }}
                       transition={{ duration: 1.5, repeat: Infinity }}
+                      aria-hidden="true"
                     />
                   )}
                 </motion.div>
@@ -1195,7 +1546,7 @@ function RecoveryTimeline() {
                   <p className={`text-sm font-semibold ${isActive ? 'text-[#722F37]' : 'text-neutral-700'}`}>
                     {item.day}
                   </p>
-                  <p className="text-xs text-neutral-500 max-w-[100px]">{item.title}</p>
+                  <p className="text-xs text-neutral-500 max-w-[100px] hidden sm:block">{item.title}</p>
                 </div>
               </motion.button>
             );
@@ -1208,31 +1559,33 @@ function RecoveryTimeline() {
         <motion.button
           onClick={() => setActiveDay(Math.max(0, activeDay - 1))}
           disabled={activeDay === 0}
-          className="p-3 rounded-full bg-white border border-neutral-200 hover:border-[#722F37]/30 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          aria-label="Previous day"
+          className="p-3 rounded-full bg-white border border-neutral-200 hover:border-[#722F37]/30 disabled:opacity-30 disabled:cursor-not-allowed transition-all focus:outline-none focus:ring-2 focus:ring-[#722F37] focus:ring-offset-2"
+          whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+          whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
         >
-          <ChevronLeft className="w-5 h-5 text-neutral-600" />
+          <ChevronLeft className="w-5 h-5 text-neutral-600" aria-hidden="true" />
         </motion.button>
 
         <motion.button
           onClick={isPlaying ? stopPlayback : startPlayback}
-          className="px-6 py-3 rounded-full bg-[#722F37] text-white font-medium flex items-center gap-2 hover:bg-[#8B3A42] transition-colors"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          className="px-6 py-3 rounded-full bg-[#722F37] text-white font-medium flex items-center gap-2 hover:bg-[#8B3A42] transition-colors focus:outline-none focus:ring-2 focus:ring-[#722F37] focus:ring-offset-2"
+          whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+          whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
         >
-          {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+          {isPlaying ? <Pause className="w-5 h-5" aria-hidden="true" /> : <Play className="w-5 h-5" aria-hidden="true" />}
           {isPlaying ? 'Pause' : 'Play Timeline'}
         </motion.button>
 
         <motion.button
           onClick={() => setActiveDay(Math.min(recoveryTimeline.length - 1, activeDay + 1))}
           disabled={activeDay === recoveryTimeline.length - 1}
-          className="p-3 rounded-full bg-white border border-neutral-200 hover:border-[#722F37]/30 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          aria-label="Next day"
+          className="p-3 rounded-full bg-white border border-neutral-200 hover:border-[#722F37]/30 disabled:opacity-30 disabled:cursor-not-allowed transition-all focus:outline-none focus:ring-2 focus:ring-[#722F37] focus:ring-offset-2"
+          whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+          whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
         >
-          <ChevronRight className="w-5 h-5 text-neutral-600" />
+          <ChevronRight className="w-5 h-5 text-neutral-600" aria-hidden="true" />
         </motion.button>
       </div>
 
@@ -1240,63 +1593,73 @@ function RecoveryTimeline() {
       <AnimatePresence mode="wait">
         <motion.div
           key={activeDay}
+          role="tabpanel"
+          aria-label={`${currentRecovery.day} recovery information`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: prefersReducedMotion ? 0.1 : 0.4 }}
           className="bg-white rounded-3xl border border-neutral-200 overflow-hidden shadow-sm"
         >
-          <div className={`h-2 bg-gradient-to-r ${currentRecovery.color}`} />
+          <div className={`h-2 bg-gradient-to-r ${currentRecovery.color}`} aria-hidden="true" />
 
           <div className="p-8 lg:p-12">
-            <div className="flex items-start gap-6 mb-8">
-              <motion.div
-                className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${currentRecovery.color} flex items-center justify-center shadow-lg flex-shrink-0`}
-                animate={{ rotate: [0, 5, -5, 0] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              >
-                {(() => {
-                  const Icon = currentRecovery.icon;
-                  return <Icon className="w-10 h-10 text-white" />;
-                })()}
-              </motion.div>
+            <div className="flex flex-col lg:flex-row items-start gap-6 mb-8">
+              {/* Left: Icon and text */}
+              <div className="flex items-start gap-6 flex-1">
+                <motion.div
+                  className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${currentRecovery.color} flex items-center justify-center shadow-lg flex-shrink-0`}
+                  animate={prefersReducedMotion ? {} : { rotate: [0, 5, -5, 0] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  {(() => {
+                    const Icon = currentRecovery.icon;
+                    return <Icon className="w-10 h-10 text-white" aria-hidden="true" />;
+                  })()}
+                </motion.div>
 
-              <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <span className={`px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r ${currentRecovery.color} text-white`}>
-                    {currentRecovery.day}
-                  </span>
-                  <h3 className="text-2xl font-bold text-[#1e293b]">
-                    {currentRecovery.title}
-                  </h3>
+                <div>
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className={`px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r ${currentRecovery.color} text-white`}>
+                      {currentRecovery.day}
+                    </span>
+                    <h3 className="text-2xl font-bold text-[#1e293b]">
+                      {currentRecovery.title}
+                    </h3>
+                  </div>
+                  <p className="text-lg text-neutral-600">
+                    {currentRecovery.description}
+                  </p>
                 </div>
-                <p className="text-lg text-neutral-600">
-                  {currentRecovery.description}
-                </p>
+              </div>
+
+              {/* Right: Recovery illustration */}
+              <div className="w-full lg:w-40 flex-shrink-0">
+                <RecoveryHealingSVG className="w-full h-auto max-w-[160px] mx-auto" />
               </div>
             </div>
 
             <div className="bg-gradient-to-br from-[#FDF8F3] to-white rounded-2xl p-6">
               <p className="text-sm font-semibold text-[#722F37] uppercase tracking-wide mb-4 flex items-center gap-2">
-                <Info className="w-4 h-4" />
+                <Info className="w-4 h-4" aria-hidden="true" />
                 Tips for This Stage
               </p>
-              <div className="grid md:grid-cols-3 gap-4">
+              <ul className="grid md:grid-cols-3 gap-4">
                 {currentRecovery.tips.map((tip, index) => (
-                  <motion.div
+                  <motion.li
                     key={index}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: index * 0.1 }}
+                    transition={{ delay: prefersReducedMotion ? 0 : index * 0.1 }}
                     className="flex items-start gap-3 p-4 bg-white rounded-xl border border-neutral-100"
                   >
                     <div className="w-6 h-6 rounded-full bg-[#722F37]/10 flex items-center justify-center flex-shrink-0">
-                      <Check className="w-3.5 h-3.5 text-[#722F37]" />
+                      <Check className="w-3.5 h-3.5 text-[#722F37]" aria-hidden="true" />
                     </div>
                     <span className="text-sm text-neutral-700">{tip}</span>
-                  </motion.div>
+                  </motion.li>
                 ))}
-              </div>
+              </ul>
             </div>
           </div>
         </motion.div>
@@ -1306,19 +1669,20 @@ function RecoveryTimeline() {
 }
 
 // ============================================================================
-// PRE/POST-OPERATIVE CARE GUIDES
+// PRE/POST-OPERATIVE CARE GUIDES - Enhanced with visual anchors
 // ============================================================================
 
 function CareGuides() {
   const [activeTab, setActiveTab] = useState<'pre' | 'post'>('pre');
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <div ref={containerRef}>
       {/* Tab Selector */}
       <div className="flex justify-center mb-12">
-        <div className="inline-flex p-1.5 bg-neutral-100 rounded-2xl">
+        <div className="inline-flex p-1.5 bg-neutral-100 rounded-2xl" role="tablist" aria-label="Care instructions">
           {[
             { key: 'pre' as const, label: 'Pre-Operative Care', icon: Calendar },
             { key: 'post' as const, label: 'Post-Operative Care', icon: Heart },
@@ -1327,23 +1691,27 @@ function CareGuides() {
             return (
               <motion.button
                 key={tab.key}
+                role="tab"
+                aria-selected={activeTab === tab.key}
+                aria-controls={`${tab.key}-panel`}
                 onClick={() => setActiveTab(tab.key)}
-                className={`relative px-8 py-4 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 ${
+                className={`relative px-8 py-4 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#722F37] focus:ring-inset ${
                   activeTab === tab.key
                     ? 'text-white'
                     : 'text-neutral-600 hover:text-[#722F37]'
                 }`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+                whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
               >
                 {activeTab === tab.key && (
                   <motion.div
                     layoutId="careTab"
                     className="absolute inset-0 bg-gradient-to-r from-[#722F37] to-[#8B3A42] rounded-xl"
                     transition={{ type: 'spring', bounce: 0.2 }}
+                    aria-hidden="true"
                   />
                 )}
-                <Icon className="relative w-5 h-5" />
+                <Icon className="relative w-5 h-5" aria-hidden="true" />
                 <span className="relative">{tab.label}</span>
               </motion.button>
             );
@@ -1356,10 +1724,13 @@ function CareGuides() {
         {activeTab === 'pre' ? (
           <motion.div
             key="pre"
+            id="pre-panel"
+            role="tabpanel"
+            aria-labelledby="pre-tab"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: prefersReducedMotion ? 0.1 : 0.4 }}
             className="grid lg:grid-cols-3 gap-6"
           >
             {preOpInstructions.map((section, sectionIndex) => {
@@ -1369,13 +1740,13 @@ function CareGuides() {
                   key={section.title}
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ delay: sectionIndex * 0.1 }}
+                  transition={{ delay: prefersReducedMotion ? 0 : sectionIndex * 0.1 }}
                   className="bg-white rounded-2xl border border-neutral-200 overflow-hidden hover:shadow-lg transition-shadow"
                 >
                   <div className="p-6 bg-gradient-to-br from-[#FDF8F3] to-white border-b border-neutral-100">
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 rounded-xl bg-[#722F37]/10 flex items-center justify-center">
-                        <Icon className="w-6 h-6 text-[#722F37]" />
+                        <Icon className="w-6 h-6 text-[#722F37]" aria-hidden="true" />
                       </div>
                       <h3 className="font-semibold text-lg text-[#1e293b]">{section.title}</h3>
                     </div>
@@ -1387,11 +1758,11 @@ function CareGuides() {
                           key={index}
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.3 + index * 0.05 }}
+                          transition={{ delay: prefersReducedMotion ? 0 : 0.3 + index * 0.05 }}
                           className="flex items-start gap-3 text-sm text-neutral-600"
                         >
                           <div className="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <Check className="w-3 h-3 text-blue-600" />
+                            <Check className="w-3 h-3 text-blue-600" aria-hidden="true" />
                           </div>
                           {item}
                         </motion.li>
@@ -1405,10 +1776,13 @@ function CareGuides() {
         ) : (
           <motion.div
             key="post"
+            id="post-panel"
+            role="tabpanel"
+            aria-labelledby="post-tab"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: prefersReducedMotion ? 0.1 : 0.4 }}
             className="grid lg:grid-cols-2 gap-8"
           >
             {postOpInstructions.map((section, sectionIndex) => {
@@ -1418,13 +1792,13 @@ function CareGuides() {
                   key={section.category}
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ delay: sectionIndex * 0.1 }}
+                  transition={{ delay: prefersReducedMotion ? 0 : sectionIndex * 0.1 }}
                   className="bg-white rounded-2xl border border-neutral-200 overflow-hidden"
                 >
                   <div className={`p-6 ${section.bgColor} border-b border-neutral-100`}>
                     <div className="flex items-center gap-3">
                       <div className={`w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm`}>
-                        <SectionIcon className={`w-6 h-6 ${section.color}`} />
+                        <SectionIcon className={`w-6 h-6 ${section.color}`} aria-hidden="true" />
                       </div>
                       <h3 className={`font-semibold text-xl ${section.color}`}>
                         {section.category}
@@ -1432,25 +1806,25 @@ function CareGuides() {
                     </div>
                   </div>
                   <div className="p-6">
-                    <div className="space-y-4">
+                    <ul className="space-y-4">
                       {section.items.map((item, index) => {
                         const ItemIcon = item.icon;
                         return (
-                          <motion.div
+                          <motion.li
                             key={index}
                             initial={{ opacity: 0, x: sectionIndex === 0 ? -10 : 10 }}
                             animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.3 + index * 0.05 }}
+                            transition={{ delay: prefersReducedMotion ? 0 : 0.3 + index * 0.05 }}
                             className="flex items-center gap-4 p-3 rounded-xl hover:bg-neutral-50 transition-colors"
                           >
                             <div className={`w-10 h-10 rounded-lg ${section.bgColor} flex items-center justify-center flex-shrink-0`}>
-                              <ItemIcon className={`w-5 h-5 ${section.color}`} />
+                              <ItemIcon className={`w-5 h-5 ${section.color}`} aria-hidden="true" />
                             </div>
                             <span className="text-neutral-700">{item.text}</span>
-                          </motion.div>
+                          </motion.li>
                         );
                       })}
-                    </div>
+                    </ul>
                   </div>
                 </motion.div>
               );
@@ -1463,31 +1837,32 @@ function CareGuides() {
 }
 
 // ============================================================================
-// SURGEON CREDENTIALS SHOWCASE
+// SURGEON CREDENTIALS SHOWCASE - Enhanced with new imagery
 // ============================================================================
 
 function TeamCredentials() {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <div ref={containerRef}>
       <div className="grid lg:grid-cols-2 gap-12 items-center">
-        {/* Image and overlay */}
+        {/* Image and overlay - using new Pexels image */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: prefersReducedMotion ? 0.1 : 0.6 }}
           className="relative"
         >
           <div className="relative rounded-3xl overflow-hidden aspect-[4/3] shadow-2xl">
             <Image
-              src="/images/clinic/clinic-14.jpg"
-              alt="Ottawa South Dental surgical team"
+              src="/images/services/oral-surgery/dental-team-care.jpg"
+              alt="Two dental professionals providing careful treatment in a modern clinical environment"
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#722F37]/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#722F37]/60 to-transparent" aria-hidden="true" />
 
             {/* Overlay text */}
             <div className="absolute bottom-0 left-0 right-0 p-8">
@@ -1502,12 +1877,12 @@ function TeamCredentials() {
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: prefersReducedMotion ? 0 : 0.3 }}
             className="absolute -bottom-6 -right-6 bg-white rounded-2xl p-5 shadow-xl border border-neutral-100"
           >
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center">
-                <Award className="w-7 h-7 text-white" />
+                <Award className="w-7 h-7 text-white" aria-hidden="true" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#1e293b]">25+</p>
@@ -1521,7 +1896,7 @@ function TeamCredentials() {
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: prefersReducedMotion ? 0.1 : 0.6, delay: prefersReducedMotion ? 0 : 0.2 }}
         >
           <h3 className="text-3xl lg:text-4xl font-bold text-[#1e293b] mb-6">
             Expert Surgical Team
@@ -1541,12 +1916,12 @@ function TeamCredentials() {
                   key={credential.label}
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ delay: 0.4 + index * 0.1 }}
+                  transition={{ delay: prefersReducedMotion ? 0 : 0.4 + index * 0.1 }}
                   className="p-5 rounded-2xl bg-gradient-to-br from-[#FDF8F3] to-white border border-[#EDE5DD] hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-10 h-10 rounded-lg bg-[#722F37]/10 flex items-center justify-center">
-                      <Icon className="w-5 h-5 text-[#722F37]" />
+                      <Icon className="w-5 h-5 text-[#722F37]" aria-hidden="true" />
                     </div>
                     <span className="text-sm text-neutral-500">{credential.label}</span>
                   </div>
@@ -1559,15 +1934,15 @@ function TeamCredentials() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ delay: 0.8 }}
+            transition={{ delay: prefersReducedMotion ? 0 : 0.8 }}
             className="mt-8"
           >
             <Link
               href="/about/team"
-              className="inline-flex items-center gap-2 text-[#722F37] font-semibold hover:gap-3 transition-all"
+              className="inline-flex items-center gap-2 text-[#722F37] font-semibold hover:gap-3 transition-all focus:outline-none focus:underline"
             >
               Meet Our Team
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
           </motion.div>
         </motion.div>
@@ -1582,6 +1957,7 @@ function TeamCredentials() {
 
 function FAQAccordion({ items }: { items: FAQItem[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <motion.div
@@ -1607,15 +1983,18 @@ function FAQAccordion({ items }: { items: FAQItem[] }) {
             <motion.button
               onClick={() => setOpenIndex(isOpen ? null : index)}
               className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#722F37]/50 focus-visible:ring-inset"
-              whileHover={{ backgroundColor: 'rgba(114, 47, 55, 0.02)' }}
+              whileHover={prefersReducedMotion ? {} : { backgroundColor: 'rgba(114, 47, 55, 0.02)' }}
+              aria-expanded={isOpen}
+              aria-controls={`faq-answer-${index}`}
             >
               <div className="flex items-center gap-4">
                 <motion.div
                   className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300 ${
                     isOpen ? 'bg-[#722F37]' : 'bg-neutral-100'
                   }`}
-                  animate={{ rotate: isOpen ? 180 : 0 }}
+                  animate={prefersReducedMotion ? {} : { rotate: isOpen ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
+                  aria-hidden="true"
                 >
                   <span className={`text-sm font-semibold ${isOpen ? 'text-white' : 'text-neutral-500'}`}>
                     {index + 1}
@@ -1624,8 +2003,9 @@ function FAQAccordion({ items }: { items: FAQItem[] }) {
                 <span className="font-semibold text-[#1e293b] pr-4">{item.question}</span>
               </div>
               <motion.div
-                animate={{ rotate: isOpen ? 180 : 0 }}
+                animate={prefersReducedMotion ? {} : { rotate: isOpen ? 180 : 0 }}
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                aria-hidden="true"
               >
                 <ChevronDown className="w-5 h-5 text-[#722F37]" />
               </motion.div>
@@ -1634,10 +2014,11 @@ function FAQAccordion({ items }: { items: FAQItem[] }) {
             <AnimatePresence>
               {isOpen && (
                 <motion.div
+                  id={`faq-answer-${index}`}
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: prefersReducedMotion ? 0.1 : 0.3, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <div className="px-6 pb-6 pt-2">
                     <div className="pl-14 text-neutral-600 leading-relaxed">{item.answer}</div>
@@ -1653,10 +2034,11 @@ function FAQAccordion({ items }: { items: FAQItem[] }) {
 }
 
 // ============================================================================
-// RELATED SERVICES
+// RELATED SERVICES - Enhanced with icons
 // ============================================================================
 
 function RelatedServices() {
+  const prefersReducedMotion = useReducedMotion();
   const services = [
     {
       title: 'Dental Implants',
@@ -1691,14 +2073,14 @@ function RelatedServices() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
+            transition={{ delay: prefersReducedMotion ? 0 : index * 0.1 }}
           >
             <Link
               href={service.href}
-              className="group block p-6 rounded-2xl bg-white border border-neutral-200 hover:border-[#722F37]/20 hover:shadow-xl transition-all duration-300"
+              className="group block p-6 rounded-2xl bg-white border border-neutral-200 hover:border-[#722F37]/20 hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#722F37] focus:ring-offset-2"
             >
               <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                <Icon className="w-7 h-7 text-white" />
+                <Icon className="w-7 h-7 text-white" aria-hidden="true" />
               </div>
               <h3 className="font-semibold text-lg text-[#1e293b] mb-2 group-hover:text-[#722F37] transition-colors">
                 {service.title}
@@ -1706,7 +2088,7 @@ function RelatedServices() {
               <p className="text-sm text-neutral-600 mb-4">{service.description}</p>
               <span className="inline-flex items-center gap-2 text-[#722F37] font-medium text-sm group-hover:gap-3 transition-all">
                 Learn More
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </span>
             </Link>
           </motion.div>
@@ -1717,10 +2099,86 @@ function RelatedServices() {
 }
 
 // ============================================================================
+// IMAGE GALLERY SECTION - New section showcasing procedure imagery
+// ============================================================================
+
+function ImageGallerySection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+  const prefersReducedMotion = useReducedMotion();
+
+  const images = [
+    {
+      src: '/images/services/oral-surgery/dental-procedure.jpg',
+      alt: 'Dental professionals performing an oral surgery procedure with precision',
+      caption: 'Precision & Care',
+    },
+    {
+      src: '/images/services/oral-surgery/patient-consultation.jpg',
+      alt: 'Patient smiling during a dental consultation appointment',
+      caption: 'Patient Comfort',
+    },
+    {
+      src: '/images/services/oral-surgery/dental-team-care.jpg',
+      alt: 'Dental team providing attentive care during a procedure',
+      caption: 'Expert Team',
+    },
+  ];
+
+  return (
+    <section ref={containerRef} className="relative py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: prefersReducedMotion ? 0.1 : 0.6 }}
+          className="text-center mb-12"
+        >
+          <span className="inline-block px-4 py-1 rounded-full bg-[#722F37]/5 text-[#722F37] text-sm font-medium mb-4">
+            Our Facility
+          </span>
+          <h2 className="text-4xl lg:text-5xl font-bold text-[#1e293b] tracking-tight mb-4">
+            Modern Care Environment
+          </h2>
+          <p className="text-neutral-600 text-lg max-w-2xl mx-auto">
+            Experience oral surgery in our state-of-the-art facility designed for your comfort and safety.
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {images.map((image, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ delay: prefersReducedMotion ? 0 : index * 0.15 }}
+              className="group relative rounded-2xl overflow-hidden aspect-[4/3] shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <Image
+                src={image.src}
+                alt={image.alt}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" aria-hidden="true" />
+              <div className="absolute bottom-0 left-0 right-0 p-6">
+                <p className="text-white font-semibold text-lg">{image.caption}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ============================================================================
 // MAIN COMPONENT
 // ============================================================================
 
 export function OralSurgeryContent() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <main id="main-content" className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -1733,6 +2191,7 @@ export function OralSurgeryContent() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: prefersReducedMotion ? 0.1 : 0.6 }}
             className="text-center mb-16"
           >
             <span className="inline-block px-4 py-1 rounded-full bg-[#722F37]/5 text-[#722F37] text-sm font-medium mb-4">
@@ -1750,6 +2209,9 @@ export function OralSurgeryContent() {
         </div>
       </section>
 
+      {/* Image Gallery - New section */}
+      <ImageGallerySection />
+
       {/* Surgeon Credentials */}
       <section className="relative py-24 bg-[#FDF8F3]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1757,6 +2219,7 @@ export function OralSurgeryContent() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: prefersReducedMotion ? 0.1 : 0.6 }}
             className="text-center mb-16"
           >
             <span className="inline-block px-4 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium mb-4">
@@ -1781,6 +2244,7 @@ export function OralSurgeryContent() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: prefersReducedMotion ? 0.1 : 0.6 }}
             className="text-center mb-16"
           >
             <span className="inline-block px-4 py-1 rounded-full bg-purple-100 text-purple-700 text-sm font-medium mb-4">
@@ -1805,6 +2269,7 @@ export function OralSurgeryContent() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: prefersReducedMotion ? 0.1 : 0.6 }}
             className="text-center mb-16"
           >
             <span className="inline-block px-4 py-1 rounded-full bg-emerald-100 text-emerald-700 text-sm font-medium mb-4">
@@ -1829,6 +2294,7 @@ export function OralSurgeryContent() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: prefersReducedMotion ? 0.1 : 0.6 }}
             className="text-center mb-16"
           >
             <span className="inline-block px-4 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-medium mb-4">
@@ -1853,6 +2319,7 @@ export function OralSurgeryContent() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: prefersReducedMotion ? 0.1 : 0.6 }}
             className="text-center mb-16"
           >
             <span className="inline-block px-4 py-1 rounded-full bg-[#722F37]/5 text-[#722F37] text-sm font-medium mb-4">
@@ -1872,14 +2339,15 @@ export function OralSurgeryContent() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: prefersReducedMotion ? 0.1 : 0.6 }}
             className="mt-12 text-center"
           >
             <p className="text-neutral-500 mb-4">Still have questions? We&apos;re happy to help.</p>
             <a
               href="tel:+16137336446"
-              className="inline-flex items-center gap-2 text-[#722F37] font-semibold hover:underline"
+              className="inline-flex items-center gap-2 text-[#722F37] font-semibold hover:underline focus:outline-none focus:underline"
             >
-              <Phone className="w-5 h-5" />
+              <Phone className="w-5 h-5" aria-hidden="true" />
               Call us at (613) 733-6446
             </a>
           </motion.div>
@@ -1893,6 +2361,7 @@ export function OralSurgeryContent() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: prefersReducedMotion ? 0.1 : 0.6 }}
             className="text-center mb-16"
           >
             <span className="inline-block px-4 py-1 rounded-full bg-[#722F37]/5 text-[#722F37] text-sm font-medium mb-4">
@@ -1912,14 +2381,15 @@ export function OralSurgeryContent() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
+            transition={{ duration: prefersReducedMotion ? 0.1 : 0.6 }}
             className="mt-10 text-center"
           >
             <Link
               href="/services"
-              className="inline-flex items-center gap-2 text-[#722F37] font-semibold hover:underline group"
+              className="inline-flex items-center gap-2 text-[#722F37] font-semibold hover:underline group focus:outline-none focus:underline"
             >
               View All Services
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </Link>
           </motion.div>
         </div>
@@ -1928,19 +2398,25 @@ export function OralSurgeryContent() {
       {/* CTA Section */}
       <section className="relative py-24 overflow-hidden">
         {/* Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#722F37] via-[#5a252c] to-[#4a1f24]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#722F37] via-[#5a252c] to-[#4a1f24]" aria-hidden="true" />
 
         {/* Decorative elements */}
-        <motion.div
-          className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/5"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
-        />
-        <motion.div
-          className="absolute -bottom-32 -left-32 w-[500px] h-[500px] rounded-full bg-white/5"
-          animate={{ rotate: -360 }}
-          transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-        />
+        {!prefersReducedMotion && (
+          <>
+            <motion.div
+              className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/5"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
+              aria-hidden="true"
+            />
+            <motion.div
+              className="absolute -bottom-32 -left-32 w-[500px] h-[500px] rounded-full bg-white/5"
+              animate={{ rotate: -360 }}
+              transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+              aria-hidden="true"
+            />
+          </>
+        )}
 
         {/* Medical cross pattern */}
         <div
@@ -1949,6 +2425,7 @@ export function OralSurgeryContent() {
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M27 27h6v-6h-6v6zm0 6h6v6h-6v-6zm6 0h6v-6h-6v6zm-12 0h6v-6h-6v6z' fill='%23ffffff' fill-opacity='1'/%3E%3C/svg%3E")`,
             backgroundSize: '60px 60px',
           }}
+          aria-hidden="true"
         />
 
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -1956,9 +2433,10 @@ export function OralSurgeryContent() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: prefersReducedMotion ? 0.1 : 0.6 }}
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-6">
-              <Shield className="w-4 h-4 text-white" />
+              <ShieldCheck className="w-4 h-4 text-white" aria-hidden="true" />
               <span className="text-sm font-medium text-white">Safe & Experienced Care</span>
             </div>
 
@@ -1970,22 +2448,22 @@ export function OralSurgeryContent() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <motion.div whileHover={prefersReducedMotion ? {} : { scale: 1.02 }} whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}>
                 <Link
                   href="/contact#book"
-                  className="group inline-flex items-center gap-3 px-8 py-4 bg-white text-[#722F37] font-semibold rounded-xl hover:bg-neutral-100 transition-colors shadow-lg"
+                  className="group inline-flex items-center gap-3 px-8 py-4 bg-white text-[#722F37] font-semibold rounded-xl hover:bg-neutral-100 transition-colors shadow-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#722F37]"
                 >
-                  <Calendar className="w-5 h-5" />
+                  <Calendar className="w-5 h-5" aria-hidden="true" />
                   Book Consultation
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                 </Link>
               </motion.div>
 
               <a
                 href="tel:+16137336446"
-                className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/10 text-white font-semibold rounded-xl border-2 border-white/20 hover:bg-white/20 transition-colors"
+                className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/10 text-white font-semibold rounded-xl border-2 border-white/20 hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#722F37]"
               >
-                <Phone className="w-5 h-5" />
+                <Phone className="w-5 h-5" aria-hidden="true" />
                 (613) 733-6446
               </a>
             </div>

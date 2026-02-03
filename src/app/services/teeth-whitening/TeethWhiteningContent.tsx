@@ -27,11 +27,16 @@ import {
   Award,
   TrendingUp,
   Droplets,
-  CircleDot,
   ChevronLeft,
   ChevronRight,
   Play,
   Pause,
+  Lightbulb,
+  ShieldCheck,
+  CircleCheck,
+  Gem,
+  Flame,
+  Brush,
 } from 'lucide-react';
 import {
   motion,
@@ -90,7 +95,7 @@ const benefits = [
     statLabel: 'Minutes',
   },
   {
-    icon: Shield,
+    icon: ShieldCheck,
     title: 'Safe & Professional',
     description: 'Dentist-supervised treatment ensures optimal safety with professional-grade whitening agents.',
     stat: '100%',
@@ -164,24 +169,28 @@ const procedureSteps = [
     title: 'Consultation & Assessment',
     description: 'We examine your teeth and gums to ensure you are a good candidate and discuss your whitening goals.',
     duration: '15 min',
+    icon: Eye,
   },
   {
     step: 2,
     title: 'Preparation & Protection',
     description: 'Your gums and soft tissues are carefully protected before the whitening gel is applied to your teeth.',
     duration: '10 min',
+    icon: Shield,
   },
   {
     step: 3,
     title: 'LED Light Activation',
     description: 'The Spa-Dent dual-arch LED light activates the whitening gel, accelerating the brightening process.',
     duration: '30 min',
+    icon: Lightbulb,
   },
   {
     step: 4,
     title: 'Reveal Your Radiant Smile',
     description: 'The gel is removed and you see your brighter, whiter smile—up to several shades lighter!',
     duration: '5 min',
+    icon: Sparkles,
   },
 ];
 
@@ -214,7 +223,7 @@ const maintenanceTips = [
     impact: 'Medium',
   },
   {
-    icon: Sparkles,
+    icon: Brush,
     title: 'Use Whitening Toothpaste',
     description: 'Maintain brightness with dentist-recommended whitening toothpaste.',
     impact: 'Medium',
@@ -226,25 +235,25 @@ const lifestyleBenefits = [
     title: 'Professional Confidence',
     description: 'Make a lasting impression in interviews, meetings, and presentations',
     icon: Award,
-    image: '/images/cosmetic/cosmetic-08.jpg',
+    image: '/images/services/teeth-whitening/confident-smile.jpg',
   },
   {
     title: 'Social Radiance',
     description: 'Smile freely at parties, dates, and social gatherings',
     icon: Heart,
-    image: '/images/cosmetic/cosmetic-14.jpg',
+    image: '/images/services/teeth-whitening/hero-smile.jpg',
   },
   {
     title: 'Photo-Ready Smile',
     description: 'Look your best in photos and on video calls',
     icon: Star,
-    image: '/images/cosmetic/cosmetic-15.jpg',
+    image: '/images/services/teeth-whitening/dentist-consultation.jpg',
   },
   {
     title: 'Self-Esteem Boost',
     description: 'Feel more confident and positive about your appearance',
     icon: TrendingUp,
-    image: '/images/cosmetic/cosmetic-20.jpg',
+    image: '/images/services/teeth-whitening/shade-guide.jpg',
   },
 ];
 
@@ -253,53 +262,25 @@ const relatedServices = [
     title: 'Cosmetic Dentistry',
     description: 'Comprehensive smile makeover options including veneers and bonding.',
     href: '/services/cosmetic-dentistry',
-    icon: Sparkles,
+    icon: Gem,
   },
   {
     title: 'Routine Checkups',
     description: 'Regular examinations to maintain your bright smile and oral health.',
     href: '/services/routine-checkups',
-    icon: Shield,
+    icon: ShieldCheck,
   },
   {
     title: 'Dental Hygiene',
     description: 'Professional cleaning to keep your teeth healthy and bright.',
     href: '/services/dental-hygiene',
-    icon: Heart,
+    icon: Sparkles,
   },
 ];
 
 // ============================================================================
 // HOOKS
 // ============================================================================
-
-function useMagnetic(strength: number = 0.3) {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springConfig = { damping: 20, stiffness: 200 };
-  const springX = useSpring(x, springConfig);
-  const springY = useSpring(y, springConfig);
-
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLElement>) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const deltaX = (e.clientX - centerX) * strength;
-      const deltaY = (e.clientY - centerY) * strength;
-      x.set(deltaX);
-      y.set(deltaY);
-    },
-    [x, y, strength]
-  );
-
-  const handleMouseLeave = useCallback(() => {
-    x.set(0);
-    y.set(0);
-  }, [x, y]);
-
-  return { x: springX, y: springY, handleMouseMove, handleMouseLeave };
-}
 
 function useCounter(end: number, duration: number = 2000, start: number = 0) {
   const [count, setCount] = useState(start);
@@ -370,13 +351,167 @@ const slideInRight = {
 };
 
 // ============================================================================
+// SVG ILLUSTRATIONS
+// ============================================================================
+
+function ToothIllustration({ className = '', shade = '#FEFEFE' }: { className?: string; shade?: string }) {
+  return (
+    <svg viewBox="0 0 100 140" className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id="toothFill" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor={shade} />
+          <stop offset="100%" stopColor={`${shade}DD`} />
+        </linearGradient>
+        <filter id="toothShadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#000" floodOpacity="0.1" />
+        </filter>
+      </defs>
+      {/* Tooth crown */}
+      <path
+        d="M50 8 C25 8, 18 35, 20 55 C22 70, 28 82, 32 95 C35 105, 40 115, 43 125 C45 130, 48 132, 50 132 C52 132, 55 130, 57 125 C60 115, 65 105, 68 95 C72 82, 78 70, 80 55 C82 35, 75 8, 50 8"
+        fill="url(#toothFill)"
+        filter="url(#toothShadow)"
+        stroke="rgba(0,0,0,0.05)"
+        strokeWidth="0.5"
+      />
+      {/* Crown shine */}
+      <ellipse cx="38" cy="40" rx="10" ry="18" fill="rgba(255,255,255,0.5)" />
+      {/* Root division line hint */}
+      <path
+        d="M50 90 L50 120"
+        stroke="rgba(0,0,0,0.03)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function SparkleIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
+    </svg>
+  );
+}
+
+function LEDLightIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 100" className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id="ledGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FCD34D" />
+          <stop offset="100%" stopColor="#F59E0B" />
+        </linearGradient>
+        <filter id="ledGlow">
+          <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+          <feMerge>
+            <feMergeNode in="coloredBlur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      {/* LED device body */}
+      <rect x="30" y="10" width="60" height="25" rx="8" fill="#374151" />
+      {/* LED lights */}
+      <motion.circle
+        cx="45"
+        cy="22"
+        r="6"
+        fill="url(#ledGradient)"
+        filter="url(#ledGlow)"
+        animate={{ opacity: [0.7, 1, 0.7] }}
+        transition={{ duration: 1.5, repeat: Infinity }}
+      />
+      <motion.circle
+        cx="60"
+        cy="22"
+        r="6"
+        fill="url(#ledGradient)"
+        filter="url(#ledGlow)"
+        animate={{ opacity: [1, 0.7, 1] }}
+        transition={{ duration: 1.5, repeat: Infinity }}
+      />
+      <motion.circle
+        cx="75"
+        cy="22"
+        r="6"
+        fill="url(#ledGradient)"
+        filter="url(#ledGlow)"
+        animate={{ opacity: [0.7, 1, 0.7] }}
+        transition={{ duration: 1.5, repeat: Infinity, delay: 0.3 }}
+      />
+      {/* Light rays */}
+      {[0, 1, 2, 3, 4].map((i) => (
+        <motion.line
+          key={i}
+          x1={40 + i * 10}
+          y1="38"
+          x2={35 + i * 12}
+          y2="75"
+          stroke="#FCD34D"
+          strokeWidth="2"
+          strokeLinecap="round"
+          opacity={0.4}
+          animate={{ opacity: [0.2, 0.6, 0.2] }}
+          transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
+        />
+      ))}
+      {/* Teeth being whitened */}
+      <rect x="35" y="75" width="50" height="20" rx="5" fill="#FEFEFE" stroke="#E5E7EB" strokeWidth="1" />
+    </svg>
+  );
+}
+
+function ShadeComparisonIllustration({ className = '' }: { className?: string }) {
+  const shades = ['#E0D4C4', '#EDE5D8', '#F5F0E8', '#F9F7F4', '#FEFEFE'];
+
+  return (
+    <svg viewBox="0 0 200 80" className={className} aria-hidden="true">
+      {shades.map((shade, i) => (
+        <g key={i}>
+          <rect
+            x={10 + i * 38}
+            y="10"
+            width="32"
+            height="50"
+            rx="4"
+            fill={shade}
+            stroke="#D1D5DB"
+            strokeWidth="1"
+          />
+          <text
+            x={26 + i * 38}
+            y="72"
+            fontSize="8"
+            fill="#6B7280"
+            textAnchor="middle"
+          >
+            {i === 0 ? 'Before' : i === 4 ? 'After' : ''}
+          </text>
+        </g>
+      ))}
+      <motion.path
+        d="M30 35 L170 35"
+        stroke="#FCD34D"
+        strokeWidth="2"
+        strokeDasharray="5,5"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 2, repeat: Infinity }}
+      />
+      <polygon points="165,30 175,35 165,40" fill="#FCD34D" />
+    </svg>
+  );
+}
+
+// ============================================================================
 // DECORATIVE COMPONENTS
 // ============================================================================
 
 function RadiantOrbs() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Bright golden orb - top right */}
       <motion.div
         className="absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full"
         style={{
@@ -388,7 +523,6 @@ function RadiantOrbs() {
         }}
         transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
       />
-      {/* White radiance - center */}
       <motion.div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full"
         style={{
@@ -400,7 +534,6 @@ function RadiantOrbs() {
         }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
       />
-      {/* Soft wine accent - bottom left */}
       <motion.div
         className="absolute -bottom-60 -left-40 w-[600px] h-[600px] rounded-full"
         style={{
@@ -447,7 +580,7 @@ function SparkleParticles() {
 function SunburstPattern() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.03]">
-      <svg className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px]" viewBox="0 0 400 400">
+      <svg className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px]" viewBox="0 0 400 400" aria-hidden="true">
         {[...Array(24)].map((_, i) => (
           <motion.line
             key={i}
@@ -475,7 +608,7 @@ function SunburstPattern() {
 function ShadeTransformationVisualizer() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const [currentShade, setCurrentShade] = useState(4); // Start at A4 (darker)
+  const [currentShade, setCurrentShade] = useState(4);
   const [isAnimating, setIsAnimating] = useState(false);
   const [autoPlay, setAutoPlay] = useState(true);
 
@@ -512,9 +645,7 @@ function ShadeTransformationVisualizer() {
       variants={staggerContainer}
       className="relative"
     >
-      {/* Main Visualization */}
       <motion.div variants={fadeInUp} className="relative bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 rounded-3xl p-8 shadow-2xl overflow-hidden">
-        {/* Ambient light effect */}
         <motion.div
           className="absolute inset-0 rounded-3xl"
           animate={{
@@ -531,70 +662,15 @@ function ShadeTransformationVisualizer() {
           {/* Tooth Visualization */}
           <div className="flex flex-col items-center">
             <div className="relative w-48 h-64">
-              {/* Tooth SVG */}
-              <svg viewBox="0 0 100 140" className="w-full h-full">
-                <defs>
-                  <linearGradient id="toothGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <motion.stop
-                      offset="0%"
-                      animate={{ stopColor: shadeGuide[currentShade]?.color || '#FEFEFE' }}
-                      transition={{ duration: 0.8 }}
-                    />
-                    <motion.stop
-                      offset="100%"
-                      animate={{ stopColor: `${shadeGuide[currentShade]?.color || '#FEFEFE'}DD` }}
-                      transition={{ duration: 0.8 }}
-                    />
-                  </linearGradient>
-                  <filter id="toothGlow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="3" result="coloredBlur" />
-                    <feMerge>
-                      <feMergeNode in="coloredBlur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                  <filter id="innerShadow">
-                    <feOffset dx="0" dy="2" />
-                    <feGaussianBlur stdDeviation="3" result="offset-blur" />
-                    <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse" />
-                    <feFlood floodColor="black" floodOpacity="0.2" result="color" />
-                    <feComposite operator="in" in="color" in2="inverse" result="shadow" />
-                    <feComposite operator="over" in="shadow" in2="SourceGraphic" />
-                  </filter>
-                </defs>
-
-                {/* Tooth Shape */}
-                <motion.path
-                  d="M50 10
-                     C 20 10, 15 40, 20 70
-                     C 22 85, 30 100, 35 120
-                     C 38 128, 42 130, 45 130
-                     L 50 130
-                     C 50 130, 50 100, 50 70
-                     C 50 100, 50 130, 50 130
-                     L 55 130
-                     C 58 130, 62 128, 65 120
-                     C 70 100, 78 85, 80 70
-                     C 85 40, 80 10, 50 10"
-                  fill="url(#toothGradient)"
-                  filter="url(#toothGlow)"
-                  stroke="rgba(255,255,255,0.3)"
-                  strokeWidth="1"
+              <motion.div
+                animate={{ scale: isAnimating ? [1, 1.05, 1] : 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <ToothIllustration
+                  className="w-full h-full drop-shadow-2xl"
+                  shade={shadeGuide[currentShade]?.color || '#FEFEFE'}
                 />
-
-                {/* Shine effect */}
-                <motion.ellipse
-                  cx="35"
-                  cy="50"
-                  rx="8"
-                  ry="15"
-                  fill="rgba(255,255,255,0.4)"
-                  animate={{
-                    opacity: [0.2, 0.6, 0.2],
-                  }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                />
-              </svg>
+              </motion.div>
 
               {/* Brightness indicator */}
               <motion.div
@@ -626,7 +702,10 @@ function ShadeTransformationVisualizer() {
 
           {/* Shade Guide */}
           <div>
-            <h4 className="text-white text-lg font-semibold mb-4">Shade Guide</h4>
+            <h4 className="text-white text-lg font-semibold mb-4 flex items-center gap-2">
+              <Gem className="w-5 h-5 text-amber-400" />
+              Shade Guide
+            </h4>
             <div className="space-y-3">
               {shadeGuide.map((shade, index) => (
                 <motion.button
@@ -662,7 +741,6 @@ function ShadeTransformationVisualizer() {
               ))}
             </div>
 
-            {/* Auto-play toggle */}
             <button
               onClick={() => {
                 setAutoPlay(!autoPlay);
@@ -704,6 +782,15 @@ function BeforeAfterSlider() {
     setSliderPosition((x / rect.width) * 100);
   };
 
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const touch = e.touches[0];
+    if (!touch) return;
+    const x = Math.max(0, Math.min(touch.clientX - rect.left, rect.width));
+    setSliderPosition((x / rect.width) * 100);
+  };
+
   useEffect(() => {
     window.addEventListener('mouseup', handleMouseUp);
     return () => window.removeEventListener('mouseup', handleMouseUp);
@@ -715,12 +802,19 @@ function BeforeAfterSlider() {
       className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden cursor-ew-resize select-none shadow-2xl"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
+      onTouchMove={handleTouchMove}
+      role="slider"
+      aria-label="Before and after comparison slider"
+      aria-valuenow={sliderPosition}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      tabIndex={0}
     >
       {/* After Image (Full) */}
       <div className="absolute inset-0">
         <Image
-          src="/images/cosmetic/cosmetic-15.jpg"
-          alt="After professional teeth whitening"
+          src="/images/services/teeth-whitening/hero-smile.jpg"
+          alt="After professional teeth whitening - bright radiant smile"
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
@@ -739,11 +833,11 @@ function BeforeAfterSlider() {
         style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
       >
         <Image
-          src="/images/cosmetic/cosmetic-20.jpg"
-          alt="Before teeth whitening"
+          src="/images/services/teeth-whitening/shade-guide.jpg"
+          alt="Before teeth whitening - natural tooth shade"
           fill
           className="object-cover"
-          style={{ filter: 'sepia(20%) saturate(80%)' }}
+          style={{ filter: 'sepia(15%) saturate(85%)' }}
           sizes="(max-width: 768px) 100vw, 50vw"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
@@ -814,8 +908,9 @@ function TreatmentOptionsComparison() {
                 {option.type}
               </span>
               {option.recommended && (
-                <span className="absolute -top-2 -right-2 bg-amber-400 text-amber-900 text-xs font-bold px-2 py-0.5 rounded-full">
-                  Recommended
+                <span className="absolute -top-2 -right-2 bg-amber-400 text-amber-900 text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <Star className="w-3 h-3" />
+                  Best
                 </span>
               )}
             </motion.button>
@@ -835,7 +930,12 @@ function TreatmentOptionsComparison() {
         >
           {/* Stats */}
           <div className="bg-gradient-to-br from-[#FDF8F3] to-white rounded-3xl p-8 border border-[#EDE5DD]">
-            <h4 className="text-2xl font-bold text-[#1e293b] mb-6">
+            <h4 className="text-2xl font-bold text-[#1e293b] mb-6 flex items-center gap-3">
+              {selectedOption === 0 ? (
+                <Building2 className="w-7 h-7 text-[#722F37]" />
+              ) : (
+                <Home className="w-7 h-7 text-[#722F37]" />
+              )}
               {treatmentOptions[selectedOption]?.type} Whitening
             </h4>
             <p className="text-neutral-600 mb-8">
@@ -849,7 +949,7 @@ function TreatmentOptionsComparison() {
                 { label: 'Results', value: treatmentOptions[selectedOption]?.results || '', icon: Zap },
                 { label: 'Improvement', value: treatmentOptions[selectedOption]?.shadeImprovement || '', icon: TrendingUp },
               ].map((stat, i) => (
-                <div key={i} className="bg-white rounded-xl p-4 shadow-sm">
+                <div key={i} className="bg-white rounded-xl p-4 shadow-sm border border-neutral-100">
                   <stat.icon className="w-5 h-5 text-[#722F37] mb-2" />
                   <p className="text-sm text-neutral-500">{stat.label}</p>
                   <p className="text-lg font-bold text-[#1e293b]">{stat.value}</p>
@@ -870,8 +970,8 @@ function TreatmentOptionsComparison() {
           {/* Features */}
           <div className="bg-white rounded-3xl p-8 border border-neutral-100 shadow-lg">
             <h4 className="text-lg font-semibold text-[#1e293b] mb-6 flex items-center gap-2">
-              <Check className="w-5 h-5 text-[#722F37]" />
-              What's Included
+              <CircleCheck className="w-5 h-5 text-[#722F37]" />
+              What&apos;s Included
             </h4>
             <div className="space-y-4">
               {treatmentOptions[selectedOption]?.features.map((feature, index) => (
@@ -888,6 +988,11 @@ function TreatmentOptionsComparison() {
                   <span className="text-neutral-700">{feature}</span>
                 </motion.div>
               ))}
+            </div>
+
+            {/* Mini illustration */}
+            <div className="mt-8 flex justify-center">
+              <LEDLightIllustration className="w-32 h-24" />
             </div>
           </div>
         </motion.div>
@@ -941,6 +1046,7 @@ function ResultsTimeline() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: index * 0.15 }}
+              aria-label={`View ${point.label} results`}
             >
               {activePoint === index && (
                 <motion.div
@@ -983,7 +1089,8 @@ function ResultsTimeline() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h4 className="text-2xl font-bold text-[#1e293b] mb-2">
+              <h4 className="text-2xl font-bold text-[#1e293b] mb-2 flex items-center gap-2">
+                <Calendar className="w-6 h-6 text-amber-500" />
                 {resultsTimeline[activePoint]?.label}
               </h4>
               <p className="text-neutral-600">{resultsTimeline[activePoint]?.description}</p>
@@ -1098,8 +1205,8 @@ function LifestyleBenefitsCarousel() {
               className="absolute inset-0"
             >
               <Image
-                src={lifestyleBenefits[activeIndex]?.image || '/images/cosmetic/cosmetic-08.jpg'}
-                alt={lifestyleBenefits[activeIndex]?.title || ''}
+                src={lifestyleBenefits[activeIndex]?.image || '/images/services/teeth-whitening/hero-smile.jpg'}
+                alt={lifestyleBenefits[activeIndex]?.title || 'Lifestyle benefit'}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -1107,6 +1214,19 @@ function LifestyleBenefitsCarousel() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
             </motion.div>
           </AnimatePresence>
+
+          {/* Floating badge */}
+          <motion.div
+            className="absolute top-6 left-6 bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-lg"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-amber-500" />
+              <span className="font-semibold text-[#1e293b]">Confidence Boost</span>
+            </div>
+          </motion.div>
 
           {/* Carousel Indicators */}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
@@ -1117,6 +1237,7 @@ function LifestyleBenefitsCarousel() {
                 className={`h-2 rounded-full transition-all duration-300 ${
                   index === activeIndex ? 'w-8 bg-white' : 'w-2 bg-white/50 hover:bg-white/75'
                 }`}
+                aria-label={`View benefit ${index + 1}`}
               />
             ))}
           </div>
@@ -1186,7 +1307,8 @@ function FAQAccordion({ items }: { items: FAQItem[] }) {
         >
           <button
             onClick={() => setOpenIndex(openIndex === index ? null : index)}
-            className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none"
+            className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-[#722F37]/20 focus:ring-inset"
+            aria-expanded={openIndex === index}
           >
             <span className="font-semibold text-[#1e293b] pr-4">{item.question}</span>
             <motion.div
@@ -1251,14 +1373,14 @@ function HeroSection() {
                 Home
               </Link>
             </li>
-            <li className="text-neutral-400">/</li>
+            <li className="text-neutral-400" aria-hidden="true">/</li>
             <li>
               <Link href="/services" className="text-neutral-500 hover:text-[#722F37] transition-colors">
                 Services
               </Link>
             </li>
-            <li className="text-neutral-400">/</li>
-            <li className="text-[#722F37] font-medium">Teeth Whitening</li>
+            <li className="text-neutral-400" aria-hidden="true">/</li>
+            <li className="text-[#722F37] font-medium" aria-current="page">Teeth Whitening</li>
           </ol>
         </motion.nav>
 
@@ -1285,6 +1407,7 @@ function HeroSection() {
                     scale: [1, 1.1, 1],
                   }}
                   transition={{ duration: 3, repeat: Infinity }}
+                  aria-hidden="true"
                 />
               </span>
               <br />
@@ -1317,9 +1440,9 @@ function HeroSection() {
             {/* Quick Stats */}
             <motion.div variants={fadeInUp} className="grid grid-cols-3 gap-6">
               {[
-                { value: '60', suffix: 'min', label: 'Treatment Time' },
-                { value: '8', suffix: '+', label: 'Shades Brighter' },
-                { value: '1', suffix: '', label: 'Visit Needed' },
+                { value: '60', suffix: 'min', label: 'Treatment Time', icon: Clock },
+                { value: '8', suffix: '+', label: 'Shades Brighter', icon: Sparkles },
+                { value: '1', suffix: '', label: 'Visit Needed', icon: CircleCheck },
               ].map((stat, index) => (
                 <div key={index} className="text-center">
                   <motion.div
@@ -1331,7 +1454,10 @@ function HeroSection() {
                     {stat.value}
                     <span className="text-lg ml-0.5">{stat.suffix}</span>
                   </motion.div>
-                  <div className="text-sm text-neutral-500 mt-1">{stat.label}</div>
+                  <div className="text-sm text-neutral-500 mt-1 flex items-center justify-center gap-1">
+                    <stat.icon className="w-3.5 h-3.5" />
+                    {stat.label}
+                  </div>
                 </div>
               ))}
             </motion.div>
@@ -1341,8 +1467,8 @@ function HeroSection() {
           <motion.div variants={slideInRight} initial="hidden" animate="visible" className="relative">
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl shadow-amber-200/30">
               <Image
-                src="/images/cosmetic/cosmetic-15.jpg"
-                alt="Beautiful bright smile after professional teeth whitening"
+                src="/images/services/teeth-whitening/hero-smile.jpg"
+                alt="Beautiful bright smile after professional teeth whitening treatment"
                 fill
                 className="object-cover"
                 priority
@@ -1358,6 +1484,7 @@ function HeroSection() {
                   x: ['-100%', '100%'],
                 }}
                 transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+                aria-hidden="true"
               />
             </div>
 
@@ -1405,6 +1532,7 @@ function HeroSection() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5 }}
+        aria-hidden="true"
       >
         <motion.div
           className="w-8 h-12 rounded-full border-2 border-amber-400/30 flex items-start justify-center p-2"
@@ -1540,59 +1668,62 @@ function ProcedureSection() {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Steps */}
           <motion.div variants={staggerContainer} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
-            {procedureSteps.map((step, index) => (
-              <motion.div
-                key={index}
-                variants={fadeInUp}
-                className={`relative flex gap-6 cursor-pointer transition-all duration-300 ${
-                  index !== procedureSteps.length - 1 ? 'pb-8' : ''
-                }`}
-                onClick={() => setActiveStep(index)}
-              >
-                {/* Timeline Line */}
-                {index !== procedureSteps.length - 1 && (
-                  <div className="absolute left-6 top-12 w-0.5 h-full bg-neutral-200">
-                    <motion.div
-                      className="w-full bg-gradient-to-b from-amber-400 to-amber-300"
-                      initial={{ height: 0 }}
-                      animate={{ height: activeStep > index ? '100%' : '0%' }}
-                      transition={{ duration: 0.5 }}
-                    />
-                  </div>
-                )}
-
-                {/* Step Number */}
+            {procedureSteps.map((step, index) => {
+              const StepIcon = step.icon;
+              return (
                 <motion.div
-                  className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
-                    activeStep >= index
-                      ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-lg shadow-amber-400/30'
-                      : 'bg-neutral-100 text-neutral-400'
+                  key={index}
+                  variants={fadeInUp}
+                  className={`relative flex gap-6 cursor-pointer transition-all duration-300 ${
+                    index !== procedureSteps.length - 1 ? 'pb-8' : ''
                   }`}
-                  animate={{ scale: activeStep === index ? 1.1 : 1 }}
+                  onClick={() => setActiveStep(index)}
                 >
-                  <span className="font-bold">{step.step}</span>
-                </motion.div>
+                  {/* Timeline Line */}
+                  {index !== procedureSteps.length - 1 && (
+                    <div className="absolute left-6 top-12 w-0.5 h-full bg-neutral-200">
+                      <motion.div
+                        className="w-full bg-gradient-to-b from-amber-400 to-amber-300"
+                        initial={{ height: 0 }}
+                        animate={{ height: activeStep > index ? '100%' : '0%' }}
+                        transition={{ duration: 0.5 }}
+                      />
+                    </div>
+                  )}
 
-                {/* Content */}
-                <div className={`flex-1 pb-2 ${activeStep === index ? '' : 'opacity-50'}`}>
-                  <div className="flex items-center gap-3 mb-2">
-                    <h4 className="text-lg font-semibold text-[#1e293b]">{step.title}</h4>
-                    <span className="text-sm text-amber-600 font-medium bg-amber-50 px-2 py-0.5 rounded-full">
-                      {step.duration}
-                    </span>
+                  {/* Step Number */}
+                  <motion.div
+                    className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                      activeStep >= index
+                        ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-lg shadow-amber-400/30'
+                        : 'bg-neutral-100 text-neutral-400'
+                    }`}
+                    animate={{ scale: activeStep === index ? 1.1 : 1 }}
+                  >
+                    <StepIcon className="w-5 h-5" />
+                  </motion.div>
+
+                  {/* Content */}
+                  <div className={`flex-1 pb-2 ${activeStep === index ? '' : 'opacity-50'}`}>
+                    <div className="flex items-center gap-3 mb-2">
+                      <h4 className="text-lg font-semibold text-[#1e293b]">{step.title}</h4>
+                      <span className="text-sm text-amber-600 font-medium bg-amber-50 px-2 py-0.5 rounded-full">
+                        {step.duration}
+                      </span>
+                    </div>
+                    <p className="text-neutral-600">{step.description}</p>
                   </div>
-                  <p className="text-neutral-600">{step.description}</p>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </motion.div>
 
           {/* Visual */}
           <motion.div variants={slideInRight} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
             <div className="relative aspect-square rounded-3xl overflow-hidden shadow-2xl">
               <Image
-                src="/images/cosmetic/cosmetic-20.jpg"
-                alt="Professional teeth whitening treatment"
+                src="/images/services/teeth-whitening/dentist-consultation.jpg"
+                alt="Professional teeth whitening treatment in progress"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -1620,6 +1751,96 @@ function ProcedureSection() {
 }
 
 // ============================================================================
+// WHITENING PROCESS ILLUSTRATION SECTION
+// ============================================================================
+
+function WhiteningProcessSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+
+  return (
+    <section ref={ref} className="relative py-24 overflow-hidden bg-white">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          variants={staggerContainer}
+          className="text-center mb-16"
+        >
+          <motion.span
+            variants={fadeInUp}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 text-amber-700 text-sm font-medium mb-6"
+          >
+            <Lightbulb className="w-4 h-4" />
+            How It Works
+          </motion.span>
+          <motion.h2 variants={fadeInUp} className="text-4xl lg:text-5xl font-bold text-[#1e293b] tracking-tight mb-6">
+            LED Whitening
+            <span className="bg-gradient-to-r from-amber-500 to-amber-400 bg-clip-text text-transparent ml-3">
+              Technology
+            </span>
+          </motion.h2>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="grid md:grid-cols-3 gap-8"
+        >
+          {/* Step 1: Apply Gel */}
+          <div className="bg-gradient-to-br from-[#FDF8F3] to-white rounded-3xl p-8 border border-[#EDE5DD] text-center">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-amber-100 flex items-center justify-center">
+              <Droplets className="w-10 h-10 text-amber-600" />
+            </div>
+            <h3 className="text-xl font-bold text-[#1e293b] mb-3">1. Apply Whitening Gel</h3>
+            <p className="text-neutral-600">Professional-strength hydrogen peroxide gel is carefully applied to your teeth.</p>
+          </div>
+
+          {/* Step 2: LED Activation */}
+          <div className="bg-gradient-to-br from-amber-50 to-white rounded-3xl p-8 border border-amber-200 text-center relative overflow-hidden">
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-amber-400/10 to-transparent"
+              animate={{ opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+            <div className="relative">
+              <div className="w-20 h-20 mx-auto mb-6">
+                <LEDLightIllustration className="w-full h-full" />
+              </div>
+              <h3 className="text-xl font-bold text-[#1e293b] mb-3">2. LED Light Activation</h3>
+              <p className="text-neutral-600">Our Spa-Dent LED light accelerates the whitening process for faster results.</p>
+            </div>
+          </div>
+
+          {/* Step 3: Reveal */}
+          <div className="bg-gradient-to-br from-[#FDF8F3] to-white rounded-3xl p-8 border border-[#EDE5DD] text-center">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-amber-100 flex items-center justify-center">
+              <Sparkles className="w-10 h-10 text-amber-600" />
+            </div>
+            <h3 className="text-xl font-bold text-[#1e293b] mb-3">3. Reveal Brighter Smile</h3>
+            <p className="text-neutral-600">See your dramatically whiter smile—up to 8 shades brighter in one visit!</p>
+          </div>
+        </motion.div>
+
+        {/* Shade comparison illustration */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="mt-12 flex justify-center"
+        >
+          <div className="bg-neutral-50 rounded-2xl p-6 border border-neutral-200">
+            <p className="text-sm text-neutral-500 text-center mb-4">Your shade transformation journey</p>
+            <ShadeComparisonIllustration className="w-64 h-20 mx-auto" />
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// ============================================================================
 // MAIN EXPORT
 // ============================================================================
 
@@ -1631,6 +1852,9 @@ export function TeethWhiteningContent() {
 
       {/* Benefits Section */}
       <BenefitsSection />
+
+      {/* Whitening Process Section - NEW */}
+      <WhiteningProcessSection />
 
       {/* Shade Transformation Visualizer */}
       <section className="relative py-32 overflow-hidden bg-gradient-to-b from-white to-[#FDF8F3]">
@@ -1763,7 +1987,7 @@ export function TeethWhiteningContent() {
             className="text-center mb-16"
           >
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/10 text-[#722F37] text-sm font-medium mb-6">
-              <Shield className="w-4 h-4" />
+              <ShieldCheck className="w-4 h-4" />
               Maintenance Guide
             </span>
             <h2 className="text-4xl lg:text-5xl font-bold text-[#1e293b] tracking-tight mb-6">
@@ -1920,7 +2144,7 @@ export function TeethWhiteningContent() {
       {/* CTA Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-[#722F37] via-[#5a252c] to-[#4a1f24]">
         {/* Decorative elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
           <motion.div
             className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full"
             style={{

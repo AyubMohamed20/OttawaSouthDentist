@@ -62,7 +62,7 @@ const teamMembers: TeamMember[] = [
     name: 'Dr. Shivani Sharma',
     credentials: 'DDS',
     role: 'General Dentist',
-    image: '/images/team/placeholder-female-1.jpg',
+    image: '/images/team/team-02.jpg',
     education: [
       'Doctor of Dental Surgery (DDS)',
       'Continuing education in cosmetic dentistry',
@@ -81,7 +81,7 @@ const teamMembers: TeamMember[] = [
     name: 'Dr. Salima Thawer',
     credentials: 'DDS',
     role: 'General Dentist',
-    image: '/images/team/placeholder-female-2.jpg',
+    image: '/images/team/team-03.jpg',
     education: [
       'Doctor of Dental Surgery (DDS)',
       'Additional training in family dentistry',
@@ -100,7 +100,7 @@ const teamMembers: TeamMember[] = [
     name: 'Dr. Nancy Sehgal',
     credentials: 'DDS',
     role: 'General Dentist',
-    image: '/images/team/placeholder-female-3.jpg',
+    image: '/images/team/team-04.jpg',
     education: [
       'Doctor of Dental Surgery (DDS)',
       'Advanced training in restorative procedures',
@@ -119,7 +119,7 @@ const teamMembers: TeamMember[] = [
     name: 'Dr. Arti Joshi',
     credentials: 'DDS',
     role: 'General Dentist',
-    image: '/images/team/placeholder-female-4.jpg',
+    image: '/images/team/team-05.jpg',
     education: [
       'Doctor of Dental Surgery (DDS)',
       'Specialized training in Invisalign',
@@ -138,7 +138,7 @@ const teamMembers: TeamMember[] = [
     name: 'Dr. Fatemah Almoaibed',
     credentials: 'DDS',
     role: 'General Dentist',
-    image: '/images/team/placeholder-female-5.jpg',
+    image: '/images/team/team-06.jpg',
     education: [
       'Doctor of Dental Surgery (DDS)',
       'Training in dental implant procedures',

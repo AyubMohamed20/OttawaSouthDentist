@@ -30,11 +30,251 @@ import {
   Layers,
   CircleDot,
   ChevronRight,
+  CircleCheck,
+  HandHeart,
+  Stethoscope,
+  BadgeCheck,
+  Zap,
+  Target,
+  Gem,
+  ShieldCheck,
+  HeartPulse,
 } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useTransform, useInView, useMotionValue, useSpring } from 'framer-motion';
 import { FAQAccordion } from '@/components/ui/faq-accordion';
 import { ContactCtaBanner } from '@/components/sections/contact-cta';
 import { contactInfo } from '@/data/site-config';
+
+// ============================================================================
+// SVG ILLUSTRATIONS - Custom dental-themed visuals
+// ============================================================================
+
+// Complete Dentures Illustration - Full arch of teeth
+function CompleteDenturesIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 120 80"
+      className={className}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      {/* Gum base */}
+      <path
+        d="M10 50 Q60 70 110 50 Q110 35 60 25 Q10 35 10 50Z"
+        fill="#FECACA"
+        stroke="#F87171"
+        strokeWidth="1.5"
+      />
+      {/* Teeth row */}
+      <g fill="white" stroke="#E5E5E5" strokeWidth="1">
+        {/* Front teeth */}
+        <rect x="45" y="32" width="8" height="14" rx="2" />
+        <rect x="54" y="32" width="8" height="14" rx="2" />
+        <rect x="63" y="32" width="8" height="14" rx="2" />
+        {/* Left teeth */}
+        <rect x="36" y="34" width="8" height="12" rx="2" transform="rotate(-10 36 34)" />
+        <rect x="26" y="38" width="8" height="11" rx="2" transform="rotate(-20 26 38)" />
+        <rect x="17" y="44" width="7" height="10" rx="2" transform="rotate(-30 17 44)" />
+        {/* Right teeth */}
+        <rect x="72" y="32" width="8" height="12" rx="2" transform="rotate(10 76 34)" />
+        <rect x="82" y="34" width="8" height="11" rx="2" transform="rotate(20 86 38)" />
+        <rect x="91" y="40" width="7" height="10" rx="2" transform="rotate(30 95 44)" />
+      </g>
+      {/* Shine effect */}
+      <ellipse cx="56" cy="38" rx="3" ry="2" fill="#F0F9FF" opacity="0.6" />
+    </svg>
+  );
+}
+
+// Partial Dentures Illustration - Some teeth with clasps
+function PartialDenturesIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 120 80"
+      className={className}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      {/* Metal framework */}
+      <path
+        d="M25 45 Q60 55 95 45"
+        fill="none"
+        stroke="#9CA3AF"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      {/* Clasps */}
+      <path d="M25 45 Q20 40 22 35" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" />
+      <path d="M95 45 Q100 40 98 35" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" />
+      {/* Gum sections */}
+      <ellipse cx="45" cy="42" rx="12" ry="8" fill="#FECACA" stroke="#F87171" strokeWidth="1" />
+      <ellipse cx="75" cy="42" rx="12" ry="8" fill="#FECACA" stroke="#F87171" strokeWidth="1" />
+      {/* Replacement teeth */}
+      <g fill="white" stroke="#E5E5E5" strokeWidth="1">
+        <rect x="38" y="35" width="7" height="11" rx="2" />
+        <rect x="46" y="35" width="7" height="11" rx="2" />
+        <rect x="68" y="35" width="7" height="11" rx="2" />
+        <rect x="76" y="35" width="7" height="11" rx="2" />
+      </g>
+      {/* Natural teeth (darker/shaded) */}
+      <g fill="#F5F5F4" stroke="#D4D4D4" strokeWidth="1">
+        <rect x="20" y="30" width="6" height="10" rx="1.5" />
+        <rect x="94" y="30" width="6" height="10" rx="1.5" />
+      </g>
+    </svg>
+  );
+}
+
+// Implant-Supported Dentures Illustration - Teeth with implant screws
+function ImplantDenturesIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 120 80"
+      className={className}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      {/* Jawbone base */}
+      <path
+        d="M15 70 Q60 80 105 70 L100 55 Q60 65 20 55 Z"
+        fill="#E7E5E4"
+        stroke="#A8A29E"
+        strokeWidth="1"
+      />
+      {/* Implant posts */}
+      <g fill="#71717A" stroke="#52525B" strokeWidth="0.5">
+        <rect x="32" y="50" width="4" height="18" rx="1" />
+        <rect x="57" y="50" width="4" height="18" rx="1" />
+        <rect x="82" y="50" width="4" height="18" rx="1" />
+        {/* Screw threads */}
+        <line x1="32" y1="55" x2="36" y2="55" stroke="#52525B" strokeWidth="0.5" />
+        <line x1="32" y1="60" x2="36" y2="60" stroke="#52525B" strokeWidth="0.5" />
+        <line x1="57" y1="55" x2="61" y2="55" stroke="#52525B" strokeWidth="0.5" />
+        <line x1="57" y1="60" x2="61" y2="60" stroke="#52525B" strokeWidth="0.5" />
+        <line x1="82" y1="55" x2="86" y2="55" stroke="#52525B" strokeWidth="0.5" />
+        <line x1="82" y1="60" x2="86" y2="60" stroke="#52525B" strokeWidth="0.5" />
+      </g>
+      {/* Denture base */}
+      <path
+        d="M20 48 Q60 58 100 48 Q100 38 60 30 Q20 38 20 48Z"
+        fill="#FECACA"
+        stroke="#F87171"
+        strokeWidth="1.5"
+      />
+      {/* Teeth */}
+      <g fill="white" stroke="#E5E5E5" strokeWidth="1">
+        <rect x="48" y="32" width="7" height="12" rx="2" />
+        <rect x="56" y="32" width="7" height="12" rx="2" />
+        <rect x="64" y="32" width="7" height="12" rx="2" />
+        <rect x="40" y="34" width="7" height="10" rx="2" transform="rotate(-8 40 34)" />
+        <rect x="72" y="32" width="7" height="10" rx="2" transform="rotate(8 76 34)" />
+        <rect x="30" y="38" width="6" height="9" rx="2" transform="rotate(-20 30 38)" />
+        <rect x="84" y="36" width="6" height="9" rx="2" transform="rotate(20 88 38)" />
+      </g>
+      {/* Connection indicators */}
+      <g fill="#722F37">
+        <circle cx="34" cy="48" r="2" />
+        <circle cx="59" cy="48" r="2" />
+        <circle cx="84" cy="48" r="2" />
+      </g>
+    </svg>
+  );
+}
+
+// Denture Care Illustration - Cleaning tools
+function DentureCareIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 120 80"
+      className={className}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      {/* Container/glass */}
+      <path
+        d="M35 25 L30 70 Q30 75 35 75 L65 75 Q70 75 70 70 L65 25 Z"
+        fill="#DBEAFE"
+        stroke="#60A5FA"
+        strokeWidth="1.5"
+      />
+      {/* Water line */}
+      <path d="M32 40 Q50 45 68 40" stroke="#93C5FD" strokeWidth="1" fill="none" />
+      {/* Dentures in water */}
+      <ellipse cx="50" cy="55" rx="14" ry="8" fill="#FECACA" opacity="0.8" />
+      <g fill="white" stroke="#E5E5E5" strokeWidth="0.5" opacity="0.9">
+        <rect x="42" y="51" width="4" height="7" rx="1" />
+        <rect x="47" y="51" width="4" height="7" rx="1" />
+        <rect x="52" y="51" width="4" height="7" rx="1" />
+        <rect x="57" y="51" width="4" height="7" rx="1" />
+      </g>
+      {/* Bubbles */}
+      <circle cx="38" cy="50" r="2" fill="#BFDBFE" />
+      <circle cx="60" cy="45" r="1.5" fill="#BFDBFE" />
+      <circle cx="45" cy="42" r="1" fill="#BFDBFE" />
+      {/* Toothbrush */}
+      <g transform="translate(75, 20) rotate(15)">
+        <rect x="0" y="0" width="8" height="35" rx="2" fill="#A78BFA" stroke="#7C3AED" strokeWidth="1" />
+        <rect x="-1" y="35" width="10" height="15" rx="2" fill="#DDD6FE" stroke="#7C3AED" strokeWidth="1" />
+        {/* Bristles */}
+        <g fill="#C4B5FD">
+          <rect x="0" y="37" width="2" height="5" rx="0.5" />
+          <rect x="3" y="37" width="2" height="5" rx="0.5" />
+          <rect x="6" y="37" width="2" height="5" rx="0.5" />
+        </g>
+      </g>
+    </svg>
+  );
+}
+
+// Smile Transformation Illustration
+function SmileTransformIllustration({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 120 60"
+      className={className}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      {/* Before - sad/incomplete smile */}
+      <g transform="translate(10, 10)">
+        <circle cx="20" cy="20" r="18" fill="#FEF3C7" stroke="#FCD34D" strokeWidth="1.5" />
+        {/* Eyes */}
+        <circle cx="14" cy="16" r="2" fill="#78716C" />
+        <circle cx="26" cy="16" r="2" fill="#78716C" />
+        {/* Sad mouth with missing teeth */}
+        <path d="M12 28 Q20 24 28 28" fill="none" stroke="#78716C" strokeWidth="1.5" strokeLinecap="round" />
+      </g>
+      {/* Arrow */}
+      <g transform="translate(50, 20)">
+        <path d="M0 10 L15 10" stroke="#722F37" strokeWidth="2" strokeLinecap="round" />
+        <path d="M12 5 L17 10 L12 15" fill="none" stroke="#722F37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+      {/* After - happy smile */}
+      <g transform="translate(70, 10)">
+        <circle cx="20" cy="20" r="18" fill="#FEF3C7" stroke="#FCD34D" strokeWidth="1.5" />
+        {/* Happy eyes */}
+        <path d="M12 14 Q14 12 16 14" fill="none" stroke="#78716C" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M24 14 Q26 12 28 14" fill="none" stroke="#78716C" strokeWidth="1.5" strokeLinecap="round" />
+        {/* Big smile with teeth */}
+        <path d="M12 24 Q20 32 28 24" fill="white" stroke="#78716C" strokeWidth="1.5" />
+        {/* Teeth detail */}
+        <line x1="16" y1="24" x2="16" y2="27" stroke="#E5E5E5" strokeWidth="0.5" />
+        <line x1="20" y1="24" x2="20" y2="28" stroke="#E5E5E5" strokeWidth="0.5" />
+        <line x1="24" y1="24" x2="24" y2="27" stroke="#E5E5E5" strokeWidth="0.5" />
+      </g>
+      {/* Sparkles around happy face */}
+      <g fill="#722F37">
+        <path d="M100 8 L101 12 L105 13 L101 14 L100 18 L99 14 L95 13 L99 12 Z" />
+        <path d="M108 25 L108.5 27 L110.5 27.5 L108.5 28 L108 30 L107.5 28 L105.5 27.5 L107.5 27 Z" />
+      </g>
+    </svg>
+  );
+}
 
 // ============================================================================
 // DATA
@@ -79,6 +319,7 @@ const dentureTypes = [
     ideal: 'Ideal for patients missing all teeth in one or both arches',
     image: '/images/seniors/seniors-02.jpg',
     icon: <Layers className="w-7 h-7" />,
+    illustration: CompleteDenturesIllustration,
     stats: { stability: 75, comfort: 85, aesthetics: 90 },
   },
   {
@@ -91,6 +332,7 @@ const dentureTypes = [
     ideal: 'Best for patients with some healthy natural teeth remaining',
     image: '/images/seniors/seniors-03.jpg',
     icon: <CircleDot className="w-7 h-7" />,
+    illustration: PartialDenturesIllustration,
     stats: { stability: 80, comfort: 88, aesthetics: 85 },
   },
   {
@@ -103,7 +345,41 @@ const dentureTypes = [
     ideal: 'Perfect for patients seeking the most secure, permanent-feeling solution',
     image: '/images/seniors/seniors-04.jpg',
     icon: <Shield className="w-7 h-7" />,
+    illustration: ImplantDenturesIllustration,
     stats: { stability: 98, comfort: 95, aesthetics: 95 },
+  },
+];
+
+const benefits = [
+  {
+    icon: <Smile className="w-6 h-6" />,
+    title: 'Natural Appearance',
+    description: 'Custom-crafted to match your facial features and desired smile aesthetics.',
+  },
+  {
+    icon: <Utensils className="w-6 h-6" />,
+    title: 'Restored Function',
+    description: 'Eat your favorite foods with confidence and proper chewing ability.',
+  },
+  {
+    icon: <MessageCircle className="w-6 h-6" />,
+    title: 'Clear Speech',
+    description: 'Speak clearly without worrying about slipping or clicking.',
+  },
+  {
+    icon: <HeartPulse className="w-6 h-6" />,
+    title: 'Facial Support',
+    description: 'Maintain facial structure and prevent the sunken look from missing teeth.',
+  },
+  {
+    icon: <ShieldCheck className="w-6 h-6" />,
+    title: 'Durable Materials',
+    description: 'High-quality acrylics and porcelain for long-lasting results.',
+  },
+  {
+    icon: <HandHeart className="w-6 h-6" />,
+    title: 'Gentle Care',
+    description: 'Compassionate treatment tailored to your comfort level.',
   },
 ];
 
@@ -140,14 +416,14 @@ const procedureSteps = [
     title: 'Initial Consultation',
     description: 'Comprehensive examination to assess your oral health, discuss goals, and explore the best denture options for your lifestyle.',
     duration: '45-60 min',
-    icon: <MessageCircle className="w-6 h-6" />,
+    icon: <Stethoscope className="w-6 h-6" />,
   },
   {
     step: '02',
     title: 'Precise Impressions',
     description: 'Detailed molds of your mouth ensure your custom dentures fit perfectly and look completely natural.',
     duration: '30-45 min',
-    icon: <Layers className="w-6 h-6" />,
+    icon: <Target className="w-6 h-6" />,
   },
   {
     step: '03',
@@ -161,7 +437,7 @@ const procedureSteps = [
     title: 'Final Fitting',
     description: 'Receive your completed dentures with detailed care instructions and guidance for the adjustment period.',
     duration: '30-45 min',
-    icon: <Award className="w-6 h-6" />,
+    icon: <BadgeCheck className="w-6 h-6" />,
   },
   {
     step: '05',
@@ -275,32 +551,63 @@ const staggerContainer = {
 };
 
 // ============================================================================
-// MAGNETIC BUTTON HOOK
+// DECORATIVE VISUAL DIVIDER
 // ============================================================================
 
-function useMagnetic(strength: number = 0.3) {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springConfig = { damping: 15, stiffness: 150 };
-  const springX = useSpring(x, springConfig);
-  const springY = useSpring(y, springConfig);
+function SectionDivider({ variant = 'wave' }: { variant?: 'wave' | 'teeth' | 'dots' }) {
+  if (variant === 'teeth') {
+    return (
+      <div className="flex justify-center items-center gap-2 py-4" aria-hidden="true">
+        <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#722F37]/30" />
+        <svg viewBox="0 0 24 24" className="w-6 h-6 text-[#722F37]/40">
+          <path
+            fill="currentColor"
+            d="M12 2C8 2 5 5 5 9c0 3 1 5 2 7s2 4 2 6c0 1 1 2 3 2s3-1 3-2c0-2 1-4 2-6s2-4 2-7c0-4-3-7-7-7z"
+          />
+        </svg>
+        <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#722F37]/30" />
+      </div>
+    );
+  }
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const deltaX = (e.clientX - centerX) * strength;
-    const deltaY = (e.clientY - centerY) * strength;
-    x.set(deltaX);
-    y.set(deltaY);
-  }, [x, y, strength]);
+  if (variant === 'dots') {
+    return (
+      <div className="flex justify-center items-center gap-3 py-6" aria-hidden="true">
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="w-2 h-2 rounded-full bg-[#722F37]"
+            initial={{ opacity: 0.2 }}
+            animate={{ opacity: [0.2, 0.6, 0.2] }}
+            transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
+          />
+        ))}
+      </div>
+    );
+  }
 
-  const handleMouseLeave = useCallback(() => {
-    x.set(0);
-    y.set(0);
-  }, [x, y]);
-
-  return { x: springX, y: springY, handleMouseMove, handleMouseLeave };
+  return (
+    <div className="relative h-16 overflow-hidden" aria-hidden="true">
+      <svg
+        viewBox="0 0 1200 60"
+        preserveAspectRatio="none"
+        className="absolute inset-0 w-full h-full"
+      >
+        <path
+          d="M0 30 Q300 50 600 30 T1200 30"
+          fill="none"
+          stroke="rgba(114,47,55,0.1)"
+          strokeWidth="2"
+        />
+        <path
+          d="M0 35 Q300 55 600 35 T1200 35"
+          fill="none"
+          stroke="rgba(114,47,55,0.05)"
+          strokeWidth="1"
+        />
+      </svg>
+    </div>
+  );
 }
 
 // ============================================================================
@@ -333,8 +640,8 @@ function HeroSection() {
       >
         <div className="absolute right-0 top-0 w-[60%] h-full">
           <Image
-            src="/images/seniors/seniors-01.jpg"
-            alt="Senior smiling confidently with dentures"
+            src="/images/services/dentures/senior-couple-smiling.jpg"
+            alt="Happy senior couple with confident smiles thanks to quality dentures"
             fill
             priority
             className="object-cover object-center"
@@ -369,6 +676,15 @@ function HeroSection() {
           }}
           transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
         />
+
+        {/* Decorative tooth icons floating */}
+        <motion.div
+          className="absolute top-[20%] right-[15%] opacity-10"
+          animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <SmileTransformIllustration className="w-32 h-20" />
+        </motion.div>
       </div>
 
       {/* Content */}
@@ -384,13 +700,14 @@ function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mb-8"
+              aria-label="Breadcrumb"
             >
               <ol className="flex items-center gap-2 text-sm text-neutral-500">
                 <li><Link href="/" className="hover:text-[#722F37] transition-colors">Home</Link></li>
-                <li>/</li>
+                <li aria-hidden="true">/</li>
                 <li><Link href="/services" className="hover:text-[#722F37] transition-colors">Services</Link></li>
-                <li>/</li>
-                <li className="text-[#722F37] font-medium">Dentures</li>
+                <li aria-hidden="true">/</li>
+                <li className="text-[#722F37] font-medium" aria-current="page">Dentures</li>
               </ol>
             </motion.nav>
 
@@ -401,7 +718,7 @@ function HeroSection() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#722F37]/10 text-[#722F37] text-sm font-medium mb-8"
             >
-              <Heart className="w-4 h-4" />
+              <HandHeart className="w-4 h-4" aria-hidden="true" />
               <span>Compassionate Denture Care</span>
             </motion.div>
 
@@ -443,9 +760,9 @@ function HeroSection() {
                   whileTap={{ scale: 0.98 }}
                 >
                   <span className="relative z-10 flex items-center gap-2">
-                    <Calendar className="w-5 h-5" />
+                    <Calendar className="w-5 h-5" aria-hidden="true" />
                     Free Consultation
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                   </span>
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-[#8a3a44] to-[#722F37]"
@@ -460,7 +777,7 @@ function HeroSection() {
                 href={phoneHref}
                 className="flex items-center gap-3 px-8 py-4 bg-white border-2 border-[#722F37]/20 text-[#722F37] rounded-full font-semibold text-lg hover:bg-[#722F37]/5 hover:border-[#722F37]/40 transition-all duration-300"
               >
-                <Phone className="w-5 h-5" />
+                <Phone className="w-5 h-5" aria-hidden="true" />
                 {formattedPhone}
               </a>
             </motion.div>
@@ -479,7 +796,7 @@ function HeroSection() {
                       key={i}
                       className="w-10 h-10 rounded-full bg-gradient-to-br from-[#722F37]/20 to-[#722F37]/40 border-2 border-white flex items-center justify-center"
                     >
-                      <Star className="w-4 h-4 text-[#722F37]" />
+                      <Star className="w-4 h-4 text-[#722F37]" aria-hidden="true" />
                     </div>
                   ))}
                 </div>
@@ -505,7 +822,7 @@ function HeroSection() {
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <ChevronDown className="w-6 h-6" />
+          <ChevronDown className="w-6 h-6" aria-hidden="true" />
         </motion.div>
       </motion.div>
     </section>
@@ -513,7 +830,136 @@ function HeroSection() {
 }
 
 // ============================================================================
-// DENTURE TYPE COMPARISON SECTION
+// BENEFITS OVERVIEW SECTION (NEW)
+// ============================================================================
+
+function BenefitsSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+
+  return (
+    <section className="py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/10 text-[#722F37] text-sm font-medium mb-6">
+            <Sparkles className="w-4 h-4" aria-hidden="true" />
+            <span>Why Choose Dentures</span>
+          </div>
+          <h2 className="font-display font-bold text-4xl md:text-5xl text-neutral-900 mb-6">
+            Benefits of <span className="text-[#722F37]">Quality Dentures</span>
+          </h2>
+          <p className="text-neutral-600 text-lg max-w-2xl mx-auto">
+            Modern dentures offer remarkable comfort, natural appearance, and restored function
+            that can truly transform your quality of life.
+          </p>
+        </motion.div>
+
+        {/* Benefits Grid with Illustration */}
+        <div ref={containerRef} className="grid lg:grid-cols-3 gap-8 items-center">
+          {/* Left Benefits */}
+          <motion.div
+            className="space-y-6"
+            initial={{ opacity: 0, x: -40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            {benefits.slice(0, 3).map((benefit, index) => (
+              <motion.div
+                key={benefit.title}
+                className="flex items-start gap-4 p-4 rounded-2xl hover:bg-[#FDF8F3] transition-colors"
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+              >
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/20 flex items-center justify-center text-[#722F37] flex-shrink-0">
+                  {benefit.icon}
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-neutral-900 mb-1">{benefit.title}</h3>
+                  <p className="text-neutral-600 text-sm leading-relaxed">{benefit.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* Center Illustration */}
+          <motion.div
+            className="relative flex justify-center items-center"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <div className="relative">
+              {/* Background glow */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/5 rounded-full blur-3xl scale-150" />
+
+              {/* Main illustration card */}
+              <div className="relative bg-white rounded-3xl p-8 shadow-2xl shadow-[#722F37]/10 border border-[#EDE5DD]">
+                <SmileTransformIllustration className="w-64 h-32 mx-auto" />
+                <div className="text-center mt-4">
+                  <p className="text-sm font-medium text-[#722F37]">Your Smile Transformation</p>
+                  <p className="text-xs text-neutral-500 mt-1">From consultation to confidence</p>
+                </div>
+              </div>
+
+              {/* Floating badges */}
+              <motion.div
+                className="absolute -top-4 -right-4 bg-white rounded-full p-3 shadow-lg"
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <CircleCheck className="w-6 h-6 text-green-500" aria-hidden="true" />
+              </motion.div>
+              <motion.div
+                className="absolute -bottom-4 -left-4 bg-white rounded-full p-3 shadow-lg"
+                animate={{ y: [0, 8, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
+              >
+                <Heart className="w-6 h-6 text-[#722F37]" aria-hidden="true" />
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Right Benefits */}
+          <motion.div
+            className="space-y-6"
+            initial={{ opacity: 0, x: 40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            {benefits.slice(3, 6).map((benefit, index) => (
+              <motion.div
+                key={benefit.title}
+                className="flex items-start gap-4 p-4 rounded-2xl hover:bg-[#FDF8F3] transition-colors"
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+              >
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#722F37]/10 to-[#722F37]/20 flex items-center justify-center text-[#722F37] flex-shrink-0">
+                  {benefit.icon}
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-neutral-900 mb-1">{benefit.title}</h3>
+                  <p className="text-neutral-600 text-sm leading-relaxed">{benefit.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ============================================================================
+// DENTURE TYPE COMPARISON SECTION (ENHANCED)
 // ============================================================================
 
 function DentureTypeCard({
@@ -529,6 +975,7 @@ function DentureTypeCard({
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(cardRef, { once: true, margin: '-100px' });
+  const Illustration = type.illustration;
 
   return (
     <motion.div
@@ -557,7 +1004,7 @@ function DentureTypeCard({
         <div className="absolute inset-0">
           <Image
             src={type.image}
-            alt={type.title}
+            alt={`${type.title} - ${type.subtitle}`}
             fill
             className={`object-cover transition-all duration-700 ${isActive ? 'scale-100' : 'scale-105'}`}
             sizes="(max-width: 768px) 100vw, 50vw"
@@ -573,6 +1020,18 @@ function DentureTypeCard({
 
         {/* Content */}
         <div className="relative h-full flex flex-col justify-end p-8">
+          {/* Illustration Badge - Shows diagram when active */}
+          {isActive && (
+            <motion.div
+              className="absolute top-6 right-6 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-lg"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
+            >
+              <Illustration className="w-24 h-16" />
+            </motion.div>
+          )}
+
           {/* Icon Badge */}
           <motion.div
             className={`
@@ -614,7 +1073,7 @@ function DentureTypeCard({
                       className="flex items-center gap-2 text-white/90"
                     >
                       <div className="w-5 h-5 rounded-full bg-[#722F37] flex items-center justify-center flex-shrink-0">
-                        <Check className="w-3 h-3 text-white" />
+                        <Check className="w-3 h-3 text-white" aria-hidden="true" />
                       </div>
                       <span className="text-sm">{feature}</span>
                     </motion.div>
@@ -649,7 +1108,7 @@ function DentureTypeCard({
                 {/* Ideal For */}
                 <div className="mt-6 p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20">
                   <div className="flex items-start gap-3">
-                    <ThumbsUp className="w-5 h-5 text-[#722F37] flex-shrink-0 mt-0.5" />
+                    <ThumbsUp className="w-5 h-5 text-[#722F37] flex-shrink-0 mt-0.5" aria-hidden="true" />
                     <p className="text-sm text-white/90">{type.ideal}</p>
                   </div>
                 </div>
@@ -666,7 +1125,7 @@ function DentureTypeCard({
               transition={{ delay: 0.5 }}
             >
               <span>Click to explore</span>
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-4 h-4" aria-hidden="true" />
             </motion.div>
           )}
         </div>
@@ -689,9 +1148,10 @@ function DentureComparisonSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <span className="inline-block text-[#722F37] text-sm font-semibold tracking-widest uppercase mb-4">
-            Find Your Perfect Fit
-          </span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/10 text-[#722F37] text-sm font-medium mb-6">
+            <Layers className="w-4 h-4" aria-hidden="true" />
+            <span>Find Your Perfect Fit</span>
+          </div>
           <h2 className="font-display font-bold text-4xl md:text-5xl text-neutral-900 mb-6">
             Types of <span className="text-[#722F37]">Dentures</span>
           </h2>
@@ -699,6 +1159,37 @@ function DentureComparisonSection() {
             Explore our denture options and find the solution that best matches
             your needs, lifestyle, and budget. Click each card to learn more.
           </p>
+        </motion.div>
+
+        {/* Mini illustrations preview */}
+        <motion.div
+          className="flex justify-center gap-8 mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          {dentureTypes.map((type) => {
+            const Illustration = type.illustration;
+            return (
+              <button
+                key={type.id}
+                onClick={() => setActiveType(type.id)}
+                className={`
+                  flex flex-col items-center gap-2 p-4 rounded-xl transition-all duration-300
+                  ${activeType === type.id
+                    ? 'bg-[#722F37]/10 scale-105'
+                    : 'hover:bg-[#FDF8F3]'
+                  }
+                `}
+              >
+                <Illustration className="w-20 h-14" />
+                <span className={`text-xs font-medium ${activeType === type.id ? 'text-[#722F37]' : 'text-neutral-500'}`}>
+                  {type.title.split(' ')[0]}
+                </span>
+              </button>
+            );
+          })}
         </motion.div>
 
         {/* Interactive Grid */}
@@ -806,9 +1297,10 @@ function LifestyleSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <span className="inline-block text-[#722F37] text-sm font-semibold tracking-widest uppercase mb-4">
-            Transform Your Life
-          </span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/10 text-[#722F37] text-sm font-medium mb-6">
+            <Zap className="w-4 h-4" aria-hidden="true" />
+            <span>Transform Your Life</span>
+          </div>
           <h2 className="font-display font-bold text-4xl md:text-5xl text-neutral-900 mb-6">
             Life is <span className="text-[#722F37]">Better with a Smile</span>
           </h2>
@@ -853,9 +1345,10 @@ function ProcessTimeline() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <span className="inline-block text-[#722F37] text-sm font-semibold tracking-widest uppercase mb-4">
-            Your Journey
-          </span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/10 text-[#722F37] text-sm font-medium mb-6">
+            <Target className="w-4 h-4" aria-hidden="true" />
+            <span>Your Journey</span>
+          </div>
           <h2 className="font-display font-bold text-4xl md:text-5xl text-neutral-900 mb-6">
             The Denture <span className="text-[#722F37]">Process</span>
           </h2>
@@ -901,7 +1394,7 @@ function ProcessTimeline() {
                   <h3 className="text-2xl font-bold text-neutral-900 mb-3">{step.title}</h3>
                   <p className="text-neutral-600 leading-relaxed mb-4">{step.description}</p>
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/10 text-[#722F37] text-sm font-medium">
-                    <Clock className="w-4 h-4" />
+                    <Clock className="w-4 h-4" aria-hidden="true" />
                     {step.duration}
                   </div>
                 </div>
@@ -939,7 +1432,7 @@ function ProcessTimeline() {
 }
 
 // ============================================================================
-// CARE & MAINTENANCE GUIDE
+// CARE & MAINTENANCE GUIDE (ENHANCED)
 // ============================================================================
 
 function CareGuideSection() {
@@ -956,9 +1449,10 @@ function CareGuideSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <span className="inline-block text-[#722F37] text-sm font-semibold tracking-widest uppercase mb-4">
-            Keep Your Smile Bright
-          </span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/10 text-[#722F37] text-sm font-medium mb-6">
+            <Gem className="w-4 h-4" aria-hidden="true" />
+            <span>Keep Your Smile Bright</span>
+          </div>
           <h2 className="font-display font-bold text-4xl md:text-5xl text-neutral-900 mb-6">
             Denture <span className="text-[#722F37]">Care Guide</span>
           </h2>
@@ -966,6 +1460,23 @@ function CareGuideSection() {
             Proper care keeps your dentures comfortable, clean, and long-lasting.
             Follow our simple daily routine for the best results.
           </p>
+        </motion.div>
+
+        {/* Care Illustration */}
+        <motion.div
+          className="flex justify-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="bg-white rounded-3xl p-8 shadow-lg border border-[#EDE5DD] inline-flex items-center gap-8">
+            <DentureCareIllustration className="w-32 h-20" />
+            <div className="text-left">
+              <h3 className="font-bold text-lg text-neutral-900">Daily Care Essentials</h3>
+              <p className="text-sm text-neutral-600 mt-1">Soak, brush, and rinse for a healthy smile</p>
+            </div>
+          </div>
         </motion.div>
 
         {/* Interactive Cards */}
@@ -1024,7 +1535,7 @@ function CareGuideSection() {
                         transition={{ delay: i * 0.1 }}
                         className="flex items-center gap-2 text-sm text-white/90"
                       >
-                        <Check className="w-4 h-4 flex-shrink-0" />
+                        <Check className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
                         {task}
                       </motion.li>
                     ))}
@@ -1045,26 +1556,26 @@ function CareGuideSection() {
         >
           <div className="flex items-start gap-4">
             <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-50 to-amber-100 flex items-center justify-center flex-shrink-0">
-              <AlertCircle className="w-7 h-7 text-amber-600" />
+              <AlertCircle className="w-7 h-7 text-amber-600" aria-hidden="true" />
             </div>
             <div>
               <h3 className="text-lg font-bold text-neutral-900 mb-2">Important Care Tips</h3>
               <ul className="grid md:grid-cols-2 gap-3 text-neutral-600">
                 <li className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#722F37]" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#722F37]" aria-hidden="true" />
                   Never use hot water—it can warp your dentures
                 </li>
                 <li className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#722F37]" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#722F37]" aria-hidden="true" />
                   Handle over a towel to prevent breakage
                 </li>
                 <li className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#722F37]" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#722F37]" aria-hidden="true" />
                   Schedule regular checkups every 6 months
                 </li>
                 <li className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#722F37]" />
-                  Don't use regular toothpaste—it's too abrasive
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#722F37]" aria-hidden="true" />
+                  Don&apos;t use regular toothpaste—it&apos;s too abrasive
                 </li>
               </ul>
             </div>
@@ -1102,9 +1613,10 @@ function TestimonialSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <span className="inline-block text-[#722F37] text-sm font-semibold tracking-widest uppercase mb-4">
-            Patient Stories
-          </span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/10 text-[#722F37] text-sm font-medium mb-6">
+            <Heart className="w-4 h-4" aria-hidden="true" />
+            <span>Patient Stories</span>
+          </div>
           <h2 className="font-display font-bold text-4xl md:text-5xl text-neutral-900">
             Smiles <span className="text-[#722F37]">Restored</span>
           </h2>
@@ -1131,7 +1643,7 @@ function TestimonialSection() {
                 >
                   <Image
                     src={testimonials[activeIndex]?.image ?? ''}
-                    alt={testimonials[activeIndex]?.author ?? ''}
+                    alt={`${testimonials[activeIndex]?.author ?? 'Patient'} - ${testimonials[activeIndex]?.treatment ?? 'Dentures'} patient testimonial`}
                     fill
                     className="object-cover"
                     sizes="50vw"
@@ -1157,7 +1669,7 @@ function TestimonialSection() {
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <Quote className="w-10 h-10 text-[#722F37]" />
+                <Quote className="w-10 h-10 text-[#722F37]" aria-hidden="true" />
               </motion.div>
 
               <AnimatePresence mode="wait">
@@ -1169,7 +1681,7 @@ function TestimonialSection() {
                   transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 >
                   {/* Stars */}
-                  <div className="flex items-center gap-1 mb-6">
+                  <div className="flex items-center gap-1 mb-6" role="img" aria-label={`${testimonials[activeIndex]?.rating ?? 5} out of 5 stars`}>
                     {[...Array(testimonials[activeIndex]?.rating ?? 5)].map((_, i) => (
                       <motion.div
                         key={i}
@@ -1177,7 +1689,7 @@ function TestimonialSection() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: i * 0.1 }}
                       >
-                        <Star className="w-6 h-6 text-[#722F37] fill-[#722F37]" />
+                        <Star className="w-6 h-6 text-[#722F37] fill-[#722F37]" aria-hidden="true" />
                       </motion.div>
                     ))}
                   </div>
@@ -1202,7 +1714,7 @@ function TestimonialSection() {
               </AnimatePresence>
 
               {/* Navigation Dots */}
-              <div className="flex items-center gap-3 mt-12">
+              <div className="flex items-center gap-3 mt-12" role="tablist" aria-label="Testimonial navigation">
                 {testimonials.map((_, i) => (
                   <button
                     key={i}
@@ -1212,6 +1724,8 @@ function TestimonialSection() {
                         ? 'w-12 bg-[#722F37]'
                         : 'w-3 bg-[#722F37]/20 hover:bg-[#722F37]/40'
                     }`}
+                    role="tab"
+                    aria-selected={i === activeIndex}
                     aria-label={`Go to testimonial ${i + 1}`}
                   />
                 ))}
@@ -1240,9 +1754,10 @@ function FAQSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <span className="inline-block text-[#722F37] text-sm font-semibold tracking-widest uppercase mb-4">
-            Questions Answered
-          </span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/10 text-[#722F37] text-sm font-medium mb-6">
+            <MessageCircle className="w-4 h-4" aria-hidden="true" />
+            <span>Questions Answered</span>
+          </div>
           <h2 className="font-display font-bold text-4xl md:text-5xl text-neutral-900 mb-6">
             Frequently Asked <span className="text-[#722F37]">Questions</span>
           </h2>
@@ -1274,7 +1789,7 @@ function FAQSection() {
             href={`tel:${contactInfo.phone}`}
             className="inline-flex items-center gap-2 text-[#722F37] font-semibold hover:underline"
           >
-            <Phone className="w-5 h-5" />
+            <Phone className="w-5 h-5" aria-hidden="true" />
             Call us at ({contactInfo.phone.slice(0, 3)}) {contactInfo.phone.slice(3, 6)}-{contactInfo.phone.slice(6)}
           </a>
         </motion.div>
@@ -1299,9 +1814,10 @@ function RelatedServicesSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <span className="inline-block text-[#722F37] text-sm font-semibold tracking-widest uppercase mb-4">
-            Explore More
-          </span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#722F37]/10 text-[#722F37] text-sm font-medium mb-6">
+            <Sparkles className="w-4 h-4" aria-hidden="true" />
+            <span>Explore More</span>
+          </div>
           <h2 className="font-display font-bold text-4xl md:text-5xl text-neutral-900">
             Related <span className="text-[#722F37]">Services</span>
           </h2>
@@ -1331,7 +1847,7 @@ function RelatedServicesSection() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute bottom-4 right-4 w-12 h-12 rounded-full bg-[#722F37] flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
-                    <ArrowRight className="w-5 h-5" />
+                    <ArrowRight className="w-5 h-5" aria-hidden="true" />
                   </div>
                 </div>
 
@@ -1366,7 +1882,7 @@ function RelatedServicesSection() {
             className="inline-flex items-center gap-2 text-[#722F37] font-semibold hover:underline group"
           >
             View All Services
-            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
           </Link>
         </motion.div>
       </div>
@@ -1384,14 +1900,26 @@ export function DenturesContent() {
       {/* Hero Section */}
       <HeroSection />
 
+      {/* Benefits Overview - NEW */}
+      <BenefitsSection />
+
+      {/* Visual Divider */}
+      <SectionDivider variant="teeth" />
+
       {/* Denture Type Comparison */}
       <DentureComparisonSection />
+
+      {/* Visual Divider */}
+      <SectionDivider variant="dots" />
 
       {/* Lifestyle Improvements */}
       <LifestyleSection />
 
       {/* Process Timeline */}
       <ProcessTimeline />
+
+      {/* Visual Divider */}
+      <SectionDivider variant="wave" />
 
       {/* Care Guide */}
       <CareGuideSection />

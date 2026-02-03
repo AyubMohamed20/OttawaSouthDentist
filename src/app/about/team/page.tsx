@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { TeamContent } from './TeamContent';
+import { TeamContentMobile } from './TeamContent-mobile';
+import { ResponsiveWrapper } from '@/components/ui/responsive-wrapper';
 
 export const metadata: Metadata = {
   title: 'Our Team | Ottawa South Dental',
@@ -50,5 +52,10 @@ export const metadata: Metadata = {
 };
 
 export default function TeamPage() {
-  return <TeamContent />;
+  return (
+    <ResponsiveWrapper
+      desktop={<TeamContent />}
+      mobile={<TeamContentMobile />}
+    />
+  );
 }
